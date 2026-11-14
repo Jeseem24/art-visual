@@ -1,0 +1,44 @@
+.displayNumber {
+  font-family: var(--font-family-heading, var(--font-bebas, 'Bebas Neue', sans-serif));
+  line-height: 0.7;
+  font-weight: 400;
+  text-transform: uppercase;
+  user-select: none;
+  display: inline-block;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+/* Size Variants */
+.sizeDefault {
+  font-size: clamp(3.75rem, calc(105.5385 / 1920 * 100vw), 105.5385px);
+  width: clamp(40px, 2.8vw, 52px);
+}
+
+.sizeCompact {
+  font-size: clamp(2.5rem, calc(64 / 1920 * 100vw), 64px);
+  width: clamp(28px, 2vw, 36px);
+}
+
+.sizeLarge {
+  font-size: clamp(5rem, calc(140 / 1920 * 100vw), 140px);
+  width: clamp(56px, 3.8vw, 72px);
+}
+
+/* Color Variants */
+.colorRed {
+  color: var(--color-brand-red, #cd3743);
+}
+
+.colorDark {
+  color: var(--color-dark-charcoal, #2d2d2d);
+}
+
+.colorWhite {
+  color: #ffffff;
+}
+
+.colorMuted {
+  color: rgba(0, 0, 0, 0.35);
+}
+

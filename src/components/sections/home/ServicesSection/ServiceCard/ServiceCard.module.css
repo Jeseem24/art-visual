@@ -1,0 +1,265 @@
+/* Service Card Component Styles */
+
+:root {
+  /* Service card layout variables */
+  --service-card-width: 502px;
+  --service-video-height: 369px;
+
+  /* Card internal spacing */
+  --service-title-margin-top: 14.74px;
+  --service-desc-margin-top: 6.09px;
+  --service-button-margin-top: 20.91px;
+  --service-button-width: 164px;
+  --service-button-height: 38px;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: var(--service-card-width, 550px);
+  max-width: 100%;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .card {
+    width: 100%;
+    max-width: 440px;
+  }
+
+  .mediaWrapper {
+    height: 310px;
+  }
+}
+
+/* Filmstrip Container */
+.filmstrip {
+  position: relative;
+  width: 100%;
+  background-color: #2D2D2D;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Film Perforation Tracks */
+.filmTrack {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 35.574px;
+  padding: 0 13.15px;
+  background-color: #2D2D2D;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* Film Perforation Hole (20.881px x 20.881px, radius 4.64px) */
+.filmHole {
+  width: 20.881px;
+  height: 20.881px;
+  border-radius: 4.64px;
+  background-color: #FFFFFF;
+  flex-shrink: 0;
+}
+
+/* Media Area (504px x 369px) */
+.mediaWrapper {
+  position: relative;
+  width: 100%;
+  height: var(--service-video-height, 369px);
+  background-color: #111111;
+  overflow: hidden;
+}
+
+.mediaVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.mediaImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Content Details */
+.contentArea {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+/* Title */
+.title {
+  font-family: var(--font-family-body, 'Outfit', sans-serif);
+  font-weight: 600;
+  font-style: normal;
+  font-size: 20.687px;
+  line-height: normal;
+  text-transform: uppercase;
+  color: #2D2D2D;
+  margin-top: var(--service-title-margin-top, 14.74px);
+  margin-bottom: 0;
+  letter-spacing: 0;
+}
+
+/* Description */
+.description {
+  font-family: var(--font-family-body, 'Outfit', sans-serif);
+  font-weight: 400;
+  font-style: normal;
+  font-size: 17.634px;
+  line-height: normal;
+  color: #000000;
+  opacity: 0.65;
+  margin-top: var(--service-desc-margin-top, 6.09px);
+  margin-bottom: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* CTA Button */
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: var(--service-button-width, 164px);
+  height: var(--service-button-height, 38px);
+  margin-top: var(--service-button-margin-top, 20.91px);
+  border-radius: 11.132px;
+  border: 0.79px solid rgba(0, 0, 0, 0.37);
+  background-color: transparent;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.2s ease);
+  outline: none;
+  overflow: hidden;
+}
+
+.ctaButton:hover {
+  border-color: #CD3743;
+  background-color: rgba(205, 55, 67, 0.04);
+}
+
+.ctaText {
+  flex: 1;
+  font-family: var(--font-family-body, 'Outfit', sans-serif);
+  font-weight: 400;
+  font-style: normal;
+  font-size: 17.121px;
+  line-height: normal;
+  color: #000000;
+  opacity: 0.81;
+  text-align: center;
+  white-space: nowrap;
+  padding-left: 6px;
+}
+
+.ctaButton:hover .ctaText {
+  color: #CD3743;
+  opacity: 1;
+}
+
+/* Vertical divider inside button */
+.ctaDivider {
+  width: 0.79px;
+  height: var(--service-button-height, 38px);
+  background-color: rgba(0, 0, 0, 0.37);
+  flex-shrink: 0;
+}
+
+.ctaButton:hover .ctaDivider {
+  background-color: #CD3743;
+}
+
+/* Arrow container */
+.ctaArrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 41.25px; /* 164px - 122.75px */
+  height: var(--service-button-height, 38px);
+  flex-shrink: 0;
+  color: #000000;
+  opacity: 0.81;
+  transition: transform var(--transition-fast, 0.2s ease);
+}
+
+.ctaButton:hover .ctaArrow {
+  color: #CD3743;
+  opacity: 1;
+  transform: translateX(2px);
+}
+
+.arrowSvg {
+  width: 17.03px;
+  height: 15.32px;
+  display: block;
+}
+
+/* =========================================================================
+   MOBILE (<= 767px) — Figma 233:2185 (412px)
+   ========================================================================= */
+@media (max-width: 767px) {
+  .card {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .filmTrack {
+    height: 26.3px;
+    padding: 0 9.7px;
+  }
+
+  .filmHole {
+    width: 15.45px;
+    height: 15.45px;
+    border-radius: 3.4px;
+  }
+
+  .mediaWrapper {
+    height: 273px;
+  }
+
+  .title {
+    font-size: 20px;
+    margin-top: 14px;
+  }
+
+  .description {
+    font-size: 15px;
+    margin-top: 5px;
+  }
+
+  .ctaButton {
+    width: 132px;
+    height: 30.6px;
+    margin-top: 15px;
+    border-radius: 9px;
+  }
+
+  .ctaText {
+    font-size: 14px;
+  }
+
+  .ctaDivider {
+    height: 30.6px;
+  }
+
+  .ctaArrow {
+    width: 33px;
+    height: 30.6px;
+  }
+
+  .arrowSvg {
+    width: 14px;
+    height: 12.5px;
+  }
+}
+

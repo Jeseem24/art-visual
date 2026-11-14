@@ -1,0 +1,62 @@
+.cardDescription {
+  font-family: var(--font-family-body, var(--font-outfit, 'Outfit', sans-serif));
+  font-weight: 350;
+  margin: 0;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  color: rgba(0, 0, 0, 0.72);
+}
+
+/* Size Variants */
+.sizeDefault {
+  font-size: clamp(14px, 0.75vw, 16px);
+}
+
+.sizeCompact {
+  font-size: 14px;
+}
+
+.sizeLarge {
+  font-size: 18px;
+}
+
+.sizeXl {
+  font-size: clamp(25px, calc(25.246 / 1920 * 100vw), 25.246px);
+  line-height: 1.35;
+}
+
+/* Tone Variants */
+.toneMuted {
+  color: rgba(0, 0, 0, 0.72);
+}
+
+.toneSubtle {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.toneWhite {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Line Clamp Variants */
+.clamp1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.clamp2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.clamp3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+

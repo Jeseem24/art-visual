@@ -1,0 +1,291 @@
+/* Hero Section Module Styles */
+.hero {
+  position: relative;
+  width: 100%;
+  padding-top: 2.5rem;
+  padding-bottom: 520px;
+  overflow-x: clip;
+  background-color: var(--color-bg-page);
+}
+
+.container {
+  width: 100%;
+  max-width: 1762px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+@media (min-width: 768px) and (max-width: 899px) {
+  .hero {
+    padding-bottom: 380px !important;
+  }
+
+  .container {
+    padding: 0 32px !important;
+  }
+
+  .headline {
+    font-size: 60px !important;
+    max-width: 600px !important;
+  }
+
+  .subtitle {
+    font-size: 16px !important;
+    max-width: 480px !important;
+  }
+}
+
+@media (min-width: 900px) and (max-width: 1199px) {
+  .hero {
+    padding-bottom: 450px !important;
+  }
+
+  .container {
+    padding: 0 32px !important;
+  }
+
+  .headline {
+    font-size: 76px !important;
+    max-width: 720px !important;
+  }
+
+  .subtitle {
+    font-size: 18px !important;
+    max-width: 560px !important;
+  }
+}
+
+@media (min-width: 1600px) {
+  .hero {
+    padding-bottom: 660px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding: 0 var(--spacing-canvas-gutter);
+  }
+}
+
+.contentWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Badge Frame */
+.badgeWrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.75rem;
+}
+
+/* Main Headline */
+.headline {
+  font-family: var(--font-family-heading);
+  font-weight: 400;
+  font-style: normal;
+  font-size: clamp(3rem, calc(125.799 / 1920 * 100vw), 106.799px);
+  line-height: 1.15;
+  row-gap: 5px;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  text-align: center;
+  color: #2D2D2D;
+  width: 100%;
+  max-width: 858px;
+  margin: -5 auto -5px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 1920px) {
+  .headline {
+    width: 858px;
+    height: 256px;
+    font-size: 106.799px;
+  }
+}
+
+.headlineLine {
+  display: block;
+  white-space: nowrap;
+}
+
+.highlight {
+  color: var(--color-brand-red);
+}
+
+/* Subtitle */
+.subtitle {
+  font-family: var(--font-family-body);
+  font-size: clamp(1.125rem, calc(30.146 / 1920 * 100vw), 30.146px);
+  font-weight: 400;
+  line-height: normal;
+  opacity: 0.65;
+  color: #000000;
+  width: 100%;
+  max-width: 618.633px;
+  margin: 0 auto 27px auto;
+  text-align: center;
+}
+
+/* CTA Button Row */
+.ctaRow {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.ctaButton {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  width: 257px;
+  height: 45.084px;
+  border-radius: 14.094px;
+  background-color: var(--color-brand-red);
+  color: var(--color-white);
+  text-decoration: none;
+  font-family: var(--font-family-body);
+  font-weight: 400;
+  font-size: 21.675px;
+  line-height: 1;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: background-color var(--transition-fast);
+  user-select: none;
+}
+
+@media (max-width: 1024px) {
+  .ctaButton {
+    width: clamp(210px, calc(257 / 1920 * 100vw), 257px);
+    height: clamp(40px, calc(48.084 / 1920 * 100vw), 48.084px);
+    border-radius: clamp(10px, calc(14.094 / 1920 * 100vw), 14.094px);
+    font-size: clamp(16px, calc(21.675 / 1920 * 100vw), 21.675px);
+  }
+}
+
+
+.ctaText {
+  width: 204.77px;
+  text-align: center;
+  padding-left: 20.73px;
+  padding-right: 9.11px;
+  white-space: nowrap;
+}
+
+.ctaDivider {
+  width: 1.658px;
+  height: 48.084px;
+  background-color: #FFFFFF;
+  flex-shrink: 0;
+}
+
+.ctaArrow {
+  width: 50.57px;
+  height: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ctaArrow svg {
+  transform: rotate(-18.43deg);
+  transition: transform var(--transition-fast);
+}
+
+/* =========================================================================
+   MOBILE (<= 767px) — Figma 233:2185 (412px)
+   ========================================================================= */
+@media (max-width: 767px) {
+  .hero {
+    padding-top: 24px;
+    padding-bottom: 275px;
+  }
+
+  .container {
+    padding: 0 20px;
+  }
+
+  .badgeWrapper {
+    margin-bottom: 0;
+  }
+
+  .badgeWrapper > * {
+    max-width: 342px;
+    height: 26.06px;
+    padding: 0 12px;
+    gap: 6px;
+  }
+
+  .badgeWrapper span {
+    font-size: 11.5px;
+  }
+
+  .headline {
+    display: block;
+    font-size: clamp(46px, 15.42vw, 63.534px);
+    line-height: 1.05;
+    row-gap: 0;
+    max-width: 392px;
+    margin: 24px auto 0;
+  }
+
+  .headlineLine {
+    display: inline;
+    white-space: normal;
+  }
+
+  .headlineLine + .headlineLine::before {
+    content: " ";
+  }
+
+  .subtitle {
+    font-size: 18.131px;
+    line-height: normal;
+    max-width: 291px;
+    margin: 10px auto 0;
+  }
+
+  .ctaRow {
+    margin-top: 28px;
+  }
+
+  .ctaButton {
+    width: 156px;
+    height: 32px;
+    border-radius: 8.5px;
+    font-size: 13px;
+  }
+
+  .ctaText {
+    width: auto;
+    flex: 1;
+    padding: 0 8px;
+  }
+
+  .ctaDivider {
+    width: 1px;
+    height: 100%;
+  }
+
+  .ctaArrow {
+    width: 31px;
+  }
+
+  .ctaArrow svg {
+    width: 13px;
+    height: 12px;
+  }
+}
+

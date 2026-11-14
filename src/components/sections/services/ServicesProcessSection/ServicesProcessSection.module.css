@@ -1,0 +1,206 @@
+/* Services Process Section Styles (3-Column Grid Layout matching 1920px Figma) */
+
+.desktopHeadline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: var(--headline-line-gap, 20px);
+}
+
+.desktopLine {
+  display: block;
+  white-space: nowrap;
+}
+
+.mobileHeadline {
+  display: none;
+}
+
+.section {
+  position: relative;
+  width: 100%;
+  padding-top: clamp(48px, 6vw, 72px);
+  padding-bottom: clamp(48px, 6vw, 72px);
+  background-color: var(--color-bg-page, #ffffff);
+  overflow-x: clip;
+}
+
+
+
+
+.container {
+  width: 100%;
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.desktopOnly {
+  display: inline;
+}
+
+.mobileOnly,
+.mobileLine {
+  display: none;
+}
+
+.stepsGrid {
+  --process-card-padding: 24px 22px;
+  --process-badge-gap: 9px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  width: 100%;
+  margin-top: clamp(40px, 6vw, 64px);
+}
+
+.stepItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.stepCard {
+  flex: 1;
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .stepsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 44px 20px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section {
+    --headline-font-size-compact: 85.538px;
+    padding-top: 135px;
+    padding-bottom: 124px;
+  }
+
+  
+
+
+.container {
+    padding-left: var(--spacing-canvas-gutter, 79px);
+    padding-right: var(--spacing-canvas-gutter, 79px);
+  }
+
+  .stepsGrid {
+    --process-badge-gap: 9px;
+    --process-badge-label-size: 20.842px;
+    --process-badge-label-opacity: 0.83;
+    --process-badge-box-width: 100px;
+    --process-badge-box-height: 90.435px;
+    --process-badge-box-padding: 0px;
+    --process-badge-box-radius: 15.652px;
+    --process-badge-box-shadow: none;
+    --process-badge-number-size: 64.271px;
+    --process-badge-number-line-height: 1;
+    --process-badge-number-padding-top: 0.04em;
+
+    --process-card-min-height: 195px;
+    --process-card-padding: 36px 26px 36px 45px;
+    --process-card-gap: 9px;
+    --process-card-title-size: 20px;
+    --process-card-title-margin-bottom: 0px;
+    --process-card-title-line-height: normal;
+    --process-card-title-letter-spacing: 0;
+    --process-card-desc-size: 21.8px;
+    --process-card-desc-line-height: 1.26;
+    --process-card-desc-letter-spacing: 0;
+    --process-card-desc-color: rgba(0, 0, 0, 0.6);
+    --process-card-desc-opacity: 1;
+
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 20px;
+    row-gap: 95px;
+    margin-top: 162px;
+  }
+
+  .stepItem {
+    gap: 25.565px;
+  }
+}
+
+@media (max-width: 767px) {
+
+  .section {
+    padding-top: 48px;
+    padding-bottom: 56px;
+  }
+
+  
+
+
+.container {
+    padding: 0 20px;
+  }
+
+  .section [class*="badgeRow"] {
+    gap: 6px;
+    height: auto;
+  }
+
+  .section [class*="cameraIcon"] {
+    width: 16.3px;
+    height: 12.8px;
+  }
+
+  .section [class*="badgeText"] {
+    font-size: 17.68px;
+  }
+
+  .desktopOnly {
+    display: none;
+  }
+
+  .mobileOnly {
+    display: contents;
+  }
+
+  .desktopHeadline {
+    display: none;
+  }
+
+  .mobileHeadline {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 4px;
+    width: 100%;
+  }
+
+  .mobileLine {
+    display: block;
+    white-space: nowrap;
+    letter-spacing: -0.015em;
+    font-size: clamp(38px, 11vw, 47.06px);
+    line-height: 1.02;
+    font-family: var(--font-family-heading, var(--font-bebas, 'Bebas Neue', sans-serif));
+    text-transform: uppercase;
+    color: var(--headline-color-dark, #2d2d2d);
+  }
+
+  .section [class*="headlineLine"] {
+    display: contents;
+  }
+
+  .section [class*="headline"] {
+    display: flex !important;
+    flex-direction: column !important;
+    margin-top: 10px;
+    margin-bottom: 0 !important;
+    row-gap: 0px !important;
+  }
+
+  .stepsGrid {
+    margin-top: clamp(64px, 16vw, 76px);
+    gap: 36px;
+  }
+
+  .stepItem {
+    gap: 16px;
+  }
+}

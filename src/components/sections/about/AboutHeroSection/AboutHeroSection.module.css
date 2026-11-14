@@ -1,0 +1,79 @@
+/* About Hero Section Styles */
+
+.hero {
+  position: relative;
+  width: 100%;
+  padding-top: clamp(5.5rem, 5vw, 5.5rem);
+  padding-bottom: clamp(48px, 5vw, 96px);
+  overflow-x: clip;
+  background-color: var(--color-bg-page);
+}
+
+.container {
+  width: 100%;
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  position: relative;
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding-left: var(--spacing-canvas-gutter, 79px);
+    padding-right: var(--spacing-canvas-gutter, 79px);
+  }
+}
+
+.highlight {
+  color: var(--color-brand-red);
+}
+
+.desktopOnly {
+  display: inline;
+}
+
+.mobileOnly,
+.mobileLine {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .hero {
+    padding-top: 50px;
+    padding-bottom: 40px;
+  }
+
+  .container {
+    padding: 0 20px;
+  }
+
+  .desktopOnly {
+    display: none;
+  }
+
+  .mobileOnly {
+    display: contents;
+  }
+
+  .mobileLine {
+    display: block;
+    white-space: nowrap;
+  }
+
+  .hero [class*="headlineLine"] {
+    display: contents;
+  }
+
+  .hero [class*="headline"] {
+    font-size: clamp(40px, 13.8vw, 60px);
+    line-height: 1.05;
+    row-gap: 6px;
+  }
+
+  .hero [class*="subtitle"] {
+    font-size: 18.13px;
+    max-width: 310px;
+    margin-top: 12px;
+    margin-bottom: 0;
+  }
+}

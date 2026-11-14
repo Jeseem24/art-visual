@@ -1,0 +1,40 @@
+.leadParagraph {
+  font-family: var(--font-family-body, var(--font-outfit, 'Outfit', sans-serif));
+  font-weight: 400;
+  margin: 0;
+  word-break: break-word;
+}
+
+/* Size Variants */
+.sizeLarge {
+  font-size: clamp(1.25rem, calc(50.719 / 1920 * 100vw), 50.719px);
+  line-height: 1.35;
+}
+
+.sizeMedium {
+  font-size: clamp(18px, 1.25vw, 24px);
+  line-height: 1.45;
+}
+
+.sizeSmall {
+  font-size: clamp(16px, 1.04vw, 20px);
+  line-height: 1.5;
+}
+
+/* Tone Variants */
+.toneDark {
+  color: var(--color-text-primary, #000000);
+}
+
+.toneMuted {
+  color: rgba(0, 0, 0, 0.72);
+}
+
+.toneSubtle {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.toneWhite {
+  color: #ffffff;
+}
+

@@ -1,0 +1,200 @@
+:root {
+  /* Featured Works section spacing variables */
+  --featured-section-padding-top: 100px;
+  --featured-section-padding-bottom: 100px;
+  --featured-headline-margin-top: 16px;
+  --featured-carousel-margin-top: 55px;
+  --featured-card-gap: 40px;
+  --featured-marquee-speed: 35s;
+  --featured-cta-margin-top: 40px;
+  --featured-button-width: 216px;
+}
+
+/* Featured Works Section Module Styles */
+
+.section {
+  position: relative;
+  width: 100%;
+  padding-top: clamp(48px, calc(var(--featured-section-padding-top, 100px) * 0.7), var(--featured-section-padding-top, 100px));
+  padding-bottom: clamp(64px, calc(var(--featured-section-padding-bottom, 120px) * 0.7), var(--featured-section-padding-bottom, 120px));
+  background-color: var(--color-bg-page, #ffffff);
+  overflow-x: clip;
+}
+
+@media (min-width: 1024px) {
+  .section {
+    padding-top: var(--featured-section-padding-top, 100px);
+    padding-bottom: var(--featured-section-padding-bottom, 120px);
+  }
+}
+
+.container {
+  width: 100%;
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4.11vw, var(--spacing-canvas-gutter, 79px));
+}
+
+/* Carousel Showcase */
+.carouselWrapper {
+  position: relative;
+  width: 100%;
+  margin-top: var(--featured-carousel-margin-top, 71px);
+  overflow: hidden;
+  padding: 24px 0 32px 0; /* Padding for card elevation & hover transform */
+}
+
+.marqueeTrack {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  gap: var(--featured-card-gap, 40px);
+  animation: scrollMarquee var(--featured-marquee-speed, 35s) linear infinite;
+  will-change: transform;
+}
+
+
+.desktopHeadline {
+  display: block;
+}
+
+.mobileHeadline {
+  display: none;
+}
+
+.cardsGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--featured-card-gap, 40px);
+  flex-shrink: 0;
+}
+
+@keyframes scrollMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-50% - (var(--featured-card-gap, 40px) / 2)));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marqueeTrack {
+    animation: none;
+    overflow-x: auto;
+    width: 100%;
+    padding-left: clamp(16px, 4.11vw, var(--spacing-canvas-gutter, 79px));
+    padding-right: clamp(16px, 4.11vw, var(--spacing-canvas-gutter, 79px));
+  }
+}
+
+/* Bottom CTA Button */
+.ctaWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: var(--featured-cta-margin-top, 68px);
+}
+
+@media (max-width: 768px) {
+  .ctaWrapper {
+    margin-top: clamp(32px, 6vw, 48px);
+  }
+}
+
+.viewAllButton {
+  width: var(--featured-button-width, 216px);
+}
+
+/* =========================================================================
+   MOBILE (<= 767px) — Figma 233:2185 (412px)
+   ========================================================================= */
+@media (max-width: 767px) {
+  .section {
+    padding-top: 56px;
+    padding-bottom: 64px;
+  }
+
+  .container {
+    padding: 0 20px;
+  }
+
+  .container [class*="badgeRow"] {
+    gap: 6px;
+    height: auto;
+  }
+
+  .container [class*="cameraIcon"] {
+    width: 16.3px;
+    height: 12.8px;
+  }
+
+  .container [class*="badgeText"] {
+    font-size: 17.33px;
+  }
+
+  .desktopHeadline {
+    display: none;
+  }
+
+  .mobileHeadline {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 4px;
+  }
+
+  .mobileLine {
+    display: block;
+    white-space: nowrap;
+  }
+
+  .container [class*="headline"] {
+    font-size: 47.06px;
+    line-height: 0.98;
+    margin-top: 10px;
+    row-gap: 4px;
+    max-width: 294px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .carouselWrapper {
+    margin-top: 28px;
+    padding: 12px 0 20px;
+  }
+
+  .marqueeTrack {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .cardsGroup {
+    gap: 20px;
+  }
+
+  .ctaWrapper {
+    margin-top: 28px;
+  }
+
+  .viewAllButton {
+    width: 170px;
+    height: 38.565px;
+    padding-left: 15px;
+    padding-right: 6px;
+    border-radius: 11.211px;
+    gap: 8px;
+  }
+
+  .viewAllButton [class*="label"] {
+    font-size: 16px;
+  }
+
+  .viewAllButton [class*="playSvg"] {
+    width: 29px;
+    height: 26px;
+  }
+}
+

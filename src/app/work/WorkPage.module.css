@@ -1,0 +1,46 @@
+/* Work page container layout and scoped CTA spacing */
+
+.workPage {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow-x: clip;
+}
+
+/* Mobile & Tablet (< 1024px) CTA Banner rhythm & compact card sizing */
+.workPage .ctaBanner {
+  padding-top: clamp(72px, 8vw, 112px);
+  padding-bottom: clamp(64px, 8vw, 104px);
+}
+
+@media (max-width: 767px) {
+  .workPage .ctaBanner {
+    --cta-banner-padding-left: 24px;
+    --cta-banner-padding-top: 40px;
+    --cta-banner-padding-bottom: 40px;
+    --cta-desc-margin-top: 20px;
+    --cta-button-margin-top: 28px;
+  }
+
+  .workPage .ctaBanner [class*="bannerCard"] {
+    min-height: auto;
+  }
+
+  .workPage .ctaBanner [class*="description"] {
+    font-size: 14.5px;
+    line-height: 1.42;
+    max-width: 200px;
+  }
+}
+
+/* Desktop (1024px+) matches Figma spacing below WorkShowcase -> CTABanner -> Footer
+   (141px WorkShowcase bottom + 140px CTA top = 281px, matching 3205 - 2924 = 281px;
+    210px bottom above Footer; exact px under body { zoom: 0.8 }) */
+@media (min-width: 1024px) {
+  .workPage .ctaBanner {
+    --cta-section-padding-top: 220px;
+    --cta-section-padding-bottom: 210px;
+    padding-top: 220px;
+    padding-bottom: 210px;
+  }
+}

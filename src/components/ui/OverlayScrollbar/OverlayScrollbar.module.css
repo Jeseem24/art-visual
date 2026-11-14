@@ -1,0 +1,53 @@
+/* Floating Overlay Scrollbar Styles (takes 0px layout space) */
+
+.track {
+  position: fixed;
+  top: 6px;
+  bottom: 6px;
+  right: 3px;
+  width: 10px;
+  z-index: 9999;
+  pointer-events: auto;
+  display: flex;
+  justify-content: flex-end;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  user-select: none;
+  touch-action: none;
+}
+
+.trackVisible,
+.track:hover,
+.trackDragging {
+  opacity: 1;
+}
+
+.thumb {
+  position: relative;
+  width: 6px;
+  border-radius: 9999px;
+  background-color: rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  transition: width 0.15s ease, background-color 0.2s ease, opacity 0.2s ease;
+  will-change: transform, height;
+}
+
+.track:hover .thumb,
+.trackDragging .thumb {
+  width: 8px;
+  background-color: rgba(205, 55, 67, 0.78);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.45);
+}
+
+.trackDragging .thumb {
+  background-color: var(--color-brand-red, #cd3743);
+}
+
+/* Hide completely on touch/mobile devices that use native overlay scrollbars */
+@media (pointer: coarse) {
+  .track {
+    display: none;
+  }
+}
+

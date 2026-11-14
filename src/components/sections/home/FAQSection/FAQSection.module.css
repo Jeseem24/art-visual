@@ -1,0 +1,71 @@
+:root {
+  /* Section Spacing Controls */
+  --faq-section-padding-top: 170px;
+  --faq-section-padding-bottom: 140px;
+  --faq-headline-margin-top: 16px;
+  --faq-list-margin-top: 87px;
+  --faq-list-max-width: 1434px;
+}
+
+/* Section Container & Layout */
+.section {
+  position: relative;
+  width: 100%;
+  padding-top: clamp(48px, calc(var(--faq-section-padding-top, 130px) * 0.7), var(--faq-section-padding-top, 130px));
+  padding-bottom: clamp(64px, calc(var(--faq-section-padding-bottom, 140px) * 0.7), var(--faq-section-padding-bottom, 140px));
+  background-color: var(--color-bg-page, #ffffff);
+  overflow-x: clip;
+}
+
+@media (min-width: 1024px) {
+  .section {
+    padding-top: var(--faq-section-padding-top, 130px);
+    padding-bottom: var(--faq-section-padding-bottom, 140px);
+  }
+}
+
+.container {
+  width: 100%;
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 5.73vw, 79px);
+  position: relative;
+}
+
+/* FAQ Accordion List */
+.faqListWrapper {
+  width: 100%;
+  max-width: var(--faq-list-max-width, 1434px);
+  margin: 0 auto;
+  margin-top: var(--faq-list-margin-top, 87px);
+  display: flex;
+  flex-direction: column;
+}
+
+/* =========================================================================
+   MOBILE (<= 767px) — Figma 233:2185 (412px)
+   ========================================================================= */
+@media (max-width: 767px) {
+  .section {
+    padding: 72px 0 80px;
+  }
+
+  .container {
+    padding: 0 20px;
+  }
+
+  .header {
+    --badge-text-size: 17.33px;
+    --headline-font-size: 47.06px;
+    --headline-line-gap: 6px;
+    --headline-badge-gap: 10px;
+  }
+
+  .headline {
+    max-width: 288px;
+  }
+
+  .faqListWrapper {
+    margin-top: 40px;
+  }
+}

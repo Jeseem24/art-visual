@@ -1,0 +1,521 @@
+:root {
+  /* Footer layout and sizing variables */
+  --footer-bg-color: #CD3743;
+  --footer-padding-top: clamp(79px, 3.07vw, 79px);
+  --footer-padding-bottom: clamp(24px, 2.14vw, 41px);
+  --footer-padding-inline: clamp(73px, 3.8vw, 73px);
+
+  --footer-logo-size: clamp(69px, 3.6vw, 69.23px);
+  --footer-logo-margin-bottom: clamp(12px, 1vw, 20px);
+
+  --footer-bio-size: clamp(39px, 2.07vw, 39.72px);
+  --footer-bio-line-height: 1.26;
+  --footer-bio-max-width: 625px;
+
+  --footer-heading-size: clamp(36px, 1.88vw, 36.02px);
+  --footer-item-size: clamp(35px, 1.89vw, 36.21px);
+  --footer-item-line-height: 0.5;
+  --footer-item-gap: clamp(10px, 1.2vw, 24px);
+
+  --footer-contact-gap-top: clamp(40px, 3.33vw, 64px);
+  --footer-heading-margin-bottom: clamp(22px, 1.2vw, 24px);
+  --footer-quicklinks-offset-x: 110px;
+  --footer-services-offset-x: 20px;
+  --footer-services-offset-y: 0px;
+
+  --footer-social-width: clamp(76px, 4vw, 76.87px);
+  --footer-social-height: clamp(66px, 3.46vw, 66.39px);
+  --footer-social-radius: clamp(8px, 0.55vw, 10.48px);
+  --footer-social-gap: clamp(14px, 1.59vw, 30.5px);
+  --footer-social-margin-top: clamp(36px, 5vw, 96px);
+  --footer-social-offset-x: 0px;
+  --footer-social-offset-y: 20px;
+  --footer-social-icon-size: clamp(28px, 2.2vw, 40px);
+
+  --footer-divider-margin-top: clamp(36px, 3.7vw, 71px);
+  --footer-divider-margin-bottom: clamp(18px, 1.95vw, 37.5px);
+  --footer-bottom-size: clamp(23px, 1.2vw, 23.02px);
+  --footer-legal-gap: clamp(70px, 3.65vw, 70px);
+}
+
+/* Footer root container */
+.footer {
+  width: 100%;
+  background-color: var(--footer-bg-color, #CD3743);
+  color: #FFFFFF;
+  padding-top: var(--footer-padding-top);
+  padding-bottom: var(--footer-padding-bottom);
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Padded inner container for content */
+.inner {
+  width: 100%;
+  max-width: 1920px;
+  margin: 0 auto;
+  padding-left: var(--footer-padding-inline);
+  padding-right: var(--footer-padding-inline);
+  box-sizing: border-box;
+}
+
+/* Brand Logo */
+.brandLogo {
+  font-family: var(--font-anton), var(--font-family-display), Impact, sans-serif;
+  font-size: var(--footer-logo-size);
+  color: #FFFFFF;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: var(--footer-logo-margin-bottom);
+  transition: opacity 0.2s ease;
+}
+
+.brandLogo:hover {
+  opacity: 0.9;
+}
+
+/* =========================================================================
+   TABLET / SMALL LAPTOP (768px - 1199px, including 1024px)
+   ========================================================================= */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .inner {
+    padding-left: 36px !important;
+    padding-right: 36px !important;
+  }
+
+  .contentGrid {
+    grid-template-columns: 1.3fr 0.9fr 1.1fr !important;
+    gap: 32px !important;
+  }
+
+  .brandLogo {
+    font-size: 38px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .brandBio {
+    font-size: 17px !important;
+    line-height: 1.4 !important;
+    max-width: 100% !important;
+  }
+
+  .heading {
+    font-size: 19px !important;
+    margin-bottom: 14px !important;
+    letter-spacing: 0.04em !important;
+  }
+
+  .linkItem,
+  .contactItem {
+    font-size: 16px !important;
+    line-height: 1.4 !important;
+  }
+
+  .linksList {
+    gap: 12px !important;
+  }
+
+  .colQuickLinks {
+    transform: none !important;
+  }
+
+  .contactBlock {
+    margin-top: 24px !important;
+  }
+
+  .socialRow {
+    transform: none !important;
+    margin-top: 24px !important;
+    gap: 12px !important;
+  }
+
+  .socialPill {
+    width: 46px !important;
+    height: 40px !important;
+    border-radius: 8px !important;
+  }
+
+  .bottomRow {
+    margin-top: 28px !important;
+    font-size: 14px !important;
+  }
+
+  .copyright,
+  .designedBy {
+    font-size: 14px !important;
+  }
+
+  .legalLinks {
+    gap: 20px !important;
+  }
+
+  .legalLink {
+    font-size: 14px !important;
+  }
+}
+
+/* =========================================================================
+   MAIN 3-COLUMN CONTENT GRID (Matches Desktop coordinates)
+   ========================================================================= */
+.contentGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(32px, 3.5vw, 64px);
+}
+
+@media (min-width: 768px) {
+  .contentGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1100px) {
+  .contentGrid {
+    /* 3-column layout: Bio/Contact, Quick Links, Services */
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.9fr) minmax(0, 1.15fr);
+    gap: clamp(48px, 6vw, 130px);
+  }
+}
+
+/* =========================================================================
+   COLUMN 1: BRAND BIO + CONTACT SECTION
+   ========================================================================= */
+.colBrandContact {
+  display: flex;
+  flex-direction: column;
+}
+
+.brandBio {
+  font-family: var(--font-outfit), var(--font-family-body), sans-serif;
+  font-size: var(--footer-bio-size);
+  font-weight: 300;
+  line-height: var(--footer-bio-line-height);
+  color: #FFFFFF;
+  opacity: 0.73;
+  max-width: var(--footer-bio-max-width);
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+
+.contactBlock {
+  margin-top: var(--footer-contact-gap-top);
+  display: flex;
+  flex-direction: column;
+}
+
+.heading {
+  font-family: var(--font-outfit), var(--font-family-body), sans-serif;
+  font-size: var(--footer-heading-size);
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  letter-spacing: 0.03em;
+  margin: 0 0 var(--footer-heading-margin-bottom) 0;
+  line-height: 1.25;
+}
+
+.linksList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--footer-item-gap, 20px);
+}
+
+.linkItem {
+  font-family: var(--font-outfit), var(--font-family-body), sans-serif;
+  font-size: var(--footer-item-size);
+  font-weight: 300;
+  line-height: var(--footer-item-line-height);
+  color: #FFFFFF;
+  opacity: 0.65;
+  text-decoration: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  display: inline-block;
+  width: fit-content;
+}
+
+.linkItem:hover {
+  opacity: 1;
+  transform: translateX(4px);
+}
+
+.contactItem {
+  font-family: var(--font-outfit), var(--font-family-body), sans-serif;
+  font-size: var(--footer-item-size);
+  font-weight: 300;
+  line-height: var(--footer-item-line-height);
+  color: #FFFFFF;
+  opacity: 0.65;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+}
+
+.contactItem:hover {
+  opacity: 1;
+}
+
+/* =========================================================================
+   COLUMN 2: QUICK LINKS + SOCIAL PILLS ROW
+   ========================================================================= */
+.colQuickLinks {
+  display: flex;
+  flex-direction: column;
+  transform: translateX(var(--footer-quicklinks-offset-x, 0px));
+}
+
+@media (max-width: 767px) {
+  .colQuickLinks {
+    transform: none;
+  }
+}
+
+.socialRow {
+  display: flex;
+  align-items: center;
+  gap: var(--footer-social-gap);
+  margin-top: var(--footer-social-margin-top);
+  flex-wrap: wrap;
+  transform: translate(var(--footer-social-offset-x, 0px), var(--footer-social-offset-y, 0px));
+}
+
+@media (max-width: 767px) {
+  .socialRow {
+    transform: none;
+  }
+}
+
+/* Pill button: 76.87px x 66.39px, border 1.22px solid white, opacity 0.35, transparent bg */
+.socialPill {
+  width: var(--footer-social-width);
+  height: var(--footer-social-height);
+  border-radius: var(--footer-social-radius);
+  border: 1.22px solid rgba(255, 255, 255, 0.35);
+  background-color: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.socialPill:hover {
+  border-color: rgba(255, 255, 255, 0.85);
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.socialIconSvg {
+  width: auto;
+  height: var(--footer-social-icon-size, clamp(28px, 2.2vw, 40px));
+  max-width: 75%;
+  max-height: 75%;
+  display: block;
+}
+
+/* =========================================================================
+   COLUMN 3: OUR SERVICES
+   ========================================================================= */
+.colServices {
+  display: flex;
+  flex-direction: column;
+  transform: translate(var(--footer-services-offset-x, 0px), var(--footer-services-offset-y, 0px));
+}
+
+@media (max-width: 767px) {
+  .colServices {
+    transform: none;
+  }
+}
+
+/* Full-width Divider Line */
+.divider {
+  width: 100%;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.4);
+  border: none;
+  margin-top: var(--footer-divider-margin-top);
+  margin-bottom: var(--footer-divider-margin-bottom);
+}
+
+/* =========================================================================
+   BOTTOM ROW: COPYRIGHT & LEGAL LINKS
+   ========================================================================= */
+.bottomRow {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .bottomRow {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.copyright {
+  font-family: var(--font-outfit), var(--font-family-body), sans-serif;
+  font-size: var(--footer-bottom-size);
+  font-weight: 400;
+  color: #FFFFFF;
+  opacity: 0.65;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.legalLinks {
+  display: flex;
+  align-items: center;
+  gap: var(--footer-legal-gap);
+}
+
+.legalLink {
+  font-family: var(--font-outfit), var(--font-family-body), sans-serif;
+  font-size: var(--footer-bottom-size);
+  font-weight: 400;
+  color: #FFFFFF;
+  opacity: 0.65;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.legalLink:hover {
+  opacity: 1;
+}
+
+/* Responsive Tablet & Mobile overrides (< 1024px) without altering Desktop */
+@media (max-width: 1023px) {
+  .footer {
+    --footer-padding-top: 56px;
+    --footer-padding-bottom: 32px;
+    --footer-padding-inline: 32px;
+    --footer-logo-size: 48px;
+    --footer-bio-size: 22px;
+    --footer-bio-line-height: 1.4;
+    --footer-heading-size: 24px;
+    --footer-item-size: 20px;
+    --footer-item-line-height: 1.35;
+    --footer-item-gap: 14px;
+    --footer-contact-gap-top: 36px;
+    --footer-social-width: 60px;
+    --footer-social-height: 52px;
+    --footer-social-gap: 16px;
+    --footer-social-margin-top: 36px;
+    --footer-bottom-size: 16px;
+    --footer-legal-gap: 32px;
+  }
+
+  .colQuickLinks,
+  .colServices,
+  .socialRow {
+    transform: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .footer {
+    --footer-padding-top: 44px;
+    --footer-padding-bottom: 24px;
+    --footer-padding-inline: 20px;
+    --footer-logo-size: 47px;
+    --footer-logo-margin-bottom: 20px;
+    --footer-bio-size: 17.89px;
+    --footer-bio-line-height: 1.35;
+    --footer-heading-size: 15.36px;
+    --footer-heading-margin-bottom: 14px;
+    --footer-item-size: 15.44px;
+    --footer-item-line-height: 1.45;
+    --footer-item-gap: 8px;
+    --footer-social-width: 55.49px;
+    --footer-social-height: 47.92px;
+    --footer-social-radius: 7.57px;
+    --footer-social-icon-size: 32px;
+    --footer-divider-margin-top: 40px;
+    --footer-divider-margin-bottom: 18px;
+    --footer-bottom-size: 14.91px;
+    --footer-legal-gap: 28px;
+  }
+
+  .contentGrid {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    column-gap: 16px;
+    row-gap: 36px;
+  }
+
+  .colBrandContact,
+  .colQuickLinks {
+    display: contents;
+  }
+
+  .brandBio {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    max-width: 342px;
+  }
+
+  .quickLinksGroup {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .colServices {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .contactBlock {
+    grid-column: 1;
+    grid-row: 3;
+    margin-top: 0;
+  }
+
+  .contactBlock .linkList {
+    gap: 4px;
+  }
+
+  .contactBlock .heading {
+    font-size: 14.6px;
+  }
+
+  .contactItem {
+    font-size: 14.68px;
+  }
+
+  .socialRow {
+    grid-column: 2;
+    grid-row: 3;
+    display: grid;
+    grid-template-columns: repeat(2, var(--footer-social-width));
+    gap: 21px 22px;
+    margin-top: 0;
+    align-content: start;
+  }
+
+  .bottomRow {
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .copyright {
+    font-size: 16.25px;
+  }
+
+  .legalLinks {
+    justify-content: center;
+  }
+}

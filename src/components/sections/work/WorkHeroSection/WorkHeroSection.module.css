@@ -1,0 +1,91 @@
+/* Work Hero Section Styles */
+
+.hero {
+  position: relative;
+  width: 100%;
+  padding-top: clamp(4.75rem, 5vw, 5.5rem);
+  padding-bottom: clamp(48px, 6vw, 64px);
+  overflow-x: clip;
+  background-color: var(--color-bg-page, #ffffff);
+}
+
+.container {
+  width: 100%;
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  position: relative;
+}
+
+.desktopHeadline {
+  display: flex;
+  flex-direction: column;
+}
+
+.desktopLine {
+  display: block;
+  white-space: nowrap;
+}
+
+.mobileHeadline {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    padding-top: 99px;
+    padding-bottom: 78px;
+  }
+
+  .container {
+    padding-left: var(--spacing-canvas-gutter, 79px);
+    padding-right: var(--spacing-canvas-gutter, 79px);
+  }
+
+  .heroHeader {
+    --hero-subtitle-size: 26.146px;
+  }
+}
+
+.highlight {
+  color: var(--color-brand-red, #cd3743);
+}
+
+@media (max-width: 767px) {
+  .hero {
+    padding-top: 48px;
+    padding-bottom: 42px;
+  }
+
+  .container {
+    padding: 0 15px;
+  }
+
+  .desktopHeadline {
+    display: none !important;
+  }
+
+  .mobileHeadline {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center;
+    width: 100%;
+  }
+
+  .mobileLine {
+    display: block !important;
+    white-space: nowrap !important;
+  }
+
+  .heroHeader [class*="headline"] {
+    font-size: clamp(48px, 14.5vw, 63.53px);
+    line-height: 1.02;
+    max-width: 100%;
+  }
+
+  .heroHeader [class*="subtitle"] {
+    font-size: 18.13px;
+    max-width: 331px;
+    margin-top: 16px;
+  }
+}

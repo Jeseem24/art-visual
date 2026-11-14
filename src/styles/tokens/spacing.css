@@ -1,0 +1,29 @@
+/* Design Tokens - Spacing, Radius, Shadows */
+:root {
+  /* Layout Paddings & Gaps */
+  --spacing-canvas-gutter: 79px;
+  --spacing-header-top: 57px;
+  --spacing-nav-gap: 47.303px;
+  --spacing-hero-offset: 63px;
+
+  /* Border Radii */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-card: 16px;
+  --radius-badge: 16.39px;
+  --radius-pill: 9999px;
+
+  /* Elevation & Shadows */
+  --shadow-none: none;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-card: 0px 0px 13.7px rgba(0, 0, 0, 0.25);
+  --shadow-pill: 0px 0px 8.9px rgba(0, 0, 0, 0.25);
+  --shadow-hero-reel: 0px 24px 48px -12px rgba(0, 0, 0, 0.25);
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+

@@ -1,0 +1,86 @@
+:root {
+  /* Why Choose Us spacing variables */
+  --why-section-padding-top: 130px;
+  --why-section-padding-bottom: 191px;
+  --why-headline-margin-top: 16px;
+  --why-headline-line-gap: 20px;
+  --why-cards-margin-top: 52px;
+  --why-cards-gap-x: 20px;
+  --why-cards-gap-y: 20px;
+}
+
+/* Section Container & Layout */
+.section {
+  position: relative;
+  width: 100%;
+  padding-top: clamp(48px, calc(var(--why-section-padding-top, 100px) * 0.7), var(--why-section-padding-top, 100px));
+  padding-bottom: clamp(64px, calc(var(--why-section-padding-bottom, 120px) * 0.7), var(--why-section-padding-bottom, 120px));
+  background-color: var(--color-bg-page, #ffffff);
+  overflow-x: clip;
+}
+
+@media (min-width: 1024px) {
+  .section {
+    padding-top: var(--why-section-padding-top, 100px);
+    padding-bottom: var(--why-section-padding-bottom, 120px);
+  }
+}
+
+.container {
+  width: 100%;
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4.11vw, var(--spacing-canvas-gutter, 79px));
+  position: relative;
+}
+
+/* Cards Grid */
+.cardsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--why-cards-gap-y, 20px) var(--why-cards-gap-x, 20px);
+  margin-top: var(--why-cards-margin-top, 52px);
+  width: 100%;
+}
+
+@media (min-width: 640px) and (max-width: 1199px) {
+  .cardsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .cardsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* =========================================================================
+   MOBILE (<= 767px) — Figma 233:2185 (412px)
+   ========================================================================= */
+@media (max-width: 767px) {
+  .section {
+    padding: 64px 0 80px;
+  }
+
+  .container {
+    padding: 0 20px;
+  }
+
+  .header {
+    --badge-text-size: 17.33px;
+    --headline-font-size: 47.06px;
+    --headline-line-gap: 6px;
+    --headline-badge-gap: 10px;
+  }
+
+  .headline {
+    max-width: 352px;
+  }
+
+  .cardsGrid {
+    gap: 28px;
+    margin-top: 36px;
+  }
+}
+

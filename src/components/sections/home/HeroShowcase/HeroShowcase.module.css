@@ -1,0 +1,262 @@
+/* Hero Showcase Module Styles */
+
+:root {
+  /* Manual showcase layout variables */
+
+  /* Showcase vertical position */
+  --showcase-top: -80px;
+
+  /* Card sizing and geometry */
+  --card-scale: 1;
+  --card-width: 309px;
+  --card-height: 332px;
+  --card-image-height: 229px;
+  --card-pivot-y: -33.5px;
+
+  /* Hanging wire controls */
+  --wire-display: block;
+  --wire-top: 0px;
+  --hero-thread-width: 1920px;
+  --hero-thread-height: 202px;
+
+  /* Card 1: Corporate Video Production (Far Left) */
+  --card-1-x: -740px;
+  --card-1-y: 148.3px;
+  --card-1-rotation: 14.36deg;
+
+  /* Card 2: Promotional Videos (Mid Left) */
+  --card-2-x: -380px;
+  --card-2-y: 215.7px;
+  --card-2-rotation: 6.19deg;
+
+  /* Card 3: Product Videography (Center) */
+  --card-3-x: 0px;
+  --card-3-y: 234.9px;
+  --card-3-rotation: 0deg;
+
+  /* Card 4: Event Video Production (Mid Right) */
+  --card-4-x: 380px;
+  --card-4-y: 215.7px;
+  --card-4-rotation: -6.19deg;
+
+  /* Card 5: Brand Video Production (Far Right) */
+  --card-5-x: 740px;
+  --card-5-y: 148.3px;
+  --card-5-rotation: -14.36deg;
+}
+
+.showcaseWrapper {
+  position: absolute;
+  top: var(--showcase-top, -45px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 1920px;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Hanging Wire Thread */
+.threadWrapper {
+  display: var(--wire-display);
+  position: absolute;
+  top: var(--wire-top);
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--hero-thread-width);
+  height: var(--hero-thread-height);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.threadSvg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+/* Cards Area */
+.cardsArea {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  pointer-events: auto;
+}
+
+/* Generic Card Slot with Eyelet Pivot Point */
+.cardSlot {
+  position: absolute;
+  width: var(--card-width, 309px);
+  /* Pivots around the center of the eyelet hole in the tab */
+  transform-origin: 50% var(--card-pivot-y, -33.5px);
+  /* Explicitly prevent any browser transition on transform during mount / refresh */
+  transition: none !important;
+  animation: none !important;
+}
+
+.cardSlot:hover {
+  z-index: 10;
+}
+
+/* Card 1: Corporate Video Production */
+.cardSlot1 {
+  left: calc(50% + var(--card-1-x, -760px) - (var(--card-width, 309px) / 2));
+  top: var(--card-1-y, 143.3px);
+  transform: scale(var(--card-scale, 1)) rotate(var(--card-1-rotation, 16.36deg));
+  z-index: 3;
+}
+
+/* Card 2: Promotional Videos */
+.cardSlot2 {
+  left: calc(50% + var(--card-2-x, -380px) - (var(--card-width, 309px) / 2));
+  top: var(--card-2-y, 215.7px);
+  transform: scale(var(--card-scale, 1)) rotate(var(--card-2-rotation, 6.19deg));
+  z-index: 4;
+}
+
+/* Card 3: Product Videography */
+.cardSlot3 {
+  left: calc(50% + var(--card-3-x, 0px) - (var(--card-width, 309px) / 2));
+  top: var(--card-3-y, 234.9px);
+  transform: scale(var(--card-scale, 1)) rotate(var(--card-3-rotation, 0deg));
+  z-index: 5;
+}
+
+/* Card 4: Event Video Production */
+.cardSlot4 {
+  left: calc(50% + var(--card-4-x, 380px) - (var(--card-width, 309px) / 2));
+  top: var(--card-4-y, 215.7px);
+  transform: scale(var(--card-scale, 1)) rotate(var(--card-4-rotation, -6.19deg));
+  z-index: 4;
+}
+
+/* Card 5: Brand Video Production */
+.cardSlot5 {
+  left: calc(50% + var(--card-5-x, 760px) - (var(--card-width, 309px) / 2));
+  top: var(--card-5-y, 143.3px);
+  transform: scale(var(--card-scale, 1)) rotate(var(--card-5-rotation, -16.36deg));
+  z-index: 3;
+}
+
+/* =========================================================================
+   LARGE DESKTOP (>= 1600px, including 1920px) — Scaled to 1440px proportions
+   ========================================================================= */
+@media (min-width: 1600px) {
+  .showcaseWrapper {
+    --showcase-top: -105px;
+    --hero-thread-width: 2560px;
+    --hero-thread-height: 270px;
+    --card-width: 412px;
+    --card-height: 442px;
+    --card-image-height: 305px;
+    --card-pivot-y: -44.5px;
+    --card-1-x: -986px;
+    --card-1-y: 199.2px;
+    --card-1-rotation: 14.36deg;
+    --card-2-x: -506px;
+    --card-2-y: 288px;
+    --card-2-rotation: 6.19deg;
+    --card-3-x: 0px;
+    --card-3-y: 313.7px;
+    --card-3-rotation: 0deg;
+    --card-4-x: 506px;
+    --card-4-y: 288px;
+    --card-4-rotation: -6.19deg;
+    --card-5-x: 986px;
+    --card-5-y: 199.2px;
+    --card-5-rotation: -14.36deg;
+  }
+}
+
+/* =========================================================================
+   TABLET (768px - 899px)
+   ========================================================================= */
+@media (min-width: 768px) and (max-width: 899px) {
+  .showcaseWrapper {
+    --showcase-top: -40px;
+    --card-width: 220px;
+    --card-height: 250px;
+    --card-image-height: 165px;
+    --card-pivot-y: -24px;
+    --hero-thread-width: 1160px;
+    --hero-thread-height: 130px;
+    --card-1-x: -430px;
+    --card-1-y: 103.3px;
+    --card-1-rotation: 14.36deg;
+    --card-2-x: -215px;
+    --card-2-y: 142.8px;
+    --card-2-rotation: 6.19deg;
+    --card-3-x: 0px;
+    --card-3-y: 153.6px;
+    --card-3-rotation: 0deg;
+    --card-4-x: 215px;
+    --card-4-y: 142.8px;
+    --card-4-rotation: -6.19deg;
+    --card-5-x: 430px;
+    --card-5-y: 103.3px;
+    --card-5-rotation: -14.36deg;
+  }
+}
+
+/* =========================================================================
+   SMALL LAPTOP / 1024px (900px - 1199px) — Exact thread eyehole alignment
+   ========================================================================= */
+@media (min-width: 900px) and (max-width: 1199px) {
+  .showcaseWrapper {
+    --showcase-top: -55px;
+    --card-width: 260px;
+    --card-height: 290px;
+    --card-image-height: 196px;
+    --card-pivot-y: -28px;
+    --hero-thread-width: 1480px;
+    --hero-thread-height: 165px;
+    --card-1-x: -540px;
+    --card-1-y: 131px;
+    --card-1-rotation: 14.36deg;
+    --card-2-x: -270px;
+    --card-2-y: 179.3px;
+    --card-2-rotation: 6.19deg;
+    --card-3-x: 0px;
+    --card-3-y: 192.5px;
+    --card-3-rotation: 0deg;
+    --card-4-x: 270px;
+    --card-4-y: 179.3px;
+    --card-4-rotation: -6.19deg;
+    --card-5-x: 540px;
+    --card-5-y: 131px;
+    --card-5-rotation: -14.36deg;
+  }
+}
+
+/* =========================================================================
+   MOBILE (<= 767px) — Figma 233:2185 (412px)
+   ========================================================================= */
+@media (max-width: 767px) {
+  .showcaseWrapper {
+    --showcase-top: 24px;
+    --card-width: 134px;
+    --card-height: 138px;
+    --card-image-height: 92px;
+    --card-pivot-y: -14px;
+    --hero-thread-width: 820px;
+    --hero-thread-height: 77px;
+    --card-1-x: -316px;
+    --card-1-y: 54px;
+    --card-1-rotation: 14.36deg;
+    --card-2-x: -162px;
+    --card-2-y: 78px;
+    --card-2-rotation: 6.19deg;
+    --card-3-x: 0px;
+    --card-3-y: 89.5px;
+    --card-3-rotation: 0deg;
+    --card-4-x: 162px;
+    --card-4-y: 78px;
+    --card-4-rotation: -6.19deg;
+    --card-5-x: 316px;
+    --card-5-y: 54px;
+    --card-5-rotation: -14.36deg;
+  }
+}

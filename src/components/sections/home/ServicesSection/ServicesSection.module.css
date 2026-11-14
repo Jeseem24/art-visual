@@ -1,0 +1,151 @@
+:root {
+  /* Section Spacing Controls */
+  --services-section-padding-top: 25px;
+  --services-section-padding-bottom: 120px;
+  --services-headline-margin-top: 16.75px;
+  --services-cards-margin-top: 80px;
+  --services-cards-gap-x: 120px;
+  --services-cards-gap-y: 120px;
+  --services-cta-margin-top: 126px;
+  --services-button-width: 240px;
+}
+
+/* Services Section Module Styles */
+
+.section {
+  position: relative;
+  width: 100%;
+  padding-top: clamp(16px, calc(var(--services-section-padding-top, 13px) * 0.8), var(--services-section-padding-top, 13px));
+  padding-bottom: clamp(48px, calc(var(--services-section-padding-bottom, 120px) * 0.6), var(--services-section-padding-bottom, 120px));
+  background-color: var(--color-bg-page, #ffffff);
+  overflow-x: clip;
+}
+
+@media (min-width: 1024px) {
+  .section {
+    padding-top: var(--services-section-padding-top, 13px);
+    padding-bottom: var(--services-section-padding-bottom, 120px);
+  }
+}
+
+.container {
+  width: 100%;
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 0 9px;
+}
+
+.headerWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Services Cards Grid */
+.cardsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 48px;
+  width: 100%;
+  margin-top: clamp(40px, calc(var(--services-cards-margin-top, 70px) * 0.7), var(--services-cards-margin-top, 70px));
+  justify-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 640px) and (max-width: 1199px) {
+  .container {
+    padding: 0 32px;
+  }
+
+  .cardsGrid {
+    grid-template-columns: repeat(2, minmax(0, 440px));
+    column-gap: 36px;
+    row-gap: 56px;
+    justify-content: center;
+  }
+}
+
+@media (min-width: 1200px) {
+  .cardsGrid {
+    grid-template-columns: repeat(3, var(--service-card-width, 504px));
+    column-gap: var(--services-cards-gap-x, 124px);
+    row-gap: var(--services-cards-gap-y, 124px);
+    margin-top: var(--services-cards-margin-top, 70px);
+    justify-content: center;
+  }
+}
+
+/* Bottom CTA Button */
+.ctaWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: var(--services-cta-margin-top, 124px);
+}
+
+@media (max-width: 768px) {
+  .ctaWrapper {
+    margin-top: clamp(32px, 6vw, 64px);
+  }
+}
+
+.viewAllButton {
+  width: var(--services-button-width, 240px);
+}
+
+/* =========================================================================
+   MOBILE (<= 767px) — Figma 233:2185 (412px)
+   ========================================================================= */
+@media (max-width: 767px) {
+  .section {
+    --headline-font-size: 47.06px;
+    --badge-text-size: 17.33px;
+    padding-top: 48px;
+    padding-bottom: 64px;
+  }
+
+  .section h2 {
+    max-width: 373px;
+  }
+
+  .container {
+    padding: 0 20px;
+  }
+
+  .cardsGrid {
+    margin-top: 42px;
+    gap: 56px;
+  }
+
+  .cardsGrid > *:nth-child(n+4) {
+    display: none;
+  }
+
+  .ctaWrapper {
+    margin-top: 54px;
+  }
+
+  .viewAllButton {
+    width: fit-content;
+    height: 39.2px;
+    border-radius: 11.396px;
+    padding: 0 6px 0 14px;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .viewAllButton span {
+    font-size: 16px;
+  }
+
+  .viewAllButton svg {
+    width: 28px;
+    height: 25px;
+  }
+}
+
+

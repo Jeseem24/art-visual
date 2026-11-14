@@ -1,0 +1,87 @@
+/* Reusable Hero Header Component Styles */
+
+.contentWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 1000px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Badge Frame */
+.badgeWrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.75rem;
+}
+
+/* Main Display Headline */
+.headline {
+  font-family: var(--font-family-heading);
+  font-weight: 400;
+  font-style: normal;
+  font-size: clamp(3rem, calc(125.799 / 1920 * 100vw), 106.799px);
+  line-height: 1.15;
+  row-gap: 5px;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--color-dark-charcoal, #2d2d2d);
+  width: 100%;
+  max-width: var(--hero-headline-max-width, 858px);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 1920px) {
+  .headline {
+    width: var(--hero-headline-max-width, 858px);
+    font-size: 106.799px;
+  }
+}
+
+.headlineLine {
+  display: block;
+  white-space: normal;
+}
+
+@media (min-width: 768px) {
+  .headlineLine {
+    white-space: nowrap;
+  }
+}
+
+.highlight {
+  color: var(--color-brand-red, #cd3743);
+}
+
+/* Subtitle Narrative */
+.subtitle {
+  font-family: var(--font-family-body);
+  font-size: var(--hero-subtitle-size, clamp(1.125rem, calc(30.146 / 1920 * 100vw), 30.146px));
+  font-weight: 400;
+  line-height: normal;
+  opacity: 0.65;
+  color: var(--color-dark-primary, #000000);
+  width: 100%;
+  max-width: var(--hero-subtitle-max-width, 618.633px);
+  margin: 0 auto 27px auto;
+  text-align: center;
+}
+
+@media (max-width: 767px) {
+  .headline {
+    font-size: clamp(2.35rem, 11vw, 3rem);
+  }
+
+  .subtitle {
+    font-size: clamp(1rem, 4.2vw, 1.125rem);
+    margin-bottom: 0;
+  }
+}
+

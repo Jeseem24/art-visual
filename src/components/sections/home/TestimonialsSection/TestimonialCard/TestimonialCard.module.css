@@ -1,0 +1,197 @@
+:root {
+  /* Testimonial card layout and typography variables */
+  --testimonial-card-padding-top: 30px;
+  --testimonial-card-padding-left: 52px;
+  --testimonial-card-padding-right: 48px;
+  --testimonial-card-padding-bottom: 40px;
+  --testimonial-card-padding: var(--testimonial-card-padding-top) var(--testimonial-card-padding-right) var(--testimonial-card-padding-bottom) var(--testimonial-card-padding-left);
+  --testimonial-card-border-radius: 20.365px;
+  --testimonial-card-bg: #ffffff;
+  --testimonial-card-border: 0.885px solid rgba(10, 34, 60, 0.44);
+  --testimonial-card-shadow: 0px 0px 14.521px 0px rgba(0, 0, 0, 0.25);
+
+  /* Avatar Dimensions */
+  --testimonial-avatar-frame-size: 80px;
+  --testimonial-avatar-size: 66px;
+  --testimonial-avatar-zoom: 1;
+
+  /* Quote Typography */
+  --testimonial-quote-size: clamp(24.9px, 1.3vw, 24.947px);
+  --testimonial-quote-line-height: 30px;
+  --testimonial-quote-margin-top: 39px;
+  --testimonial-quote-max-width: 403px;
+}
+
+.card {
+  position: relative;
+  width: 100%;
+  min-height: 323.177px;
+  background-color: var(--testimonial-card-bg);
+  border: var(--testimonial-card-border);
+  border-radius: var(--testimonial-card-border-radius);
+  box-shadow: var(--testimonial-card-shadow);
+  padding: var(--testimonial-card-padding);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  box-sizing: border-box;
+}
+
+/* Header with Avatar & Details */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Avatar Frame */
+.avatarFrame {
+  position: relative;
+  width: var(--testimonial-avatar-frame-size, 80px);
+  height: var(--testimonial-avatar-frame-size, 80px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background-color: #ffffff;
+  border-radius: 14px;
+  border: 0.885px solid rgba(10, 34, 60, 0.44);
+  box-shadow: 0px 0px 11px 0px rgba(0, 0, 0, 0.2);
+}
+
+.avatarImageWrapper {
+  width: var(--testimonial-avatar-size, 66px);
+  height: var(--testimonial-avatar-size, 66px);
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.avatarImage {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+  object-position: center 8px;
+  transform: scale(1.5); 
+  display: block;
+}
+
+/* Author Details */
+.authorMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+.authorName {
+  font-family: var(--font-family-poppins, 'Poppins', sans-serif);
+  font-size: clamp(18px, 0.95vw, 18.373px);
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #000000;
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+}
+
+.authorRole {
+  font-family: var(--font-family-inter, 'Inter', sans-serif);
+  font-size: clamp(12px, 0.65vw, 12.236px);
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.72);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.starRating {
+  width: 108.91px;
+  height: 21.78px;
+  display: block;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+/* Quote Paragraph */
+.quote {
+  font-family: var(--font-family-inter, 'Inter', sans-serif);
+  font-size: var(--testimonial-quote-size, 24.947px);
+  font-weight: 500;
+  line-height: var(--testimonial-quote-line-height, 30px);
+  color: rgba(0, 0, 0, 0.72);
+  margin: 0;
+  margin-top: var(--testimonial-quote-margin-top, 39px);
+  max-width: var(--testimonial-quote-max-width, 403px);
+  width: 100%;
+  letter-spacing: -0.01em;
+  word-break: break-word;
+}
+
+/* =========================================================================
+   MOBILE (<= 767px) — Figma 233:2185 (412px)
+   ========================================================================= */
+@media (max-width: 767px) {
+  .card {
+    flex: 0 0 194px;
+    min-height: 168.6px;
+    padding: 20px 16px 18px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 7.088px 0px rgba(0, 0, 0, 0.25);
+    scroll-snap-align: center;
+  }
+
+  .header {
+    gap: 10px;
+  }
+
+  .avatarFrame {
+    width: 40px;
+    height: 45px;
+    border-radius: 9.14px;
+    overflow: hidden;
+    padding: 0;
+  }
+
+  .avatarImageWrapper {
+    width: 100%;
+    height: 100%;
+    border-radius: 9.14px;
+  }
+
+  .avatarImage {
+    object-fit: cover;
+    object-position: center 15%;
+  }
+
+  .authorMeta {
+    gap: 3px;
+  }
+
+  .authorName {
+    font-size: 10.45px;
+    font-weight: 600;
+  }
+
+  .authorRole {
+    font-size: 6.5px;
+  }
+
+  .starRating {
+    width: 55px;
+    height: 11px;
+    margin-top: 1px;
+  }
+
+  .quote {
+    font-size: 11px;
+    line-height: 1.35;
+    margin-top: 14px;
+    max-width: 100%;
+  }
+}

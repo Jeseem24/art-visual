@@ -1,0 +1,54 @@
+/* Brand CTA Button */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 49px;
+  padding-left: 19px;
+  padding-right: 8px;
+  border-radius: 14.2454px;
+  background-color: var(--color-brand-red, #CD3743);
+  color: #FFFFFF;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  box-sizing: border-box;
+  user-select: none;
+  white-space: nowrap;
+  gap: 12px;
+  transition: background-color var(--transition-fast, 0.2s ease), transform var(--transition-fast, 0.2s ease);
+}
+
+.button:hover {
+  background-color: var(--color-brand-red-hover, #B52D38);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--color-brand-red, #CD3743);
+  outline-offset: 3px;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.label {
+  font-family: var(--font-family-body, 'Outfit', sans-serif);
+  font-weight: 400;
+  font-size: 21.909px;
+  line-height: normal;
+  letter-spacing: 0;
+  color: #FFFFFF;
+  white-space: nowrap;
+}
+
+.playSvg {
+  display: block;
+  flex-shrink: 0;
+  width: 37px;
+  height: 33px;
+  transition: transform var(--transition-fast, 0.2s ease);
+}
+

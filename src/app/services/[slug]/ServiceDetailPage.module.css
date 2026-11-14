@@ -1,0 +1,185 @@
+/* Scoped layout and spacing overrides for /services/[slug] (Figma 182:1807).
+   Desktop (1024px+) runs under body { zoom: 0.8 }, so exact Figma px values are used. */
+
+.serviceDetailPage {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Mobile & Tablet (< 1024px): compact, balanced section rhythm */
+.serviceDetailPage .heroSection {
+  padding-top: clamp(24px, 4.5vw, 48px);
+  padding-bottom: 0;
+}
+
+.serviceDetailPage .aboutSection {
+  padding-top: clamp(44px, 6.5vw, 72px);
+  padding-bottom: clamp(40px, 5.5vw, 64px);
+}
+
+.serviceDetailPage .offerSection {
+  padding-top: clamp(32px, 4.5vw, 56px);
+  padding-bottom: clamp(40px, 5.5vw, 64px);
+}
+
+.serviceDetailPage .processSection {
+  padding-top: clamp(40px, 5.5vw, 64px);
+  padding-bottom: clamp(40px, 5.5vw, 64px);
+}
+
+.serviceDetailPage .receiveSection {
+  padding-top: clamp(40px, 5.5vw, 64px);
+  padding-bottom: clamp(40px, 5.5vw, 64px);
+}
+
+.serviceDetailPage .featuredWorks {
+  padding-top: clamp(40px, 5.5vw, 64px);
+  padding-bottom: clamp(48px, 6.5vw, 72px);
+}
+
+.serviceDetailPage .whyChooseUs {
+  padding-top: clamp(40px, 5.5vw, 64px);
+  padding-bottom: clamp(48px, 6.5vw, 72px);
+}
+
+.serviceDetailPage .faqSection {
+  padding-top: clamp(40px, 5.5vw, 64px);
+  padding-bottom: clamp(48px, 6.5vw, 72px);
+}
+
+.serviceDetailPage .ctaBanner {
+  padding-top: clamp(44px, 6vw, 72px);
+  padding-bottom: clamp(64px, 8vw, 104px);
+}
+
+/* Mobile CTA card & 313px button guard (< 768px) */
+@media (max-width: 767px) {
+  .serviceDetailPage .heroSection {
+    padding-top: 40px;
+    padding-bottom: 0;
+  }
+
+  .serviceDetailPage .aboutSection {
+    padding-top: 44px;
+    padding-bottom: 40px;
+  }
+
+  .serviceDetailPage .offerSection {
+    padding-top: 32px;
+    padding-bottom: 40px;
+  }
+
+  .serviceDetailPage .offerSection [class*="headline"] {
+    font-size: clamp(42px, 12.2vw, 50px) !important;
+    letter-spacing: -0.02em !important;
+  }
+
+  .serviceDetailPage .processSection {
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+
+  .serviceDetailPage .receiveSection {
+    padding-top: 36px;
+    padding-bottom: 48px;
+  }
+
+  .serviceDetailPage .ctaBanner {
+    --cta-banner-padding-left: 24px;
+    --cta-banner-padding-top: 30px;
+    --cta-banner-padding-bottom: 34px;
+    --cta-desc-margin-top: 18px;
+    --cta-button-margin-top: 26px;
+  }
+
+  .serviceDetailPage .ctaBanner [class*="bannerCard"] {
+    min-height: auto;
+  }
+}
+
+/* Tablet CTA tuning (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .serviceDetailPage .ctaBanner {
+    --headline-font-size: clamp(36px, 5vw, 52px);
+  }
+
+  .serviceDetailPage .ctaBanner a {
+    width: 313px;
+    max-width: 100%;
+  }
+}
+
+/* Desktop (1024px+): Exact Figma 182:1807 vertical rhythm & 313px CTA button */
+@media (min-width: 1024px) {
+  .serviceDetailPage .heroSection {
+    padding-top: 119px;
+    padding-bottom: 0;
+  }
+
+  /* 153px below hero title; 215px total gap to What We Offer (108 + 107) */
+  .serviceDetailPage .aboutSection {
+    padding-top: 153px;
+    padding-bottom: 108px;
+  }
+
+  /* 260px total gap to Creative Process (125 + 135) */
+  .serviceDetailPage .offerSection {
+    padding-top: 107px;
+    padding-bottom: 125px;
+  }
+
+  /* 245px total gap to What You'll Receive (124 + 121) */
+  .serviceDetailPage .processSection {
+    padding-top: 135px;
+    padding-bottom: 124px;
+  }
+
+  /* 255px total gap to Featured Works (155 + 100) */
+  .serviceDetailPage .receiveSection {
+    padding-top: 121px;
+    padding-bottom: 155px;
+  }
+
+  /* 230px total gap to Why Choose Us (100 + 130) */
+  .serviceDetailPage .featuredWorks {
+    padding-top: 100px;
+    padding-bottom: 100px;
+  }
+
+  /* 230px total gap to FAQ (110 + 120) */
+  .serviceDetailPage .whyChooseUs {
+    padding-top: 130px;
+    padding-bottom: 110px;
+  }
+
+  /* 230px total gap to CTA Banner (120 + 110) */
+  .serviceDetailPage .faqSection {
+    padding-top: 120px;
+    padding-bottom: 120px;
+  }
+
+  /* Overrides broken CTA top padding & sizes the 313px CTA button for this page only */
+  .serviceDetailPage .ctaBanner {
+    --headline-font-size: 64px;
+    padding-top: 110px;
+    padding-bottom: 210px;
+  }
+
+  .serviceDetailPage .ctaBanner a {
+    width: 313px;
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 1280px) {
+  .serviceDetailPage .ctaBanner {
+    --headline-font-size: 78px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .serviceDetailPage .ctaBanner {
+    --headline-font-size: 96px;
+  }
+}

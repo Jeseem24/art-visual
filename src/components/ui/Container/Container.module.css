@@ -1,0 +1,32 @@
+/* Container Module Styles */
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding-left: var(--spacing-canvas-gutter);
+    padding-right: var(--spacing-canvas-gutter);
+  }
+}
+
+.wide {
+  max-width: 1762px;
+}
+
+.default {
+  max-width: 1280px;
+}
+
+.narrow {
+  max-width: 1024px;
+}
+
+.full {
+  max-width: 100%;
+}
+

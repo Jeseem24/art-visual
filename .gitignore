@@ -39,3 +39,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Internal documentation, specs, and BRDs (excluded per user request)
+docs/
+*.pdf
+Quantix_Media Website BRD - Video production.pdf
+
+# Internal tools, AST graph, and raw media scratch
+graphify-out/
+video/
+

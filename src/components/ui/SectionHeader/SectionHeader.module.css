@@ -1,0 +1,164 @@
+:root {
+  /* Headline & Section Header Tokens */
+  --headline-font-size: clamp(2.5rem, calc(105.5385 / 1920 * 100vw), 105.5385px);
+  --headline-font-size-compact: clamp(2rem, calc(85.5385 / 1920 * 100vw), 85.5385px);
+  --headline-font-size-hero: clamp(3rem, calc(106.799 / 1920 * 100vw), 106.799px);
+
+  --headline-line-gap: 20px;
+  --headline-badge-gap: 16px;
+
+  --headline-color-dark: #2d2d2d;
+  --headline-color-light: #ffffff;
+
+  --badge-text-size: clamp(23.48px, 1.22vw, 23.48px);
+}
+
+/* =========================================================================
+   HEADER WRAPPER
+   ========================================================================= */
+.headerWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+}
+
+.alignCenter {
+  align-items: center;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.alignLeft {
+  align-items: flex-start;
+  text-align: left;
+}
+
+/* =========================================================================
+   SUBTITLE BADGE ROW
+   ========================================================================= */
+.badgeRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 30px;
+}
+
+.alignCenter .badgeRow {
+  justify-content: center;
+}
+
+.cameraIcon {
+  width: 22px;
+  height: 17.29px;
+  flex-shrink: 0;
+  display: block;
+}
+
+.themeDark .cameraIcon {
+  color: #000000;
+  opacity: 0.65;
+}
+
+.themeLight .cameraIcon {
+  color: #ffffff;
+  opacity: 0.65;
+}
+
+.badgeText {
+  font-family: var(--font-family-body, var(--font-outfit, 'Outfit', sans-serif));
+  font-size: var(--badge-text-size);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  margin: 0;
+  line-height: normal;
+}
+
+.themeDark .badgeText {
+  color: #000000;
+  opacity: 0.65;
+}
+
+.themeLight .badgeText {
+  color: #ffffff;
+  opacity: 0.65;
+}
+
+/* =========================================================================
+   HEADLINE
+   ========================================================================= */
+.headline {
+  font-family: var(--font-family-heading, var(--font-bebas, 'Bebas Neue', sans-serif));
+  line-height: 0.98;
+  font-weight: 400;
+  text-transform: uppercase;
+  margin: 0;
+  margin-top: var(--headline-badge-gap);
+  letter-spacing: 0.01em;
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--headline-line-gap);
+}
+
+.alignCenter .headline {
+  align-items: center;
+  text-align: center;
+}
+
+.alignLeft .headline {
+  align-items: flex-start;
+  text-align: left;
+}
+
+/* Theme Colors */
+.themeDark .headline {
+  color: var(--headline-color-dark);
+}
+
+.themeLight .headline {
+  color: var(--headline-color-light);
+}
+
+/* Size Variants */
+.sizeDefault {
+  font-size: var(--headline-font-size);
+}
+
+.sizeCompact {
+  font-size: var(--headline-font-size-compact);
+}
+
+.sizeHero {
+  font-size: var(--headline-font-size-hero);
+}
+
+/* Individual line wrapper */
+.headlineLine {
+  display: block;
+  white-space: normal;
+}
+
+@media (min-width: 768px) {
+  .headlineLine {
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 767px) {
+  .headline {
+    display: block;
+    font-size: 47.06px;
+    line-height: 1.08;
+  }
+
+  .headlineLine {
+    display: inline;
+    white-space: normal;
+  }
+
+  .headlineLine + .headlineLine::before {
+    content: " ";
+  }
+}
+

@@ -1,0 +1,27 @@
+/* Home page scoped styles */
+
+.homePage {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+@media (max-width: 767px) {
+  .homePage .ctaBanner [class*="bannerCard"] {
+    min-height: 434px;
+  }
+
+  .homePage .ctaBanner [class*="reelsArea"] {
+    right: -55px;
+    bottom: -55px;
+  }
+}
+
+@media (max-width: 410px) {
+  .homePage .ctaBanner [class*="reelsArea"] {
+    transform: scale(0.86) !important;
+    right: -45px !important;
+    bottom: -50px !important;
+  }
+}
+

@@ -1,0 +1,613 @@
+:root {
+  /* About Us section layout and spacing variables */
+  --about-section-padding-top: 60px;
+  --about-section-padding-bottom: 110px;
+  --about-badge-margin-bottom: 16px;
+  --about-headline-max-width: 600px;
+  --about-headline-line-gap: 20px;
+  --about-grid-line-color: rgba(0, 0, 0, 0.15);
+  --about-reticle-color: rgba(0, 0, 0, 0.7);
+  --about-photo-width: 503px;
+  --about-photo-height: 368px;
+  --about-ribbon-speed: 35s;
+  --about-ribbon-angle: -4.85deg;
+  --about-cta-margin-top: 195px;
+  --about-button-width: 233px;
+}
+
+/* Section Container & Grid */
+.section {
+  position: relative;
+  width: 100%;
+  background-color: var(--color-bg-page, #ffffff);
+  overflow-x: clip;
+}
+
+/* Top Horizontal Architectural Border */
+.topBorderLine {
+  position: relative;
+  width: 100%;
+  height: 1px;
+  background-color: var(--about-grid-line-color, rgba(0, 0, 0, 0.15));
+  margin-top: var(--about-section-padding-top, 60px);
+}
+
+.container {
+  width: 100%;
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4.11vw, var(--spacing-canvas-gutter, 79px));
+  position: relative;
+}
+
+/* Top Row: Headline (Left) & Story Paragraph (Right) */
+.topRow {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding-top: clamp(32px, 3.8vw, 72px);
+  padding-bottom: clamp(32px, 3.8vw, 72px);
+}
+
+@media (min-width: 1024px) {
+  .topRow {
+    display: grid;
+    grid-template-columns: minmax(360px, 535px) 1fr;
+    gap: 0;
+    padding-top: 110px;
+    padding-bottom: 80px;
+    padding-left: 16px;
+  }
+}
+
+/* Left Column */
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .leftCol {
+    padding-right: 48px;
+    max-width: var(--about-headline-max-width, 480px);
+  }
+}
+
+/* Right Column: Story Paragraph */
+.rightCol {
+  display: flex;
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .rightCol {
+    padding-left: 70px;
+  }
+}
+
+.storyParagraph {
+  font-family: var(--font-outfit, sans-serif);
+  font-size: clamp(1.25rem, calc(50.719 / 1920 * 100vw), 50.719px);
+  font-weight: 400;
+  line-height: 1.35;
+  margin: 0;
+  max-width: 1100px;
+  word-break: break-word;
+}
+
+.storyHighlight {
+  color: #000000;
+  font-weight: 400;
+}
+
+.storyBody {
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 400;
+}
+
+/* =========================================================================
+   TABLET / SMALL LAPTOP (768px - 1199px, including 1024px)
+   ========================================================================= */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .container {
+    padding: 0 32px;
+  }
+
+  .topRow {
+    grid-template-columns: 280px 1fr !important;
+    gap: 28px !important;
+    padding-top: 60px !important;
+    padding-bottom: 50px !important;
+    padding-left: 0 !important;
+  }
+
+  .verticalDividerLine {
+    left: calc(32px + 280px) !important;
+    height: 700px !important;
+  }
+
+  .crosshairReticle {
+    left: calc(32px + 280px) !important;
+  }
+
+  .storyParagraph {
+    font-size: 28px !important;
+    line-height: 1.35 !important;
+  }
+
+  .showcaseArea {
+    transform: none !important;
+    padding-top: 48px !important;
+    padding-bottom: 70px !important;
+  }
+
+  .photoContainer {
+    width: 440px !important;
+    height: 320px !important;
+    margin: 0 auto !important;
+  }
+
+  .ribbonWrapper {
+    margin-top: -190px !important;
+    height: 96px !important;
+  }
+
+  .ribbonText {
+    font-size: 38px !important;
+  }
+
+  .ctaWrapper {
+    margin-top: 75px !important;
+  }
+}
+
+/* Middle Horizontal Divider & Intersection Reticle */
+.middleDividerWrapper {
+  position: relative;
+  width: 100%;
+  height: 1px;
+}
+
+.middleBorderLine {
+  width: 100%;
+  height: 1px;
+  background-color: var(--about-grid-line-color, rgba(0, 0, 0, 0.15));
+}
+
+/* Vertical architectural divider */
+.verticalDividerLine {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .verticalDividerLine {
+    display: block;
+    position: absolute;
+    left: calc(var(--spacing-canvas-gutter, 79px) + 535px);
+    top: 0px;
+    height: 814px;
+    width: 1px;
+    background-color: var(--about-grid-line-color, rgba(0, 0, 0, 0.15));
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+/* Crosshairs Reticle */
+.crosshairReticle {
+  display: none;
+  opacity: 0.5;
+}
+
+@media (min-width: 1024px) {
+  .crosshairReticle {
+    display: block;
+    position: absolute;
+    left: calc(var(--spacing-canvas-gutter, 79px) + 535px);
+    top: 0;
+    transform: translate(-50%, -50%);
+    width: 38px;
+    height: 37px;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .reticleVertical {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 1.5px;
+    height: 37px;
+    background-color: var(--about-reticle-color, rgba(0, 0, 0, 0.7));
+    transform: translateX(-50%);
+  }
+
+  .reticleHorizontal {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 38px;
+    height: 1.5px;
+    background-color: var(--about-reticle-color, rgba(0, 0, 0, 0.7));
+    transform: translateY(-50%);
+  }
+}
+
+/* Lower Showcase: Viewfinder Photo Card & Slanted Ribbon Marquee */
+.showcaseArea {
+  position: relative;
+  width: 100%;
+  padding-top: clamp(40px, 4.5vw, 60px);
+  transform: translate(-60px,-30);
+  padding-bottom: var(--about-section-padding-bottom, 110px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Viewfinder Photo Card */
+.photoContainer {
+  position: relative;
+  width: min(100%, var(--about-photo-width, 503px));
+  height: clamp(260px, 30vw, var(--about-photo-height, 368px));
+  margin: 0 auto;
+  z-index: 2;
+}
+
+.photoImageWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.18);
+  background-color: #000000;
+}
+
+.mediaVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.photoImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Camera Viewfinder Frame with 1px white border */
+.viewfinderFrame {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  right: 18px;
+  bottom: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Corner Viewfinder Ticks */
+.viewfinderCornerTL {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: 37px;
+  height: 37px;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.viewfinderCornerTL::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 37px;
+  height: 3px;
+  background-color: #ffffff;
+}
+
+.viewfinderCornerTL::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 37px;
+  background-color: #ffffff;
+}
+
+.viewfinderCornerBR {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 37px;
+  height: 37px;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.viewfinderCornerBR::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 37px;
+  height: 3px;
+  background-color: #ffffff;
+}
+
+.viewfinderCornerBR::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 3px;
+  height: 37px;
+  background-color: #ffffff;
+}
+
+/* Slanted Brand Marquee Ribbon */
+.ribbonWrapper {
+  position: relative;
+  width: 150vw;
+  margin-left: calc(-50vw + 50%);
+  margin-top: clamp(-280px, -14.5vw, -90px);
+  height: 124px;
+  background-color: #cd3743;
+  transform: rotate(var(--about-ribbon-angle, -4.85deg));
+  transform-origin: center;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  z-index: 1;
+  box-shadow: 0 10px 30px rgba(205, 55, 67, 0.25);
+}
+
+@media (min-width: 1024px) {
+  .ribbonWrapper {
+    margin-top: -280px;
+    height: 124px;
+  }
+}
+
+.ribbonTrack {
+  display: flex;
+  white-space: nowrap;
+  width: max-content;
+  will-change: transform;
+  animation: ribbonMarquee var(--about-ribbon-speed, 25s) linear infinite;
+}
+
+
+.ribbonGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 36px;
+  padding-right: 36px;
+}
+
+.ribbonItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 36px;
+}
+
+.ribbonText {
+  font-family: var(--font-family-body, var(--font-outfit, 'Outfit', sans-serif));
+  font-size: clamp(1.75rem, calc(63.32 / 1920 * 100vw), 63.32px);
+  font-weight: 500;
+  color: #ffffff;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.ribbonDot {
+  width: clamp(16px, 1.56vw, 30px);
+  height: clamp(16px, 1.56vw, 30px);
+  border-radius: 50%;
+  background-color: #ffffff;
+  flex-shrink: 0;
+}
+
+@keyframes ribbonMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Call to Action Button */
+.ctaWrapper {
+  margin-top: var(--about-cta-margin-top, 48px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  z-index: 3;
+}
+
+.aboutButton {
+  width: var(--about-button-width, 233px) !important;
+}
+
+/* Button element offsets */
+.ctaWrapper :global([class*="label"]),
+.ctaWrapper span {
+  transform: translate(-4px);
+}
+
+.ctaWrapper :global([class*="playSvg"]),
+.ctaWrapper svg {
+  transform: translate(-5px);
+}
+
+/* =========================================================================
+   MOBILE (<= 767px) — Figma 233:2185 (412px)
+   ========================================================================= */
+@media (max-width: 767px) {
+  .topBorderLine {
+    margin-top: 32px;
+  }
+
+  .container {
+    padding: 0 20px;
+  }
+
+  .topRow {
+    gap: 0;
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
+
+  .leftCol {
+    position: relative;
+    padding-bottom: 24px;
+  }
+
+  .leftCol::after {
+    content: "";
+    position: absolute;
+    left: -20px;
+    right: -20px;
+    bottom: 0;
+    height: 1px;
+    background-color: var(--about-grid-line-color, rgba(0, 0, 0, 0.15));
+    pointer-events: none;
+  }
+
+  .leftCol [class*="badgeRow"] {
+    gap: 6px;
+    height: auto;
+  }
+
+  .leftCol [class*="cameraIcon"] {
+    width: 16.3px;
+    height: 12.8px;
+  }
+
+  .leftCol [class*="badgeText"] {
+    font-size: 17.33px;
+  }
+
+  .leftCol [class*="headline"] {
+    font-size: 47.06px;
+    line-height: 0.98;
+    margin-top: 10px;
+    row-gap: 4px;
+    max-width: 367px;
+  }
+
+  .rightCol {
+    padding-top: 20px;
+  }
+
+  .storyParagraph {
+    width: 100%;
+    max-width: 372px;
+    font-size: 16.5px;
+    line-height: 1.4;
+  }
+
+  .showcaseArea {
+    padding-top: 0;
+    padding-bottom: 64px;
+    transform: none;
+  }
+
+  .photoContainer {
+    width: 233px;
+    height: 170.465px;
+    margin: 36px auto 0;
+    z-index: 2;
+  }
+
+  .viewfinderFrame {
+    top: 9px;
+    left: 9px;
+    right: 9px;
+    bottom: 9px;
+  }
+
+  .viewfinderCornerTL,
+  .viewfinderCornerBR {
+    width: 17px;
+    height: 17px;
+  }
+
+  .viewfinderCornerTL::before,
+  .viewfinderCornerBR::before {
+    width: 17px;
+    height: 2px;
+  }
+
+  .viewfinderCornerTL::after,
+  .viewfinderCornerBR::after {
+    width: 2px;
+    height: 17px;
+  }
+
+  .ribbonWrapper {
+    margin-top: -140px;
+    height: 110px;
+    z-index: 1;
+  }
+
+  .ribbonText {
+    font-size: 28px;
+  }
+
+  .ribbonDot {
+    width: 12px;
+    height: 12px;
+  }
+
+  .ribbonGroup,
+  .ribbonItem {
+    gap: 20px;
+  }
+
+  .ribbonGroup {
+    padding-right: 20px;
+  }
+
+  .ctaWrapper {
+    margin-top: 72px;
+  }
+
+  .ctaWrapper [class*="label"],
+  .ctaWrapper span,
+  .ctaWrapper [class*="playSvg"],
+  .ctaWrapper svg {
+    transform: none;
+  }
+
+  .aboutButton {
+    width: 189px !important;
+    height: 39.747px !important;
+    padding-left: 15px;
+    padding-right: 6px;
+    border-radius: 11.55px;
+    gap: 8px;
+  }
+
+  .aboutButton [class*="label"] {
+    font-size: 16px;
+  }
+
+  .aboutButton [class*="playSvg"] {
+    width: 30px;
+    height: 27px;
+  }
+}
+

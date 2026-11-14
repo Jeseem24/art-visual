@@ -1,0 +1,59 @@
+/* Reusable Highlight Card Component Styles */
+
+.card {
+  position: relative;
+  border-radius: 21px;
+  min-height: 228px;
+  padding: clamp(28px, 2.34vw, 45px) clamp(24px, 3.23vw, 62px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(10px, 0.73vw, 14px);
+  box-sizing: border-box;
+  overflow: clip;
+  transition: transform var(--transition-fast, 0.2s ease),
+              box-shadow var(--transition-fast, 0.2s ease);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.12);
+}
+
+/* Solid Red Variant (e.g. Our Vision) */
+.variantSolidRed {
+  background-color: var(--color-brand-red, #cd3743);
+  border: 1px solid transparent;
+}
+
+/* Outlined White Variant (e.g. Our Mission) */
+.variantOutlined {
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.52);
+}
+
+.title {
+  text-align: left;
+  font-size: 28px;        
+}
+
+.description {
+  max-width: 743px;
+}
+
+@media (max-width: 767px) {
+  .card {
+    min-height: auto;
+    padding: 24px 22px;
+  }
+
+  .card .title {
+    font-size: 22px;
+  }
+
+  .card .description {
+    font-size: clamp(16px, 4.2vw, 20px);
+    line-height: 1.45;
+  }
+}
+

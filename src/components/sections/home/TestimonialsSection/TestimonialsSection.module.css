@@ -1,0 +1,131 @@
+:root {
+  /* Testimonials layout and spacing variables */
+  --testimonials-section-padding-top: 72px;
+  --testimonials-section-padding-bottom: 104px;
+  --testimonials-headline-margin-top: 12px;
+  --testimonials-headline-line-gap: 20px;
+  --testimonials-cards-margin-top: 90px;
+  --testimonials-cards-gap-x: 57px;
+  --testimonials-cards-gap-y: 50px;
+}
+
+/* Section Container & Background */
+.section {
+  position: relative;
+  width: 100%;
+  padding-top: clamp(48px, calc(var(--testimonials-section-padding-top, 72px) * 0.8), var(--testimonials-section-padding-top, 72px));
+  padding-bottom: clamp(64px, calc(var(--testimonials-section-padding-bottom, 104px) * 0.8), var(--testimonials-section-padding-bottom, 104px));
+  background-color: var(--color-bg-red-section, #cd3743);
+  overflow-x: clip;
+}
+
+@media (min-width: 1024px) {
+  .section {
+    padding-top: var(--testimonials-section-padding-top, 72px);
+    padding-bottom: var(--testimonials-section-padding-bottom, 104px);
+  }
+}
+
+.container {
+  width: 100%;
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 0 clamp(105px, 5.73vw, 110px);
+  position: relative;
+}
+
+/* Cards Grid */
+.cardsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--testimonials-cards-gap-y, 50px) var(--testimonials-cards-gap-x, 57px);
+  margin-top: var(--testimonials-cards-margin-top, 90px);
+  width: 100%;
+}
+
+@media (min-width: 640px) and (max-width: 1199px) {
+  .container {
+    padding: 0 32px;
+  }
+
+  .cardsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 32px;
+    row-gap: 40px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .cardsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Mobile-only moving marquee hidden on >= 768px */
+.mobileMarqueeWrapper {
+  display: none;
+}
+
+/* =========================================================================
+   MOBILE (<= 767px) — Figma 233:2185 (412px)
+   ========================================================================= */
+@media (max-width: 767px) {
+  .section {
+    min-height: 507px;
+    padding: 66px 0 54px;
+  }
+
+  .container {
+    padding: 0 20px;
+  }
+
+  .header {
+    --badge-text-size: 17.33px;
+    --headline-font-size: 40px;
+    --headline-line-gap: 6px;
+    --headline-badge-gap: 10px;
+  }
+
+  .headline {
+    max-width: 100%;
+    font-size: 40px;
+  }
+
+  .headline [class*="headlineLine"] {
+    display: block;
+  }
+
+  .cardsGrid {
+    display: none;
+  }
+
+  .mobileMarqueeWrapper {
+    display: block;
+    overflow: hidden;
+    margin-top: 28px;
+    margin-left: -20px;
+    margin-right: -20px;
+    width: calc(100% + 40px);
+    padding: 20px 0 12px;
+  }
+
+  .mobileMarqueeTrack {
+    display: flex;
+    flex-direction: row;
+    gap: 18px;
+    width: max-content;
+    padding-left: 18px;
+    will-change: transform;
+    animation: testimonialMarquee 26s linear infinite;
+  }
+}
+
+@keyframes testimonialMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+

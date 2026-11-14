@@ -1,0 +1,444 @@
+/* Creative Process Section Styles */
+
+.desktopHeadline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: var(--headline-line-gap, 20px);
+}
+
+.desktopLine {
+  display: block;
+  white-space: nowrap;
+}
+
+.mobileHeadline {
+  display: none;
+}
+
+.section {
+  position: relative;
+  width: 100%;
+  padding-top: clamp(96px, 5vw, 96px);
+  padding-bottom: clamp(96px, 9vw, 130px);
+  background-color: var(--color-bg-page, #ffffff);
+  overflow-x: clip;
+}
+
+
+
+
+.headerContainer {
+  width: 100%;
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  
+
+
+.headerContainer {
+    padding-left: var(--spacing-canvas-gutter, 79px);
+    padding-right: var(--spacing-canvas-gutter, 79px);
+  }
+}
+
+.desktopOnly {
+  display: inline;
+}
+
+.mobileOnly,
+.mobileLine {
+  display: none;
+}
+
+/* =========================================================================
+   DESKTOP CURVED TIMELINE (1024px+)
+   ========================================================================= */
+.desktopTimeline {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .desktopTimeline {
+    display: block;
+    position: relative;
+    width: 100%;
+    max-width: 1920px;
+    aspect-ratio: 1920 / 1850;
+    margin: clamp(32px, 4.5vw, 85px) auto 0 auto;
+  }
+}
+
+.curveSvg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.badgeNode {
+  position: absolute;
+  z-index: 3;
+}
+
+.cardNode {
+  position: absolute;
+  width: 24.2%;
+  z-index: 2;
+}
+
+/* Step 1: Discover */
+.badgeStep0 {
+  left: 15.55%;
+  top: 0.5%;
+}
+.cardStep0 {
+  left: 6.88%;
+  top: 11.8%;
+}
+
+/* Step 2: Plan */
+.badgeStep1 {
+  left: 42.1%;
+  top: 15.0%;
+}
+.cardStep1 {
+  left: 50.4%;
+  top: 10.54%;
+}
+
+/* Step 3: Produce */
+.badgeStep2 {
+  left: 30.25%;
+  top: 40.8%;
+}
+.cardStep2 {
+  left: 19.32%;
+  top: 51.2%;
+}
+
+/* Step 4: Edit */
+.badgeStep3 {
+  left: 63.2%;
+  top: 44.5%;
+}
+.cardStep3 {
+  left: 71.69%; /* Ends cleanly at 95.89% right gutter */
+  top: 46.8%;
+}
+
+/* Step 5: Deliver */
+.badgeStep4 {
+  left: 77.45%;
+  top: 79.5%;
+}
+.cardStep4 {
+  left: 71.69%; /* Ends cleanly at 95.89% right gutter */
+  top: 89.8%;
+}
+
+/* =========================================================================
+   MOBILE & TABLET HORIZONTAL SCROLL TIMELINE (< 1024px) - Figma 240:4218
+   ========================================================================= */
+.mobileScrollContainer {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  margin-top: 16px;
+  padding-bottom: 24px;
+}
+
+@media (min-width: 1024px) {
+  .mobileScrollContainer {
+    display: none;
+  }
+}
+
+.mobileScrollContainer::-webkit-scrollbar {
+  height: 6px;
+}
+
+.mobileScrollContainer::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 9999px;
+  margin: 0 20px;
+}
+
+.mobileScrollContainer::-webkit-scrollbar-thumb {
+  background: var(--color-brand-red, #cd3743);
+  border-radius: 9999px;
+}
+
+.mobileTimelineCanvas {
+  position: relative;
+  width: 1374px;
+  height: 794px;
+  flex-shrink: 0;
+  overflow: clip;
+}
+
+/* Mobile Curved Ribbon Vector */
+.mobileCurveWrapper {
+  position: absolute;
+  left: -141.65px;
+  top: -66.38px;
+  width: 1646.339px;
+  height: 971.26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.mobileCurveRotator {
+  flex: none;
+  transform: rotate(-18.17deg);
+}
+
+.mobileCurveInner {
+  position: relative;
+  width: 1565.932px;
+  height: 508.25px;
+}
+
+.mobileCurveImage,
+.mobileCurveSvg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+}
+
+/* Common Mobile Node Positioning */
+.mobileBadgeNode {
+  position: absolute;
+  width: 47.67px;
+  z-index: 3;
+}
+
+.mobileCardNode {
+  position: absolute;
+  width: 273.456px;
+  z-index: 2;
+}
+
+/* Step 1: Discover */
+.mobileBadgeStep0 {
+  left: 94.64px;
+  top: 292.48px;
+}
+.mobileCardStep0 {
+  left: 60px;
+  top: 370.15px;
+}
+
+/* Step 2: Plan */
+.mobileBadgeStep1 {
+  left: 412.96px;
+  top: 292.48px;
+}
+.mobileCardStep1 {
+  left: 293.06px;
+  top: 153.77px;
+}
+
+/* Step 3: Produce */
+.mobileBadgeStep2 {
+  left: 428.81px;
+  top: 534.23px;
+}
+.mobileCardStep2 {
+  left: 400.86px;
+  top: 612.7px;
+}
+
+/* Step 4: Edit */
+.mobileBadgeStep3 {
+  left: 726.05px;
+  top: 363.81px;
+}
+.mobileCardStep3 {
+  left: 717.91px;
+  top: 219.56px;
+}
+
+/* Step 5: Deliver */
+.mobileBadgeStep4 {
+  left: 1089.07px;
+  top: 424.85px;
+}
+.mobileCardStep4 {
+  left: 1007.22px;
+  top: 499.35px;
+}
+
+/* Mobile Card Styling matching Figma 240:4449 */
+.mobileCardOverride {
+  background-color: #ffffff !important;
+  border: 0.592px solid rgba(0, 0, 0, 0.1) !important;
+  border-radius: 12.43px !important;
+  box-shadow: 0px 0px 3.019px 0px rgba(0, 0, 0, 0.12) !important;
+  width: 273.456px !important;
+  min-height: 131.401px !important;
+  padding: 16px 20px 18px 20px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+  text-align: left !important;
+  box-sizing: border-box !important;
+  gap: 6px !important;
+}
+
+.mobileCardOverride [class*="title"] {
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  color: #000000 !important;
+  text-align: left !important;
+  margin-bottom: 2px !important;
+  line-height: 1.25 !important;
+}
+
+.mobileCardOverride [class*="description"] {
+  font-size: 12.5px !important;
+  font-weight: 400 !important;
+  line-height: 1.38 !important;
+  color: rgba(0, 0, 0, 0.62) !important;
+  text-align: left !important;
+  margin: 0 !important;
+}
+
+/* Mobile Badge Styling matching Figma 240:4449 */
+.mobileBadgeOverride {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  width: 47.67px !important;
+  gap: 4px !important;
+}
+
+.mobileBadgeOverride [class*="stepLabel"] {
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  color: #2d2d2d !important;
+  opacity: 0.83 !important;
+  text-align: center !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
+}
+
+.mobileBadgeOverride [class*="numberBox"] {
+  width: 47.67px !important;
+  height: 43.11px !important;
+  border-radius: 7.5px !important;
+  background-color: #2d2d2d !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+}
+
+.mobileBadgeOverride [class*="numberText"] {
+  font-size: 30.8px !important;
+  line-height: 1 !important;
+  color: #ffffff !important;
+  font-family: var(--font-family-heading, 'Bebas Neue', sans-serif) !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+@media (max-width: 1023px) {
+  .section {
+    padding-top: clamp(48px, 6vw, 72px);
+    padding-bottom: clamp(56px, 7vw, 80px);
+  }
+}
+
+@media (max-width: 767px) {
+  .section {
+    padding-top: 48px;
+    padding-bottom: 56px;
+  }
+
+  
+
+
+.headerContainer {
+    padding: 0 20px;
+  }
+
+  .headerContainer [class*="badgeRow"] {
+    gap: 6px;
+    height: auto;
+  }
+
+  .headerContainer [class*="cameraIcon"] {
+    width: 16.3px;
+    height: 12.8px;
+  }
+
+  .headerContainer [class*="badgeText"] {
+    font-size: 17.5px;
+  }
+
+  .desktopOnly {
+    display: none;
+  }
+
+  .mobileOnly {
+    display: contents;
+  }
+
+  .mobileLine {
+    display: block;
+    white-space: nowrap;
+    letter-spacing: -0.015em;
+  }
+
+  .desktopHeadline {
+    display: none;
+  }
+
+  .mobileHeadline {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 4px;
+    width: 100%;
+  }
+
+  .mobileLine {
+    display: block;
+    white-space: nowrap;
+    letter-spacing: -0.015em;
+    font-size: clamp(43px, 11.2vw, 47.06px);
+    line-height: 1.02;
+    font-family: var(--font-family-heading, var(--font-bebas, 'Bebas Neue', sans-serif));
+    text-transform: uppercase;
+    color: var(--headline-color-dark, #2d2d2d);
+  }
+
+  .headerContainer [class*="headlineLine"] {
+    display: contents;
+  }
+
+  .headerContainer [class*="headline"] {
+    display: flex !important;
+    flex-direction: column !important;
+    margin-top: 10px;
+    row-gap: 0px !important;
+  }
+}
+

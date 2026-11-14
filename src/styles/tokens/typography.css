@@ -1,0 +1,48 @@
+/* Design Tokens - Typography */
+:root {
+  /* Font Families */
+  --font-family-display: var(--font-anton), 'Anton', sans-serif;
+  --font-family-heading: var(--font-bebas), 'Bebas Neue', sans-serif;
+  --font-family-body: var(--font-outfit), 'Outfit', sans-serif;
+  --font-family-inter: var(--font-inter), 'Inter', sans-serif;
+  --font-family-poppins: var(--font-poppins), 'Poppins', sans-serif;
+  --font-family-geist: var(--font-geist), 'Geist', sans-serif;
+
+  /* Convenience Non-cyclic Aliases */
+  --font-bebas-neue: var(--font-family-heading);
+
+  /* Font Weights */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Font Sizes */
+  --font-size-xs: 0.75rem;       /* 12px */
+  --font-size-sm: 0.875rem;      /* 14px */
+  --font-size-base: 0.9375rem;   /* 15px - Nav link */
+  --font-size-md: 1rem;          /* 16px - Badge text */
+  --font-size-lg: 1.125rem;      /* 18px */
+  --font-size-xl: 1.25rem;       /* 20px */
+  --font-size-2xl: 1.5rem;       /* 24px */
+  --font-size-subtitle: 1.634rem;/* 26.15px - Hero subtitle */
+  --font-size-3xl: 2rem;         /* 32px */
+  --font-size-4xl: 2.5rem;       /* 40px */
+  --font-size-5xl: 3.5rem;       /* 56px */
+  --font-size-hero: 6.675rem;    /* 106.8px - Main Hero */
+
+  /* Line Heights */
+  --line-height-none: 0.96;
+  --line-height-tight: 1.15;
+  --line-height-normal: 1.45;
+  --line-height-relaxed: 1.65;
+
+  /* Letter Spacing */
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-normal: 0em;
+  --letter-spacing-wide: 0.04em;
+  --letter-spacing-nav: 0.08em;
+  --letter-spacing-caps: 0.05em;
+}
+

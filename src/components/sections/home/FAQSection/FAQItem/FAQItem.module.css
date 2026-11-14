@@ -1,0 +1,165 @@
+:root {
+  /* FAQ Item Spacing & Typography */
+  --faq-padding-above-question: clamp(24px, 1.88vw, 36px);
+  --faq-padding-below-question: clamp(24px, 1.88vw, 36px);
+  --faq-gap-question-to-answer: clamp(16px, 1.15vw, 22px);
+  --faq-padding-below-answer: clamp(26px, 2.2vw, 42px);
+  --faq-trigger-gap: clamp(24px, 2vw, 36px);
+
+  --faq-question-size: clamp(29px, 2.07vw, 39.84px);
+  --faq-question-color: rgba(0, 0, 0, 0.86);
+  --faq-icon-size: 26.93px;
+  --faq-icon-opacity: 0.71;
+  --faq-answer-size: clamp(26px, 1.57vw, 30.11px);
+  --faq-answer-line-height: 1.64;
+  --faq-answer-color: rgba(0, 0, 0, 0.73);
+  --faq-answer-max-width: 1006px;
+  --faq-line-border: 0.84px solid rgba(0, 0, 0, 0.36);
+}
+
+.item {
+  width: 100%;
+  border-bottom: var(--faq-line-border);
+  box-sizing: border-box;
+}
+
+/* Question Trigger Button */
+.trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--faq-trigger-gap, 32px);
+  padding-top: var(--faq-padding-above-question, 36px);
+  padding-bottom: var(--faq-padding-below-question, 36px);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  outline: none;
+  transition: opacity 0.2s ease, padding-bottom 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* When question is open/expanded, adjust bottom spacing to the answer gap */
+.triggerOpen {
+  padding-bottom: var(--faq-gap-question-to-answer, 22px);
+}
+
+.trigger:hover {
+  opacity: 0.85;
+}
+
+.trigger:focus-visible {
+  outline: 2px solid var(--color-brand-red, #cd3743);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.questionText {
+  font-family: var(--font-family-geist, 'Geist', sans-serif);
+  font-size: var(--faq-question-size);
+  font-weight: 500;
+  line-height: 1.334;
+  color: var(--faq-question-color);
+  margin: 0;
+  flex: 1;
+  letter-spacing: -0.01em;
+}
+
+/* Plus Vector Icon */
+.iconWrapper {
+  width: var(--faq-icon-size);
+  height: var(--faq-icon-size);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.icon {
+  width: 100%;
+  height: 100%;
+  display: block;
+  opacity: var(--faq-icon-opacity);
+  color: #000000;
+}
+
+/* Rotate plus to 45deg (X) when open */
+.iconOpen {
+  transform: rotate(45deg);
+}
+
+/* Smooth Accordion Body Collapse/Expand */
+.answerCollapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.answerExpanded {
+  grid-template-rows: 1fr;
+}
+
+.answerInner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.answerText {
+  font-family: var(--font-family-inter, 'Inter', sans-serif);
+  font-size: var(--faq-answer-size);
+  font-weight: 500;
+  line-height: var(--faq-answer-line-height);
+  color: var(--faq-answer-color);
+  max-width: var(--faq-answer-max-width);
+  margin: 0;
+  padding-bottom: var(--faq-padding-below-answer, 42px);
+  letter-spacing: -0.01em;
+  word-break: break-word;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.answerExpanded .answerText {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =========================================================================
+   MOBILE (<= 767px) — Figma 233:2185 (412px)
+   ========================================================================= */
+@media (max-width: 767px) {
+  .item {
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.35);
+  }
+
+  .trigger {
+    padding: 16px 0;
+    gap: 16px;
+  }
+
+  .triggerOpen {
+    padding-bottom: 10px;
+  }
+
+  .questionText {
+    font-size: 15.589px;
+    font-weight: 500;
+    line-height: 1.334;
+    color: #000000;
+    opacity: 0.86;
+  }
+
+  .iconWrapper {
+    width: 17.69px;
+    height: 17.69px;
+  }
+
+  .answerText {
+    font-size: 14.5px;
+    line-height: 1.55;
+    padding-bottom: 20px;
+  }
+}

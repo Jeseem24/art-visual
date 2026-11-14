@@ -1,0 +1,153 @@
+/* Featured Work Card Component Styles */
+
+:root {
+  /* Work card sizing variables */
+  --work-card-width: 446px;
+  --work-card-height: 665px;
+  --work-badge-height: 62px;
+}
+
+.card {
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+  width: var(--work-card-width, 446px);
+  height: var(--work-card-height, 665px);
+  background-color: #FFFFFF;
+  border-radius: 27px;
+  box-shadow: 0px 0px 17.4px rgba(0, 0, 0, 0.25);
+  text-decoration: none;
+  overflow: hidden;
+  user-select: none;
+  transition: transform var(--transition-normal, 0.25s ease), box-shadow var(--transition-normal, 0.25s ease);
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .card {
+    width: 360px;
+    height: 536px;
+    border-radius: 22px;
+  }
+
+  .mediaFrame {
+    border-radius: 20px;
+  }
+
+  .badge {
+    bottom: 30px;
+    left: 24px;
+    right: 24px;
+    height: 52px;
+  }
+
+  .title {
+    font-size: 14px;
+  }
+}
+
+/* Media Frame */
+.mediaFrame {
+  position: absolute;
+  top: 22px;
+  left: 19px;
+  right: 19px;
+  bottom: 21px;
+  border-radius: 27px;
+  overflow: hidden;
+  background-color: #1a1a1a;
+}
+
+.mediaImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--transition-smooth, 0.4s ease);
+}
+
+.mediaVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Floating Title Badge */
+.badge {
+  position: absolute;
+  bottom: 41px;
+  left: 38px;
+  right: 37px;
+  height: var(--work-badge-height, 62px);
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.12);
+  z-index: 10;
+  transition: background-color var(--transition-fast, 0.2s ease);
+}
+
+/* Title Text */
+.title {
+  font-family: var(--font-family-body, 'Outfit', sans-serif);
+  font-weight: 600;
+  font-style: normal;
+  font-size: 16.432px;
+  line-height: normal;
+  text-transform: uppercase;
+  text-align: center;
+  color: #2D2D2D;
+  margin: 0;
+  letter-spacing: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+/* =========================================================================
+   MOBILE (<= 767px) — Figma 233:2185 (412px)
+   ========================================================================= */
+@media (max-width: 767px) {
+  .card {
+    width: 238.268px;
+    height: 355.265px;
+    border-radius: 14.424px;
+    padding: 11.75px 10.15px;
+    box-sizing: border-box;
+    box-shadow: 0px 0px 9.296px 0px rgba(0, 0, 0, 0.25);
+  }
+
+  .mediaFrame {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    height: 332.293px;
+    border-radius: 14.424px;
+  }
+
+  .badge {
+    bottom: 21.9px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: 198.2px;
+    height: 33.122px;
+    border-radius: 6.411px;
+    padding: 0 10px;
+    box-shadow: 0px 2.137px 8.548px rgba(0, 0, 0, 0.12);
+  }
+
+  .title {
+    font-size: 9.5px;
+    font-weight: 600;
+    color: #2d2d2d;
+  }
+}
+

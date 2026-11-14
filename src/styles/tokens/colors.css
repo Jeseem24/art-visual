@@ -1,0 +1,33 @@
+/* Design Tokens - Colors */
+:root {
+  /* Brand Primary Colors */
+  --color-brand-red: #CD3743;
+  --color-brand-red-hover: #B52834;
+  --color-brand-red-light: rgba(205, 55, 67, 0.18);
+  --color-brand-red-border: rgba(255, 0, 20, 0.17);
+  --color-nav-focus: #DF0000; /* Active nav link highlight */
+
+  /* Neutrals & Dark Tones */
+  --color-dark-primary: #000000;
+  --color-dark-charcoal: #2D2D2D;
+  --color-white: #FFFFFF;
+
+  /* Typography Colors */
+  --color-text-primary: #000000;
+  --color-text-heading: #2D2D2D;
+  --color-text-muted: rgba(0, 0, 0, 0.65);
+  --color-text-subtle: rgba(0, 0, 0, 0.47);
+  --color-text-inverse: #FFFFFF;
+  --color-text-inverse-muted: rgba(255, 255, 255, 0.75);
+
+  /* Border & Divider Colors */
+  --color-border-subtle: rgba(0, 0, 0, 0.15);
+  --color-border-card: rgba(0, 0, 0, 0.25);
+  --color-border-light: rgba(0, 0, 0, 0.08);
+
+  /* Backgrounds */
+  --color-bg-page: #FFFFFF;
+  --color-bg-subtle: rgba(0, 0, 0, 0.02);
+  --color-bg-red-section: #CD3743;
+}
+

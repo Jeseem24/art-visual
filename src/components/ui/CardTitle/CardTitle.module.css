@@ -1,0 +1,43 @@
+.cardTitle {
+  font-family: var(--font-family-body, var(--font-outfit, 'Outfit', sans-serif));
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  margin: 0;
+  line-height: 1.25;
+  color: var(--color-dark-charcoal, #2d2d2d);
+  transition: color var(--transition-fast, 0.2s ease);
+}
+
+/* Size Variants */
+.sizeDefault {
+  font-size: clamp(20px, 1.08vw, 26.687px);
+}
+
+.sizeCompact {
+  font-size: clamp(18px, 0.95vw, 20px);
+}
+
+.sizeLarge {
+  font-size: clamp(24px, 1.4vw, 32px);
+}
+
+/* Tone Variants */
+.toneDark {
+  color: var(--color-dark-charcoal, #2d2d2d);
+}
+
+.toneBlack {
+  color: #000000;
+}
+
+.toneWhite {
+  color: #ffffff;
+}
+
+/* Interactive Hover Color */
+.interactive:hover,
+:global(.group):hover .cardTitle {
+  color: var(--color-brand-red, #cd3743);
+}
+

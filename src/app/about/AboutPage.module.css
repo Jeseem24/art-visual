@@ -1,0 +1,82 @@
+/* Scoped spacing overrides for the About page alone.
+   Desktop (1024px+) preserves your exact values; smaller viewports scale cleanly. */
+
+.aboutPage {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Mobile & Tablet (< 1024px) balanced section rhythm */
+.aboutPage .creativeProcess {
+  padding-bottom: clamp(48px, 6vw, 72px);
+}
+
+.aboutPage .featuredWorks {
+  padding-top: clamp(48px, 6vw, 72px);
+  padding-bottom: clamp(64px, 8vw, 96px);
+}
+
+.aboutPage .testimonials {
+  padding-top: clamp(48px, 6vw, 72px);
+  padding-bottom: clamp(56px, 7vw, 84px);
+}
+
+.aboutPage .ctaBanner {
+  padding-top: clamp(56px, 7vw, 96px);
+  padding-bottom: clamp(64px, 8vw, 104px);
+}
+
+/* Mobile CTA Card (< 768px): keeps card padding symmetric and copy readable */
+@media (max-width: 767px) {
+  .aboutPage .ctaBanner {
+    --cta-banner-padding-left: 24px;
+    --cta-banner-padding-top: 30px;
+    --cta-banner-padding-bottom: 34px;
+    --cta-desc-margin-top: 18px;
+    --cta-button-margin-top: 24px;
+  }
+
+  .aboutPage .ctaBanner [class*="bannerCard"] {
+    min-height: 434px;
+  }
+
+  .aboutPage .ctaBanner [class*="reelsArea"] {
+    right: -55px;
+    bottom: -55px;
+  }
+}
+
+@media (max-width: 410px) {
+  .aboutPage .ctaBanner [class*="reelsArea"] {
+    transform: scale(0.86) !important;
+    right: -45px !important;
+    bottom: -50px !important;
+  }
+}
+
+/* Desktop (1024px+): Exact locked spacing values */
+@media (min-width: 1024px) {
+  /* Gap below "Our Creative Process" (clears overhanging Step 05 card) */
+  .aboutPage .creativeProcess {
+    padding-bottom: clamp(120px, 11vw, 200px);
+  }
+
+  /* Gaps above and below "Featured Works" */
+  .aboutPage .featuredWorks {
+    padding-top: clamp(88px, 7.5vw, 140px);
+    padding-bottom: clamp(260px, 8.5vw, 260px);
+  }
+
+  /* Inner red padding inside "What Our Clients Say" */
+  .aboutPage .testimonials {
+    padding-top: clamp(64px, 5vw, 96px);
+    padding-bottom: clamp(72px, 6.25vw, 120px);
+  }
+
+  /* White space between red "What Our Clients Say" -> "Start a project" -> Footer */
+  .aboutPage .ctaBanner {
+    padding-top: clamp(210px, 9.5vw, 180px);
+    padding-bottom: clamp(210px, 9.5vw, 180px);
+  }
+}

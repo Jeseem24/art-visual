@@ -1,0 +1,64 @@
+/* Contact page container layout and scoped vertical rhythm */
+
+.contactPage {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow-x: clip;
+}
+
+/* Mobile & Tablet (< 1024px) compact section rhythm */
+.contactPage .whyChooseUs {
+  padding-top: clamp(48px, 6vw, 72px);
+  padding-bottom: clamp(48px, 6vw, 72px);
+}
+
+.contactPage .ctaBanner {
+  padding-top: clamp(48px, 6vw, 72px);
+  padding-bottom: clamp(64px, 8vw, 104px);
+}
+
+@media (max-width: 767px) {
+  .contactPage .ctaBanner {
+    --cta-banner-padding-left: 24px;
+    --cta-banner-padding-top: 40px;
+    --cta-banner-padding-bottom: 40px;
+    --cta-desc-margin-top: 20px;
+    --cta-button-margin-top: 28px;
+  }
+
+  .contactPage .ctaBanner [class*="bannerCard"] {
+    min-height: auto;
+  }
+
+  .contactPage .ctaBanner [class*="description"] {
+    font-size: 14.5px;
+    line-height: 1.42;
+    max-width: 200px;
+  }
+}
+
+/* Desktop (1024px+) matches Figma 212:445 vertical rhythm under body { zoom: 0.8 }:
+   - Hero bottom (78px) + Inquiry top (150px) = 228px toward y=779
+   - Inquiry bottom (120px) + WhyChooseUs top (148px) = 268px (2076 - 1808)
+   - WhyChooseUs bottom (120px) + CTA top (88px) = 208px (2993 - 2785)
+   - CTA bottom (234px) above Footer (3841 - 3607) */
+@media (min-width: 1024px) {
+  .contactPage .inquirySection {
+    padding-top: 150px;
+  }
+
+  .contactPage .whyChooseUs {
+    --why-section-padding-top: 148px;
+    --why-section-padding-bottom: 120px;
+    padding-top: 148px;
+    padding-bottom: 120px;
+  }
+
+  .contactPage .ctaBanner {
+    --cta-section-padding-top: 88px;
+    --cta-section-padding-bottom: 234px;
+    padding-top: 88px;
+    padding-bottom: 234px;
+  }
+}

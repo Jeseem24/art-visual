@@ -1,0 +1,380 @@
+/* Navbar Module Styles */
+.header {
+  width: 100%;
+  background-color: var(--color-bg-page);
+  position: relative;
+  z-index: 40;
+}
+
+.container {
+  width: 100%;
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding-top: var(--spacing-header-top);
+    padding-left: var(--spacing-canvas-gutter);
+    padding-right: var(--spacing-canvas-gutter);
+    padding-bottom: 1.25rem;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+  }
+}
+
+.logoArea {
+  display: flex;
+  align-items: center;
+  justify-self: start;
+}
+
+.navLinks {
+  display: none;
+  align-items: center;
+  justify-self: center;
+  gap: var(--spacing-nav-gap);
+  opacity: 0.83;
+}
+
+@media (min-width: 1024px) {
+  .navLinks {
+    display: flex;
+  }
+}
+
+.navLink {
+  font-family: var(--font-family-body);
+  font-size: 18.201px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  color: var(--color-dark-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+  white-space: nowrap;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.navLink:hover {
+  color: var(--color-nav-focus, #DF0000);
+}
+
+.navLink:focus,
+.navLink:focus-visible,
+.navLink:active {
+  color: var(--color-nav-focus, #DF0000);
+  outline: none;
+  box-shadow: none;
+}
+
+.active {
+  color: var(--color-nav-focus, #DF0000);
+  font-weight: var(--font-weight-semibold);
+  outline: none;
+}
+
+.ctaWrapper {
+  display: none;
+  align-items: center;
+  justify-self: end;
+  flex-shrink: 0;
+}
+
+@media (min-width: 1024px) {
+  .ctaWrapper {
+    display: flex;
+  }
+}
+
+/* Primary Call-to-Action Button */
+.talkButton {
+  display: inline-flex;
+  transform: translateY(-5px);
+  align-items: center;
+  justify-content: space-between;
+  width: 181px;
+  height: 48.6019px;
+  padding-left: 26.25px;
+  padding-right: 8px;
+  border-radius: 14.2454px;
+  background-color: var(--color-brand-red);
+  color: var(--color-white);
+  font-family: var(--font-family-body);
+  font-weight: 400;
+  font-size: 21.909px;
+  line-height: normal;
+  letter-spacing: 0;
+  font-variant: normal;
+  text-transform: none;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  box-sizing: border-box;
+  user-select: none;
+  white-space: nowrap;
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.talkButton:hover {
+  background-color: var(--color-brand-red-hover);
+}
+
+.talkButton:focus-visible {
+  outline: 2px solid var(--color-brand-red);
+  outline-offset: 3px;
+}
+
+.talkButtonMobile {
+  width: 100%;
+  height: 48.6019px;
+  font-size: 21.909px;
+  padding-left: 14.25px;
+  padding-right: 8px;
+  border-radius: 14.2454px;
+}
+
+.btnText {
+  display: inline-block;
+  line-height: normal;
+  color: var(--color-white);
+}
+
+.btnIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 37px;
+  height: 33px;
+  flex-shrink: 0;
+  border-radius: 7px;
+  overflow: hidden;
+}
+
+.playSvg {
+  width: 37px;
+  height: 33px;
+  display: block;
+}
+
+.mobileToggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  background: transparent;
+  border: none;
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+/* Tablet / Small Laptop (1024px) Layout Tuning */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .container {
+    padding-left: 32px !important;
+    padding-right: 32px !important;
+    padding-top: 24px !important;
+    gap: 16px;
+  }
+
+  .mobileLogo {
+    width: 68px !important;
+    height: 36px !important;
+  }
+
+  .navLinks {
+    gap: 20px !important;
+  }
+
+  .navLink {
+    font-size: 15px !important;
+  }
+
+  .talkButton {
+    width: 140px !important;
+    height: 40px !important;
+    font-size: 16px !important;
+    transform: none !important;
+    padding-left: 16px !important;
+    padding-right: 6px !important;
+  }
+
+  .talkButton .btnIcon,
+  .talkButton .playSvg {
+    width: 28px !important;
+    height: 26px !important;
+  }
+}
+
+/* 3-line hamburger icon & 90-degree smooth rotation to vertical lines */
+.hamburgerWrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.hamburgerOpen {
+  transform: rotate(90deg);
+}
+
+.hamburgerSvg {
+  display: block;
+  width: 22px;
+  height: 15px;
+  color: #000000;
+}
+
+@media (min-width: 1024px) {
+  .mobileToggle {
+    display: none;
+  }
+}
+
+.mobileDrawer {
+  display: none;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background-color: var(--color-bg-page);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.mobileDrawerOpen {
+  display: flex;
+}
+
+@media (min-width: 1024px) {
+  .mobileDrawer {
+    display: none;
+  }
+}
+
+.mobileNavList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Mobile-only floating pill navbar & drawer (412px Figma 239:449) */
+@media (max-width: 767px) {
+  .header {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 50;
+    background-color: transparent;
+    padding-top: 16px;
+    pointer-events: none;
+  }
+
+  .container {
+    pointer-events: auto;
+    width: calc(100% - 40px);
+    max-width: calc(100% - 40px);
+    margin: 0 auto;
+    height: 49px;
+    padding: 0 20px;
+    border-radius: 14px;
+    background-color: var(--color-white, #ffffff);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+    position: relative;
+    z-index: 2;
+  }
+
+  .mobileLogo {
+    width: 54px;
+    height: 29px;
+  }
+
+  .mobileToggle {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-black, #000000);
+    cursor: pointer;
+    pointer-events: auto;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    border: none;
+    background: transparent;
+    outline: none;
+  }
+
+  .mobileDrawer {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    width: 224px;
+    padding: 76px 24px 28px 42px;
+    gap: 28px;
+    background-color: var(--color-white, #ffffff);
+    border-radius: 18px;
+    border-bottom: none;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+    transform-origin: top right;
+    transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                visibility 0.25s;
+    visibility: hidden;
+  }
+
+  .mobileDrawerOpen {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto !important;
+    visibility: visible;
+  }
+
+  .mobileNavList {
+    gap: 18px;
+  }
+
+  .mobileDrawer .navLink {
+    font-family: var(--font-family-body);
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-black, #000000);
+  }
+
+  .mobileDrawer .navLink.active {
+    color: var(--color-brand-red, #cd3743);
+    font-weight: 600;
+  }
+
+  .talkButtonMobile {
+    width: 113px;
+    height: 30.3px;
+    padding: 0 4.5px 0 13px;
+    border-radius: 8.894px;
+    font-size: 13.68px;
+    font-weight: 500;
+    transform: none;
+  }
+
+  .talkButtonMobile .btnIcon,
+  .talkButtonMobile .playSvg {
+    width: 23px;
+    height: 20.6px;
+    border-radius: 4.37px;
+  }
+}

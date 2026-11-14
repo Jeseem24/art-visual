@@ -1,0 +1,202 @@
+/* Reusable Process Step Card & Number Badge Styles */
+
+.card {
+  position: relative;
+  width: 100%;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: clamp(14px, 1.09vw, 21px);
+  box-shadow: 0px 0px 5.1px 0px rgba(0, 0, 0, 0.12);
+  padding: var(--process-card-padding, clamp(24px, 1.87vw, 36px) clamp(26px, 1.56vw, 30px) clamp(24px, 1.75vw, 34px) clamp(26px, 2.6vw, 50px));
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--process-card-gap, clamp(8px, 0.52vw, 10px));
+  transition: border-color var(--transition-fast, 0.2s ease),
+              box-shadow var(--transition-fast, 0.2s ease),
+              transform var(--transition-fast, 0.2s ease);
+}
+
+.card:hover {
+  border-color: rgba(205, 55, 67, 0.35);
+  box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.title {
+  text-align: left;
+  font-size: clamp(19px, 2.5vw, 22px);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.description {
+  text-align: left;
+  font-size: clamp(15.5px, 2.1vw, 18px);
+  font-weight: 400;
+  line-height: 1.4;
+  opacity: 80%;
+}
+
+@media (max-width: 479px) {
+  .card {
+    padding: 20px 20px 22px 22px;
+  }
+}
+
+@media (max-width: 767px) {
+  .card {
+    border-radius: 13.61px;
+    border: 0.648px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 3.305px 0px rgba(0, 0, 0, 0.12);
+    padding: 23px 24px;
+    min-height: 164px;
+    gap: 8px;
+  }
+
+  .title {
+    font-size: 15.24px;
+    font-weight: 600;
+    line-height: 1.25;
+    margin-bottom: 4px;
+  }
+
+  .description {
+    font-size: 18.46px;
+    line-height: 1.35;
+    color: rgba(0, 0, 0, 0.6);
+    opacity: 1;
+  }
+
+  .badgeWrapper {
+    gap: 6px;
+  }
+
+  .stepLabel {
+    font-size: 13.507px;
+    opacity: 0.83;
+  }
+
+  .numberBox {
+    width: 64.808px;
+    height: 58.609px;
+    padding: 0;
+    border-radius: 10.144px;
+    box-shadow: none;
+  }
+
+  .numberText {
+    font-size: 41.653px;
+    line-height: 1;
+    padding-top: 0.06em;
+  }
+}
+
+@media (min-width: 1024px) {
+  .card {
+    min-height: var(--process-card-min-height, clamp(145px, 11vw, 212px));
+  }
+
+  .title {
+    font-size: var(--process-card-title-size, clamp(20px, 1.2vw, 23px));
+    font-weight: 600;
+    margin-bottom: var(--process-card-title-margin-bottom, 6px);
+    line-height: var(--process-card-title-line-height, 1.25);
+    letter-spacing: var(--process-card-title-letter-spacing, 0.01em);
+  }
+
+  .description {
+    font-size: var(--process-card-desc-size, clamp(22.5px, 1.35vw, 26px));
+    font-weight: 400;
+    line-height: var(--process-card-desc-line-height, 1.35);
+    letter-spacing: var(--process-card-desc-letter-spacing, -0.01em);
+    color: var(--process-card-desc-color, rgba(0, 0, 0, 0.72));
+    opacity: var(--process-card-desc-opacity, 0.8);
+  }
+}
+
+/* Dark Numbered Step Badge & Label */
+.badgeWrapper {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--process-badge-gap, clamp(8px, 0.55vw, 12px));
+}
+
+.badgeAlignCenter {
+  align-items: center;
+}
+.badgeAlignCenter .stepLabel {
+  text-align: center;
+}
+
+.badgeAlignLeft {
+  align-items: flex-start;
+}
+.badgeAlignLeft .stepLabel {
+  text-align: left;
+}
+
+.badgeAlignRight {
+  align-items: flex-end;
+}
+.badgeAlignRight .stepLabel {
+  text-align: right;
+}
+
+.stepLabel {
+  font-family: var(--font-family-body, var(--font-outfit, 'Outfit', sans-serif));
+  font-weight: 600;
+  font-size: 18px;
+  text-transform: uppercase;
+  color: rgba(45, 45, 45, 0.85);
+  margin: 0;
+  line-height: 1.2;
+}
+
+@media (min-width: 1024px) {
+  .stepLabel {
+    font-size: var(--process-badge-label-size, clamp(18px, calc(25 / 1920 * 100vw), 25px));
+    opacity: var(--process-badge-label-opacity, 1);
+  }
+}
+
+.numberBox {
+  width: 84px;
+  height: 76px;
+  padding: 14px;
+  border-radius: 16px;
+  background-color: var(--color-dark-charcoal, #2d2d2d);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  box-shadow: var(--process-badge-box-shadow, 0 8px 20px -4px rgba(0, 0, 0, 0.2));
+}
+
+@media (min-width: 1024px) {
+  .numberBox {
+    width: var(--process-badge-box-width, clamp(84px, calc(128 / 1920 * 100vw), 128px));
+    height: var(--process-badge-box-height, clamp(76px, calc(116 / 1920 * 100vw), 116px));
+    padding: var(--process-badge-box-padding, clamp(14px, 0.9vw, 18px));
+    border-radius: var(--process-badge-box-radius, clamp(14px, calc(20 / 1920 * 100vw), 20px));
+  }
+}
+
+.numberText {
+  width: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: var(--process-badge-number-line-height, 0.72);
+  padding-top: var(--process-badge-number-padding-top, 0.08em);
+  font-size: 52px;
+}
+
+@media (min-width: 1024px) {
+  .numberText {
+    font-size: var(--process-badge-number-size, clamp(52px, calc(82 / 1920 * 100vw), 82px));
+  }
+}
+
