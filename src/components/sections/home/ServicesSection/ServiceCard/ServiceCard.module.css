@@ -18,18 +18,56 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: var(--service-card-width, 550px);
-  max-width: 100%;
+  width: 100%;
+  max-width: var(--service-card-width, 504px);
+  margin: 0 auto;
 }
 
-@media (min-width: 768px) and (max-width: 1199px) {
+@media (min-width: 768px) and (max-width: 1279px) {
   .card {
     width: 100%;
-    max-width: 440px;
+    max-width: 100%;
   }
 
-  .mediaWrapper {
-    height: 310px;
+  .filmTrack {
+    height: 26px;
+    padding: 0 8px;
+  }
+
+  .filmHole {
+    width: 13px;
+    height: 13px;
+    border-radius: 3px;
+  }
+
+  .title {
+    font-size: 17px;
+    margin-top: 12px;
+  }
+
+  .description {
+    font-size: 13.5px;
+    margin-top: 5px;
+    line-height: 1.35;
+  }
+
+  .ctaButton {
+    width: 140px;
+    height: 34px;
+    margin-top: 16px;
+  }
+
+  .ctaText {
+    font-size: 14px;
+  }
+
+  .ctaDivider {
+    height: 34px;
+  }
+
+  .ctaArrow {
+    width: 35px;
+    height: 34px;
   }
 }
 
@@ -64,11 +102,11 @@
   flex-shrink: 0;
 }
 
-/* Media Area (504px x 369px) */
+/* Media Area (504px x 369px aspect ratio) */
 .mediaWrapper {
   position: relative;
   width: 100%;
-  height: var(--service-video-height, 369px);
+  aspect-ratio: 504 / 369;
   background-color: #111111;
   overflow: hidden;
 }
