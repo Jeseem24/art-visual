@@ -134,6 +134,61 @@
 }
 
 /* =========================================================================
+   TABLET / SMALL LAPTOP (768px - 1199px)
+   Compact, proportional padding, avatar, and typography
+   ========================================================================= */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .card {
+    min-height: auto;
+    padding: clamp(20px, 2.4vw, 28px) clamp(20px, 2.5vw, 30px);
+    border-radius: 16px;
+    height: 100%;
+  }
+
+  .header {
+    gap: clamp(12px, 1.4vw, 16px);
+  }
+
+  .avatarFrame {
+    width: clamp(52px, 5.2vw, 64px);
+    height: clamp(52px, 5.2vw, 64px);
+    border-radius: 12px;
+  }
+
+  .avatarImageWrapper {
+    width: clamp(42px, 4.2vw, 52px);
+    height: clamp(42px, 4.2vw, 52px);
+  }
+
+  .authorMeta {
+    gap: 3px;
+  }
+
+  .authorName {
+    font-size: clamp(13.5px, 1.35vw, 16px);
+    line-height: 1.25;
+  }
+
+  .authorRole {
+    font-size: clamp(10.5px, 1.05vw, 12px);
+    line-height: 1.25;
+  }
+
+  .starRating {
+    width: clamp(80px, 8vw, 96px);
+    height: auto;
+    margin-top: 2px;
+  }
+
+  .quote {
+    font-size: clamp(14px, 1.4vw, 17px);
+    line-height: 1.45;
+    margin-top: clamp(16px, 1.8vw, 22px);
+    max-width: 100%;
+  }
+}
+
+/* =========================================================================
    MOBILE (<= 767px) — Figma 233:2185 (412px)
    ========================================================================= */
 @media (max-width: 767px) {

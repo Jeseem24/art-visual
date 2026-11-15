@@ -47,41 +47,82 @@
 }
 
 /* =========================================================================
-   TABLET / SMALL LAPTOP (768px - 1199px, including 1024px)
+   TABLET PORTRAIT (768px - 1023px)
    ========================================================================= */
-@media (min-width: 768px) and (max-width: 1199px) {
+@media (min-width: 768px) and (max-width: 1023px) {
   .container {
     padding: 0 32px !important;
   }
 
   .bannerCard {
-    min-height: 480px !important;
+    min-height: 460px !important;
   }
 
   .contentWrapper {
-    max-width: 56% !important;
-    padding: 44px 20px 44px 36px !important;
+    max-width: 58% !important;
+    padding: 36px 20px 36px 32px !important;
   }
 
   .description {
-    font-size: 23px !important;
+    font-size: 21px !important;
     line-height: 1.35 !important;
     max-width: 100% !important;
-    margin-top: 22px !important;
+    margin-top: 18px !important;
     margin-bottom: 0 !important;
   }
 
   .buttonWrapper {
-    margin-top: 28px !important;
+    margin-top: 24px !important;
   }
 
   .reelsArea {
     display: block !important;
-    width: 500px !important;
-    right: -70px !important;
-    top: -160px !important;
-    bottom: -160px !important;
-    transform: scale(0.72) !important;
+    width: 480px !important;
+    right: -90px !important;
+    top: -140px !important;
+    bottom: -140px !important;
+    transform: scale(0.68) !important;
+    transform-origin: center right !important;
+  }
+}
+
+/* =========================================================================
+   TABLET LANDSCAPE / LAPTOP (1024px - 1439px)
+   Fluidly adapts and mirrors the 1440px desktop design proportions.
+   ========================================================================= */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .container {
+    padding: 0 clamp(32px, 4.11vw, var(--spacing-canvas-gutter, 79px));
+  }
+
+  .bannerCard {
+    min-height: clamp(500px, 42vw, 614px) !important;
+  }
+
+  .contentWrapper {
+    max-width: clamp(540px, 56vw, 900px) !important;
+    padding: clamp(48px, 4.8vw, 76px) clamp(16px, 2vw, 32px) clamp(36px, 3.5vw, 52px) clamp(36px, 3.8vw, 58px) !important;
+  }
+
+  .description {
+    font-size: clamp(24px, 2.5vw, 39.72px) !important;
+    line-height: 1.28 !important;
+    max-width: clamp(460px, 50vw, 840px) !important;
+    margin-top: clamp(24px, 2.8vw, 45px) !important;
+    margin-bottom: 0 !important;
+  }
+
+  .buttonWrapper {
+    margin-top: clamp(28px, 3.2vw, 52px) !important;
+  }
+
+  .reelsArea {
+    display: block !important;
+    width: 780px !important;
+    right: clamp(-170px, calc(-260px + 8.5vw), -120px) !important;
+    top: -240px !important;
+    bottom: -240px !important;
+    transform: scale(clamp(0.76, 0.07vw, 1)) !important;
     transform-origin: center right !important;
   }
 }
@@ -397,9 +438,55 @@
 }
 
 @media (max-width: 360px) {
+  .bannerCard {
+    min-height: 310px;
+  }
+
+  .contentWrapper {
+    padding: 20px 14px 20px 14px;
+  }
+
+  .header {
+    --badge-text-size: 13px;
+    --headline-font-size: clamp(24px, 8vw, 28px);
+    --headline-line-gap: 2px;
+    --headline-badge-gap: 6px;
+  }
+
+  .description {
+    font-size: 12.5px;
+    line-height: 1.32;
+    max-width: 170px;
+    margin-top: 10px;
+  }
+
+  .buttonWrapper {
+    margin-top: 14px;
+  }
+
   .reelsArea {
-    transform: scale(0.72) !important;
-    right: -50px !important;
-    bottom: -70px !important;
+    transform: scale(0.52) !important;
+    right: -28px !important;
+    bottom: -15px !important;
+  }
+}
+
+@media (max-width: 330px) {
+  .bannerCard {
+    min-height: 295px;
+  }
+
+  .header {
+    --headline-font-size: 25px;
+  }
+
+  .description {
+    max-width: 155px;
+  }
+
+  .reelsArea {
+    transform: scale(0.48) !important;
+    right: -24px !important;
+    bottom: -10px !important;
   }
 }

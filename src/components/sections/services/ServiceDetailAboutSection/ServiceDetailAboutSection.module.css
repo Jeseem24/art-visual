@@ -45,24 +45,26 @@
   word-break: break-word;
 }
 
-/* Desktop (1024px+): Exact Figma px under body { zoom: 0.8 } */
+/* Desktop (1024px+): Exact Figma px under body { zoom: 0.8 } with fluid adaptation from 1440px */
 @media (min-width: 1024px) {
   .section {
-    --headline-font-size-compact: 85.538px;
-    padding-top: 153px;
-    padding-bottom: 108px;
+    --headline-font-size-compact: clamp(48px, calc(85.5385 / 1440 * 100vw), 85.538px);
+    padding-top: clamp(88px, calc(153 / 1440 * 100vw), 153px);
+    padding-bottom: clamp(64px, calc(108 / 1440 * 100vw), 108px);
   }
 
   .container {
-    padding-left: var(--spacing-canvas-gutter, 79px);
-    padding-right: var(--spacing-canvas-gutter, 79px);
+    padding-left: clamp(32px, 4.11vw, var(--spacing-canvas-gutter, 79px));
+    padding-right: clamp(32px, 4.11vw, var(--spacing-canvas-gutter, 79px));
   }
 
   .desktopHeadline {
     display: block !important;
-    font-size: 85.538px !important;
-    line-height: 0.98 !important;
-    white-space: nowrap !important;
+    font-size: clamp(48px, calc(85.5385 / 1440 * 100vw), 85.538px) !important;
+    line-height: 1.02 !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    max-width: 100% !important;
   }
 
   .mobileHeadline {
@@ -70,13 +72,13 @@
   }
 
   .paragraphsWrapper {
-    gap: 32px;
-    margin-top: 32px;
+    gap: clamp(20px, calc(32 / 1440 * 100vw), 32px);
+    margin-top: clamp(24px, calc(32 / 1440 * 100vw), 32px);
   }
 
   .paragraph {
-    font-size: 31.787px;
-    line-height: 1.3;
+    font-size: clamp(18px, calc(31.787 / 1440 * 100vw), 31.787px);
+    line-height: 1.35;
   }
 }
 

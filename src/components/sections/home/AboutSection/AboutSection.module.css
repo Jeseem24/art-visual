@@ -109,9 +109,9 @@
 }
 
 /* =========================================================================
-   TABLET / SMALL LAPTOP (768px - 1199px, including 1024px)
+   TABLET PORTRAIT (768px - 1023px)
    ========================================================================= */
-@media (min-width: 768px) and (max-width: 1199px) {
+@media (min-width: 768px) and (max-width: 1023px) {
   .container {
     padding: 0 32px;
   }
@@ -142,6 +142,7 @@
     transform: none !important;
     padding-top: 48px !important;
     padding-bottom: 70px !important;
+    align-items: center !important;
   }
 
   .photoContainer {
@@ -160,7 +161,70 @@
   }
 
   .ctaWrapper {
-    margin-top: 75px !important;
+    margin-top: clamp(135px, 14vw, 150px) !important;
+  }
+}
+
+/* =========================================================================
+   TABLET LANDSCAPE / LAPTOP (1024px - 1439px)
+   Balanced left column and divider placed snugly to the right of the heading.
+   ========================================================================= */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .container {
+    padding: 0 clamp(32px, 3.2vw, 60px);
+  }
+
+  .topRow {
+    grid-template-columns: clamp(325px, 32.5vw, 490px) 1fr !important;
+    gap: clamp(24px, 2.5vw, 40px) !important;
+    padding-top: clamp(70px, 7vw, 110px) !important;
+    padding-bottom: clamp(50px, 5vw, 80px) !important;
+    padding-left: 0 !important;
+  }
+
+  .leftCol {
+    padding-right: 12px !important;
+    max-width: 100% !important;
+  }
+
+  .verticalDividerLine {
+    left: calc(clamp(32px, 3.2vw, 60px) + clamp(325px, 32.5vw, 490px) + 12px) !important;
+    height: 750px !important;
+  }
+
+  .crosshairReticle {
+    left: calc(clamp(32px, 3.2vw, 60px) + clamp(325px, 32.5vw, 490px) + 12px) !important;
+  }
+
+  .storyParagraph {
+    font-size: clamp(22px, 2.2vw, 36px) !important;
+    line-height: 1.35 !important;
+  }
+
+  .showcaseArea {
+    transform: none !important;
+    padding-top: clamp(48px, 4.5vw, 60px) !important;
+    padding-bottom: clamp(70px, 7vw, 110px) !important;
+    align-items: center !important;
+  }
+
+  .photoContainer {
+    width: clamp(380px, 34vw, 503px) !important;
+    height: clamp(278px, 25vw, 368px) !important;
+    margin: 0 auto !important;
+  }
+
+  .ribbonWrapper {
+    margin-top: clamp(-250px, -18vw, -160px) !important;
+    height: clamp(96px, 8vw, 124px) !important;
+  }
+
+  .ribbonText {
+    font-size: clamp(32px, 3.2vw, 48px) !important;
+  }
+
+  .ctaWrapper {
+    margin-top: clamp(120px, 13vw, 180px) !important;
   }
 }
 
@@ -241,7 +305,6 @@
   position: relative;
   width: 100%;
   padding-top: clamp(40px, 4.5vw, 60px);
-  transform: translate(-60px,-30);
   padding-bottom: var(--about-section-padding-bottom, 110px);
   display: flex;
   flex-direction: column;

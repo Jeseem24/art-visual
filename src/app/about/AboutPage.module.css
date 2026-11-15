@@ -47,11 +47,35 @@
   }
 }
 
-@media (max-width: 410px) {
+@media (max-width: 410px) and (min-width: 361px) {
   .aboutPage .ctaBanner [class*="reelsArea"] {
     transform: scale(0.86) !important;
     right: -45px !important;
     bottom: -50px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .aboutPage .ctaBanner [class*="bannerCard"] {
+    min-height: 310px !important;
+  }
+
+  .aboutPage .ctaBanner [class*="reelsArea"] {
+    transform: scale(0.52) !important;
+    right: -28px !important;
+    bottom: -15px !important;
+  }
+}
+
+@media (max-width: 330px) {
+  .aboutPage .ctaBanner [class*="bannerCard"] {
+    min-height: 295px !important;
+  }
+
+  .aboutPage .ctaBanner [class*="reelsArea"] {
+    transform: scale(0.48) !important;
+    right: -24px !important;
+    bottom: -10px !important;
   }
 }
 
