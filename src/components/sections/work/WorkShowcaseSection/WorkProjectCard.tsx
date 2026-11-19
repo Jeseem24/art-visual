@@ -39,7 +39,6 @@ export const WorkProjectCard = memo(function WorkProjectCard({
         {videoSrc ? (
           <video
             src={videoSrc.includes("#t=") ? videoSrc : `${videoSrc}#t=0.001`}
-            poster={imageSrc}
             autoPlay
             loop
             muted

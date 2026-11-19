@@ -17,7 +17,7 @@ export interface AboutSectionData {
   };
   media: {
     videoSrc: string;
-    posterSrc: string;
+    posterSrc?: string;
     alt: string;
   };
   photo?: {

@@ -87,19 +87,22 @@ export const AboutSection = memo(function AboutSection({
           <div className={styles.photoImageWrapper}>
             {content.media.videoSrc ? (
               <video
-                src={content.media.videoSrc}
-                poster={content.media.posterSrc}
+                src={
+                  content.media.videoSrc.includes("#t=")
+                    ? content.media.videoSrc
+                    : `${content.media.videoSrc}#t=0.001`
+                }
                 autoPlay
                 loop
                 muted
                 playsInline
-                preload="auto"
+                preload="metadata"
                 className={styles.mediaVideo}
                 aria-label={content.media.alt}
               />
             ) : (
               <Image
-                src={content.media.posterSrc}
+                src={content.media.posterSrc || "/images/about/studio-inspiration.png"}
                 alt={content.media.alt}
                 fill
                 sizes="(max-width: 768px) 100vw, 503px"

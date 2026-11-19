@@ -15,9 +15,5 @@ export const HERO_DEFAULTS = {
     label: "Explore Our Work",
     href: "/work",
   },
-  reel: {
-    poster: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=1920&q=85",
-    label: "Watch 2026 Reel",
-  },
 } as const;
 

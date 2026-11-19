@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import { HeroShowcase } from "@/components/sections/home/HeroShowcase";
 import { HERO_DEFAULTS } from "./constants";
+import type { ShowcaseCardItem } from "@/components/sections/home/HeroShowcase/constants";
 import styles from "./HeroSection.module.css";
 
 export interface HeroSectionProps {
@@ -21,8 +22,8 @@ export interface HeroSectionProps {
     label: string;
     href: string;
   };
-  /** Showcase video poster URL */
-  reelPoster?: string;
+  /** Optional hero showcase cards */
+  showcaseCards?: readonly ShowcaseCardItem[];
   /** Custom class name */
   className?: string;
 }
@@ -77,7 +78,7 @@ export const HeroSection = memo(function HeroSection({
   headline = HERO_DEFAULTS.headline,
   subtitle = HERO_DEFAULTS.subtitle,
   cta = HERO_DEFAULTS.cta,
-  reelPoster = HERO_DEFAULTS.reel.poster,
+  showcaseCards,
   className = "",
 }: HeroSectionProps) {
   return (
@@ -118,7 +119,7 @@ export const HeroSection = memo(function HeroSection({
               </span>
             </Link>
 
-            <HeroShowcase />
+            <HeroShowcase cards={showcaseCards} />
           </div>
         </div>
       </div>

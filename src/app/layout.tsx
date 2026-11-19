@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { Anton, Bebas_Neue, Outfit, Inter, Poppins, Geist } from "next/font/google";
 import { siteConfig } from "@/config/site";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
-import { OverlayScrollbar } from "@/components/ui/OverlayScrollbar";
-import { QuoteModalProvider } from "@/components/ui/QuoteModal";
-import { NavigationScrollReset } from "@/components/ui/NavigationScrollReset";
+import { SiteLayout } from "@/components/layout/SiteLayout";
+import { DraftModeBanner } from "@/components/ui/DraftModeBanner";
+import { sanityFetch } from "@/sanity/lib/fetch";
+import { SITE_SETTINGS_QUERY, NAVBAR_QUERY } from "@/sanity/lib/queries";
 import "./globals.css";
 
 const anton = Anton({
@@ -49,33 +48,116 @@ const geist = Geist({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: `${siteConfig.name} | ${siteConfig.tagline}`,
-    template: `%s | ${siteConfig.name}`,
-  },
-  description: siteConfig.description,
-  metadataBase: new URL(siteConfig.url),
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const siteSettings = await sanityFetch<any>({
+    query: SITE_SETTINGS_QUERY,
+    fallback: null,
+    tags: ["siteSettings", "layout"],
+  });
 
-export default function RootLayout({
+  const rawBrand = siteSettings?.brandName || siteConfig.name;
+  const brandName = rawBrand.toLowerCase() === "art visual" ? "Art Visual" : rawBrand;
+  const tagline = siteSettings?.tagline || siteConfig.tagline;
+  const description = siteSettings?.brandDescription || siteConfig.description;
+  const faviconUrl = siteSettings?.faviconUrl;
+
+  return {
+    title: {
+      default: `${brandName} | ${tagline}`,
+      template: `%s | ${brandName}`,
+    },
+    description,
+    metadataBase: new URL(siteConfig.url),
+    icons: {
+      icon: [
+        ...(faviconUrl ? [{ url: faviconUrl, sizes: "any" }] : []),
+        { url: "/icon.png", type: "image/png", sizes: "512x512" },
+        { url: "/favicon.ico", sizes: "any" },
+      ],
+      apple: [
+        { url: faviconUrl || "/apple-icon.png", sizes: "180x180", type: "image/png" },
+      ],
+    },
+  };
+}
+
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const [siteSettings, navbarData] = await Promise.all([
+    sanityFetch<any>({
+      query: SITE_SETTINGS_QUERY,
+      fallback: null,
+      tags: ["siteSettings", "layout"],
+    }),
+    sanityFetch<any>({
+      query: NAVBAR_QUERY,
+      fallback: null,
+      tags: ["navbarSettings", "layout"],
+    }),
+  ]);
+
+  const footerContactItems = siteSettings
+    ? [
+        {
+          label: "Email Address",
+          value: siteSettings.contactEmail || "hello@sbsc.com",
+          href: `mailto:${siteSettings.contactEmail || "hello@sbsc.com"}`,
+        },
+        {
+          label: "Phone Number",
+          value: siteSettings.contactPhone || "+91 98765 43210",
+          href: `tel:${(siteSettings.contactPhone || "+919876543210").replace(/\s+/g, "")}`,
+        },
+        {
+          label: "Location",
+          value: siteSettings.location || "Chennai, India",
+          href: "#location",
+        },
+        {
+          label: "WhatsApp",
+          value: siteSettings.whatsappNumber || "+91 98765 43210",
+          href: `https://wa.me/${(siteSettings.whatsappNumber || "+919876543210").replace(/\D/g, "")}`,
+        },
+      ]
+    : undefined;
+
+  const socialLinks = siteSettings
+    ? {
+        instagram: siteSettings.socialInstagram,
+        facebook: siteSettings.socialFacebook,
+        twitter: siteSettings.socialTwitter,
+        youtube: siteSettings.socialYoutube,
+      }
+    : undefined;
+
+  const rawBrand = siteSettings?.brandName || siteConfig.name;
+  const brandName = rawBrand.toLowerCase() === "art visual" ? "Art Visual" : rawBrand;
+
   return (
     <html
       lang="en"
       className={`${anton.variable} ${bebasNeue.variable} ${outfit.variable} ${inter.variable} ${poppins.variable} ${geist.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-white text-dark-primary font-sans">
-        <NavigationScrollReset />
-        <QuoteModalProvider>
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </QuoteModalProvider>
-        <OverlayScrollbar />
+      <body className="min-h-full font-sans antialiased">
+        <SiteLayout
+          navItems={navbarData?.navItems}
+          ctaLabel={navbarData?.ctaLabel}
+          logoUrl={siteSettings?.logoUrl}
+          brandName={brandName}
+          brandDescription={siteSettings?.brandDescription}
+          contactItems={footerContactItems}
+          socialLinks={socialLinks}
+          copyright={siteSettings?.copyright}
+          quickLinks={siteSettings?.quickLinks}
+          servicesList={siteSettings?.servicesList}
+          legalLinks={siteSettings?.legalLinks}
+          draftBanner={<DraftModeBanner />}
+        >
+          {children}
+        </SiteLayout>
       </body>
     </html>
   );

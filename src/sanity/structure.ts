@@ -4,7 +4,6 @@ import type {
   DefaultDocumentNodeResolver,
 } from "sanity/structure";
 import { orderableDocumentListDeskItem } from "@sanity/orderable-document-list";
-import { DraftPreviewView } from "./components/DraftPreviewView";
 import { CmsDashboardView } from "./components/dashboard/CmsDashboardView";
 import {
   LayoutDashboard,
@@ -47,12 +46,10 @@ export const BLOCKED_SINGLETON_ACTIONS = new Set([
 
 /**
  * Reusable document views:
- * 1. Form Editor (standard field input)
- * 2. Preview Live ↗ (interactive live website preview with new-tab launcher)
+ * Standard Form Editor for content management.
  */
 export const getDocumentViews = (S: StructureBuilder) => [
   S.view.form().title("Editor"),
-  S.view.component(DraftPreviewView).id("draft-preview").title("Preview Live"),
 ];
 
 /**

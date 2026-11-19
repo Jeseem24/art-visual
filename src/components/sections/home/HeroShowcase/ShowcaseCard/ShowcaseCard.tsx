@@ -52,7 +52,6 @@ export const ShowcaseCard = memo(function ShowcaseCard({
           {videoSrc ? (
             <video
               src={videoSrc.includes("#t=") ? videoSrc : `${videoSrc}#t=0.001`}
-              poster={image}
               autoPlay
               loop
               muted

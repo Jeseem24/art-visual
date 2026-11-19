@@ -5,7 +5,7 @@ export interface ShowcaseCardItem {
   id: string;
   title: string;
   description: string;
-  image: string;
+  image?: string;
   videoSrc: string;
   rotationDeg: number;
 }

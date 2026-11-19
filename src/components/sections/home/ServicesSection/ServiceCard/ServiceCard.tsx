@@ -79,7 +79,6 @@ export const ServiceCard = memo(function ServiceCard({
           {videoSrc ? (
             <video
               src={videoSrc.includes("#t=") ? videoSrc : `${videoSrc}#t=0.001`}
-              poster={posterSrc || imageSrc}
               autoPlay
               loop
               muted

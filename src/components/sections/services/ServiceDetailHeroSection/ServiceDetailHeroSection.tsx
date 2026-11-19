@@ -58,13 +58,16 @@ export const ServiceDetailHeroSection = memo(function ServiceDetailHeroSection({
           <div className={styles.mediaWrapper}>
             {videoSrc ? (
               <video
-                src={videoSrc}
-                poster={posterSrc}
+                src={
+                  videoSrc.includes("#t=")
+                    ? videoSrc
+                    : `${videoSrc}#t=0.001`
+                }
                 autoPlay
                 loop
                 muted
                 playsInline
-                preload="auto"
+                preload="metadata"
                 aria-label={mediaAlt}
                 className={styles.mediaVideo}
               />

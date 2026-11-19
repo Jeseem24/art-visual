@@ -20,9 +20,14 @@ export default defineConfig({
   dataset,
   schema: {
     ...schema,
-    // Filter out singleton types from the global "Create new document" menu (+)
+    // Filter out singleton and internal types from the global "Create new document" menu (+)
     templates: (templates) =>
-      templates.filter(({ schemaType }) => !SINGLETON_TYPES.has(schemaType)),
+      templates.filter(
+        ({ schemaType }) =>
+          !SINGLETON_TYPES.has(schemaType) &&
+          schemaType !== "versionSnapshot" &&
+          schemaType !== "media.tag"
+      ),
   },
   document: {
     // Art Visual Hybrid Action Toolbar:
@@ -34,7 +39,10 @@ export default defineConfig({
     newDocumentOptions: (prev, { creationContext }) => {
       if (creationContext.type === "global") {
         return prev.filter(
-          (template) => !SINGLETON_TYPES.has(template.templateId)
+          (template) =>
+            !SINGLETON_TYPES.has(template.templateId) &&
+            template.templateId !== "versionSnapshot" &&
+            template.templateId !== "media.tag"
         );
       }
       return prev;

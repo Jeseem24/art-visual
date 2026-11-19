@@ -1,9 +1,10 @@
 import React, { memo } from "react";
 import { ShowcaseCard } from "./ShowcaseCard";
-import { HERO_SHOWCASE_CARDS } from "./constants";
+import { HERO_SHOWCASE_CARDS, type ShowcaseCardItem } from "./constants";
 import styles from "./HeroShowcase.module.css";
 
 export interface HeroShowcaseProps {
+  cards?: readonly ShowcaseCardItem[];
   className?: string;
 }
 
@@ -21,6 +22,7 @@ const slotClassNames = [
  * showcase cards positioned along the curved wire arc.
  */
 export const HeroShowcase = memo(function HeroShowcase({
+  cards = HERO_SHOWCASE_CARDS,
   className = "",
 }: HeroShowcaseProps) {
   return (
@@ -47,15 +49,16 @@ export const HeroShowcase = memo(function HeroShowcase({
 
       {/* 5 Hanging Showcase Cards */}
       <div className={styles.cardsArea}>
-        {HERO_SHOWCASE_CARDS.map((card, index) => {
+        {cards.map((card, index) => {
           const slotClass = slotClassNames[index] ?? styles.cardSlot3;
+          const cardKey = card.id || (card as any)._key || `hero-card-${index}`;
           return (
             <div
-              key={card.id}
+              key={cardKey}
               className={`${styles.cardSlot} ${slotClass}`}
             >
               <ShowcaseCard
-                id={card.id}
+                id={cardKey}
                 title={card.title}
                 description={card.description}
                 image={card.image}

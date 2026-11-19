@@ -63,7 +63,7 @@ export const TestimonialCard = memo(function TestimonialCard({
         <div className={styles.avatarFrame}>
           <div className={styles.avatarImageWrapper}>
             <Image
-              src={avatar}
+              src={avatar || "/images/testimonials/avatar-1.png"}
               alt={name}
               width={66}
               height={66}
