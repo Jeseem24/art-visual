@@ -89,7 +89,6 @@ export function ContentHealthChecker() {
           favicon,
           aboutVideoFile,
           video,
-          image,
           orderRank
         }
       `);
@@ -168,18 +167,18 @@ export function ContentHealthChecker() {
               recommendation: "Select a production category (e.g. Brand Films, Commercial Ads) for portfolio filtering.",
             });
           }
-          // Note: In Sanity, video file is under "video" and cover image is under "image"
-          if (!doc.video && !doc.image) {
+          // Video-native project check: verify video reel is attached
+          if (!doc.video) {
             foundIssues.push({
-              id: `${cleanId}-missing-media`,
+              id: `${cleanId}-missing-video`,
               documentId: cleanId,
               documentType: doc._type,
               documentTitle: docTitle,
               field: "video",
               severity: "warning",
               category: "Media & Video",
-              message: `Project "${docTitle}" has neither a custom video file nor a cover image asset uploaded in CMS.`,
-              recommendation: "Upload an MP4 preview video or cover image.",
+              message: `Project "${docTitle}" does not have an MP4 video reel uploaded.`,
+              recommendation: "Upload an MP4 preview video reel.",
             });
           }
         }

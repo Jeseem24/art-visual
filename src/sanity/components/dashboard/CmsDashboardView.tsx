@@ -20,8 +20,6 @@ import {
   Layers,
   Briefcase,
   Image as ImageIcon,
-  CheckCircle2,
-  AlertTriangle,
   Clock,
   ArrowRight,
   RefreshCw,
@@ -66,7 +64,7 @@ const TYPE_NAME_MAP: Record<string, string> = {
   navbarSettings: "Navigation Settings",
   ctaBanner: "CTA Banner",
   testimonial: "Testimonial",
-  faqItem: "FAQ",
+  faqItem: "FAQ Item",
 };
 
 // High-speed consolidated GROQ query: 1 single network request
@@ -139,7 +137,7 @@ export function CmsDashboardView() {
     fetchDashboardData();
   }, [fetchDashboardData]);
 
-  // Universal Sanity Studio navigation using intent resolver
+  // Universal Sanity Studio navigation using intent router
   const handleOpenDocument = (docType: string, docId: string) => {
     const cleanId = docId.replace("drafts.", "");
     window.location.href = `/studio/intent/edit/id=${cleanId};type=${docType}/`;
@@ -154,17 +152,17 @@ export function CmsDashboardView() {
   };
 
   return (
-    <Card height="fill" tone="inherit" padding={[3, 4, 5]} style={{ overflowY: "auto", height: "100%" }}>
-      <Stack gap={5} style={{ maxWidth: 1140, margin: "0 auto", paddingBottom: 40 }}>
-        {/* Header Bar */}
-        <Flex justify="space-between" align="center" wrap="wrap" gap={3}>
+    <Box padding={[4, 5, 5]} style={{ width: "100%", boxSizing: "border-box" }}>
+      <Stack gap={5} style={{ maxWidth: 1140, margin: "0 auto", paddingBottom: 64 }}>
+        {/* Top Header */}
+        <Flex justify="space-between" align="center" wrap="wrap" gap={3} style={{ paddingTop: 8 }}>
           <Box>
-            <Flex align="center" gap={2}>
-              <LayoutDashboard size={24} color="#3b82f6" />
+            <Flex align="center" gap={3}>
+              <LayoutDashboard size={26} color="#3b82f6" />
               <Heading size={3}>Art Visual Content Studio</Heading>
             </Flex>
-            <Text size={1} muted style={{ marginTop: 6, lineHeight: 1.5 }}>
-              Manage website pages, portfolio reels, services, and live content health.
+            <Text size={1} muted style={{ marginTop: 6, lineHeight: 1.6 }}>
+              Production management, content health, and quick actions for editors.
             </Text>
           </Box>
           <Flex align="center" gap={2}>
@@ -173,7 +171,7 @@ export function CmsDashboardView() {
               text={loading ? "Refreshing..." : "Refresh"}
               mode="ghost"
               fontSize={1}
-              padding={2}
+              padding={3}
               onClick={fetchDashboardData}
             />
           </Flex>
@@ -268,7 +266,7 @@ export function CmsDashboardView() {
                   </Flex>
                   <Heading size={4}>{metrics.totalMediaAssets}</Heading>
                   <Flex align="center" justify="space-between">
-                    <Text size={0} muted>Videos & Images</Text>
+                    <Text size={0} muted>Videos & Files</Text>
                     <Badge tone="positive" fontSize={0}>Active</Badge>
                   </Flex>
                 </Stack>
@@ -304,12 +302,12 @@ export function CmsDashboardView() {
               <Stack gap={4}>
                 <Box>
                   <Heading size={2}>Quick Editorial Shortcuts</Heading>
-                  <Text size={1} muted style={{ marginTop: 4, lineHeight: 1.5 }}>
+                  <Text size={1} muted style={{ marginTop: 4, lineHeight: 1.6 }}>
                     Jump directly to edit pages, featured reels, or shared site sections.
                   </Text>
                 </Box>
 
-                <Grid style={{ gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))" }} gap={3}>
+                <Grid style={{ gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))" }} gap={3}>
                   <Button
                     icon={() => <FileText size={15} />}
                     text="Edit Homepage"
@@ -378,11 +376,11 @@ export function CmsDashboardView() {
               </Stack>
             </Card>
 
-            {/* Bottom Row: Recent Activity & Sitemap Reference */}
+            {/* Bottom Row: Recent Activity & Content Location Guide */}
             <Grid style={{ gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))" }} gap={4}>
               {/* Recently Modified Documents */}
               <Card padding={4} radius={3} border tone="inherit">
-                <Stack gap={3}>
+                <Stack gap={4}>
                   <Flex justify="space-between" align="center">
                     <Flex align="center" gap={2}>
                       <Clock size={16} />
@@ -398,8 +396,21 @@ export function CmsDashboardView() {
                   ) : (
                     <Stack gap={2}>
                       {metrics.recentActivity.map((doc) => {
-                        const displayName =
+                        const isSingleton = [
+                          "homePage",
+                          "aboutPage",
+                          "servicesPage",
+                          "workPage",
+                          "contactPage",
+                          "siteSettings",
+                          "ctaBanner",
+                          "navbarSettings",
+                        ].includes(doc._type);
+
+                        const itemTitle =
                           doc.projectName || doc.title || doc.name || TYPE_NAME_MAP[doc._type] || doc._type;
+                        const itemSubtitle = isSingleton ? "Site Page" : (TYPE_NAME_MAP[doc._type] || "Document");
+
                         const dateFormatted = new Date(doc._updatedAt).toLocaleDateString(undefined, {
                           month: "short",
                           day: "numeric",
@@ -410,7 +421,7 @@ export function CmsDashboardView() {
                         return (
                           <Card
                             key={doc._id}
-                            padding={2}
+                            padding={3}
                             radius={2}
                             border
                             tone="transparent"
@@ -419,8 +430,8 @@ export function CmsDashboardView() {
                           >
                             <Flex justify="space-between" align="center">
                               <Box>
-                                <Text size={1} weight="medium">{displayName}</Text>
-                                <Text size={0} muted style={{ marginTop: 2 }}>{TYPE_NAME_MAP[doc._type] || doc._type}</Text>
+                                <Text size={1} weight="medium">{itemTitle}</Text>
+                                <Text size={0} muted style={{ marginTop: 4 }}>{itemSubtitle}</Text>
                               </Box>
                               <Flex align="center" gap={2}>
                                 <Text size={0} muted>{dateFormatted}</Text>
@@ -435,33 +446,33 @@ export function CmsDashboardView() {
                 </Stack>
               </Card>
 
-              {/* Website Content Editorial Guide */}
+              {/* Content Location Guide */}
               <Card padding={4} radius={3} border tone="inherit">
-                <Stack gap={3}>
+                <Stack gap={4}>
                   <Flex align="center" gap={2}>
                     <Compass size={16} color="#3b82f6" />
                     <Text weight="semibold" size={1}>Content Location Guide</Text>
                   </Flex>
 
-                  <Stack gap={2}>
-                    <Card padding={2} radius={2} border tone="transparent">
-                      <Text size={1} weight="semibold">Featured Works Carousel</Text>
-                      <Text size={0} muted style={{ marginTop: 2, lineHeight: 1.4 }}>
-                        Cards are managed under <strong>Portfolio Projects</strong>. Turn on "Showcase in Home Page Carousel" to display a project on the homepage.
+                  <Stack gap={3}>
+                    <Card padding={3} radius={2} border tone="transparent">
+                      <Text size={1} weight="semibold" style={{ color: "#60a5fa" }}>Featured Works Carousel</Text>
+                      <Text size={1} muted style={{ marginTop: 6, lineHeight: 1.6 }}>
+                        Project cards are edited under <strong>Portfolio Projects</strong> in the left sidebar. Turn on <em>"Showcase in Home Page Carousel"</em> on any project to feature it.
                       </Text>
                     </Card>
 
-                    <Card padding={2} radius={2} border tone="transparent">
-                      <Text size={1} weight="semibold">Call to Action (CTA) Banner</Text>
-                      <Text size={0} muted style={{ marginTop: 2, lineHeight: 1.4 }}>
-                        The bottom banner ("Have a Story to Tell? Let's Create It.") is managed under <strong>CTA Banner</strong> so edits sync across all pages.
+                    <Card padding={3} radius={2} border tone="transparent">
+                      <Text size={1} weight="semibold" style={{ color: "#a78bfa" }}>Global CTA Banner</Text>
+                      <Text size={1} muted style={{ marginTop: 6, lineHeight: 1.6 }}>
+                        The bottom banner (<em>"Have a Story to Tell? Let's Create It."</em>) is edited under <strong>Global CTA Banner</strong> so updates apply across all pages.
                       </Text>
                     </Card>
 
-                    <Card padding={2} radius={2} border tone="transparent">
-                      <Text size={1} weight="semibold">Why Choose Us & Creative Process</Text>
-                      <Text size={0} muted style={{ marginTop: 2, lineHeight: 1.4 }}>
-                        Why Choose Us is edited in <strong>Home Page</strong>. The 5-step timeline is edited in <strong>About Page &gt; Creative Process</strong>.
+                    <Card padding={3} radius={2} border tone="transparent">
+                      <Text size={1} weight="semibold" style={{ color: "#34d399" }}>Why Choose Us & Creative Process</Text>
+                      <Text size={1} muted style={{ marginTop: 6, lineHeight: 1.6 }}>
+                        Why Choose Us pillars are edited in <strong>Home Page</strong>. The 5-step timeline is edited in <strong>About Page &gt; Creative Process</strong>.
                       </Text>
                     </Card>
                   </Stack>
@@ -471,7 +482,7 @@ export function CmsDashboardView() {
           </>
         )}
       </Stack>
-    </Card>
+    </Box>
   );
 }
 
