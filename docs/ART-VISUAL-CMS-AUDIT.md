@@ -158,7 +158,7 @@ flowchart TD
 
 1. **Unit 01 (Dashboard):** Verified in Studio with live published/draft counts, responsive cards, and zero simulated metrics.
 2. **Unit 02 (Media & DAM):** Verified with 20MB limit dropzone tests, asset reference dependency check, and inline `<video>` preview component.
-3. **Unit 03 (Content Editing):** Verified with working snapshot pruning, clean unset/set restore, responsive preview iframe (Desktop/Tablet/Mobile), and isolated `UndoRedoInput`.
+3. **Unit 03 (Content Editing):** Verified with working snapshot pruning, clean unset/set restore, isolated `UndoRedoInput`, and case-normalization for "Art Visual". (Note: Responsive preview iframe omitted per user request; video poster fields and bindings removed per client instruction for 100% video-native loading).
 4. **Unit 04 (Health Checker):** Verified with real-time audit scanning, error badge counts, and direct one-click fix links.
 5. **Quality Gates:** 
    - `npx tsc --noEmit` exits with 0 errors.

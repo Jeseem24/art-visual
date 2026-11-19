@@ -11,17 +11,27 @@ This guide provides exact, zero-downtime rollback procedures for each independen
 
 ---
 
+## Commit Reference
+
+| Unit | Commit Message | Commit Hash | Revert Command |
+| :--- | :--- | :---: | :--- |
+| **Unit 01** | `feat(cms): add professional dashboard` | `5cb47e5` | `git revert 5cb47e5 --no-edit` |
+| **Unit 02** | `feat(media): improve asset management` | `bd0d2d5` | `git revert bd0d2d5 --no-edit` |
+| **Unit 03** | `feat(editor): improve content editing experience` | `59a9115` | `git revert 59a9115 --no-edit` |
+| **Unit 04** | `feat(health): add website content health checker` | `d16d753` | `git revert d16d753 --no-edit` |
+
+---
+
 ## Unit 01 Rollback Procedure (`feat(cms): add professional dashboard`)
 
 ### 1. Execute Git Revert
 ```bash
-git revert <UNIT_01_COMMIT_HASH> --no-edit
+git revert 5cb47e5 --no-edit
 ```
 
 ### 2. Selective File Rollback Alternative
-If you wish to revert only Unit 01 without a git commit:
 ```bash
-git checkout HEAD~1 -- src/sanity/structure.ts
+git checkout 5cb47e5~1 -- src/sanity/structure.ts
 rm -rf src/sanity/components/dashboard
 ```
 
@@ -32,17 +42,52 @@ rm -rf src/sanity/components/dashboard
 ---
 
 ## Unit 02 Rollback Procedure (`feat(media): improve asset management`)
-*(Will be documented upon Unit 02 completion)*
+
+### 1. Execute Git Revert
+```bash
+git revert bd0d2d5 --no-edit
+```
+
+### 2. Verification Steps
+1. Run `npx tsc --noEmit` to verify type safety.
+2. Confirm `sanity-plugin-media` and video fields revert to standard file pickers.
 
 ---
 
 ## Unit 03 Rollback Procedure (`feat(editor): improve content editing experience`)
-*(Will be documented upon Unit 03 completion)*
+
+### 1. Execute Git Revert
+```bash
+git revert 59a9115 --no-edit
+```
+
+### 2. Selective File Rollback Alternative
+```bash
+git checkout 59a9115~1 -- src/sanity/plugins/versioning src/sanity/schemaTypes sanity.config.ts src/app/api/draft-mode
+```
+
+### 3. Verification Steps
+1. Run `npx tsc --noEmit` to verify type safety.
+2. Visit `http://localhost:3000/studio` to confirm editor toolbar and actions revert cleanly.
 
 ---
 
 ## Unit 04 Rollback Procedure (`feat(health): add website content health checker`)
-*(Will be documented upon Unit 04 completion)*
+
+### 1. Execute Git Revert
+```bash
+git revert d16d753 --no-edit
+```
+
+### 2. Selective File Rollback Alternative
+```bash
+git checkout d16d753~1 -- src/sanity/structure.ts src/sanity/components/dashboard/CmsDashboardView.tsx
+rm -rf src/sanity/components/health
+```
+
+### 3. Verification Steps
+1. Run `npx tsc --noEmit` to verify type safety.
+2. Confirm Desk Structure removes the "Content Health Checker" item and dashboard health card reverts to non-linked summary.
 
 ---
 
@@ -50,5 +95,8 @@ rm -rf src/sanity/components/dashboard
 To discard all changes on `cms-studio-enhancement` and return to the original clean master state:
 ```bash
 git checkout master
-git branch -D cms-studio-enhancement
+```
+Or to reset `cms-studio-enhancement` to master:
+```bash
+git reset --hard master
 ```
