@@ -5,11 +5,11 @@ export const aboutPage = defineType({
   title: "About Page",
   type: "document",
   fieldsets: [
-    { name: "hero", title: "Hero Section", options: { collapsible: true, collapsed: false } },
-    { name: "whoWeAre", title: "Who We Are Section", options: { collapsible: true, collapsed: true } },
-    { name: "visionMission", title: "Vision & Mission Section", options: { collapsible: true, collapsed: true } },
-    { name: "whatWeDo", title: "What We Do (Capabilities)", options: { collapsible: true, collapsed: true } },
-    { name: "creativeProcess", title: "Creative Process (5 Steps)", options: { collapsible: true, collapsed: true } },
+    { name: "hero", title: "1. Hero Section", options: { collapsible: true, collapsed: false } },
+    { name: "whoWeAre", title: "2. Who We Are Section", options: { collapsible: true, collapsed: false } },
+    { name: "visionMission", title: "3. Vision & Mission Section", options: { collapsible: true, collapsed: false } },
+    { name: "whatWeDo", title: "4. What We Do (Capabilities - 8 Cards)", options: { collapsible: true, collapsed: false } },
+    { name: "creativeProcess", title: "5. Creative Process (5 Timeline Steps)", options: { collapsible: true, collapsed: false } },
   ],
   fields: [
     // --- HERO SECTION ---

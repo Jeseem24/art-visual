@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
-import { useClient } from "sanity";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Card,
+  Stack,
   Flex,
   Box,
   Heading,
@@ -11,25 +11,25 @@ import {
   Badge,
   Button,
   Grid,
-  Stack,
   Spinner,
 } from "@sanity/ui";
+import { useClient } from "sanity";
 import {
   LayoutDashboard,
-  Film,
-  Briefcase,
-  Layers,
-  Image as ImageIcon,
   FileText,
+  Layers,
+  Briefcase,
+  Image as ImageIcon,
   CheckCircle2,
   AlertTriangle,
-  Eye,
-  RefreshCw,
-  ExternalLink,
-  History,
   Clock,
   ArrowRight,
-  ShieldAlert,
+  RefreshCw,
+  Eye,
+  Megaphone,
+  Phone,
+  ShieldCheck,
+  Compass,
 } from "lucide-react";
 
 interface DashboardMetrics {
@@ -54,89 +54,82 @@ interface DashboardMetrics {
   };
 }
 
-const CLIENT_CONFIG = { apiVersion: "2024-01-01" };
-
 const TYPE_NAME_MAP: Record<string, string> = {
-  homePage: "Home Page",
-  aboutPage: "About Page",
-  servicesPage: "Services Page",
-  workPage: "Work Page",
-  contactPage: "Contact Page",
-  siteSettings: "Site Settings & Footer",
-  navbarSettings: "Navigation Header",
-  ctaBanner: "CTA Banner",
+  homePage: "Homepage",
+  aboutPage: "About Us Page",
+  servicesPage: "Services Landing",
+  serviceItem: "Service Detail",
+  workPage: "Work Portfolio Landing",
   featuredWork: "Portfolio Project",
-  serviceItem: "Service Item",
+  contactPage: "Contact Page",
+  siteSettings: "Global Site Settings",
+  navbarSettings: "Navigation Settings",
+  ctaBanner: "CTA Banner",
   testimonial: "Testimonial",
-  faqItem: "FAQ Item",
+  faqItem: "FAQ",
 };
 
+// High-speed consolidated GROQ query: 1 single network request
+const DASHBOARD_CONSOLIDATED_QUERY = `
+{
+  "pubProjects": count(*[_type == "featuredWork" && !(_id in path("drafts.**"))]),
+  "draftProjects": count(*[_type == "featuredWork" && _id in path("drafts.**")]),
+  "pubServices": count(*[_type == "serviceItem" && !(_id in path("drafts.**"))]),
+  "draftServices": count(*[_type == "serviceItem" && _id in path("drafts.**")]),
+  "mediaCount": count(*[_type in ["sanity.imageAsset", "sanity.fileAsset"]]),
+  "snapshotCount": count(*[_type == "versionSnapshot"]),
+  "recentDocs": *[_type in [
+    "featuredWork", "serviceItem", "homePage", "aboutPage",
+    "servicesPage", "workPage", "contactPage", "siteSettings", "ctaBanner"
+  ]] | order(_updatedAt desc)[0...6] {
+    _id,
+    _type,
+    _updatedAt,
+    title,
+    name,
+    projectName
+  },
+  "brokenSlugs": count(*[_type in ["featuredWork", "serviceItem"] && (!defined(slug.current) || slug.current == "")])
+}
+`;
+
 export function CmsDashboardView() {
-  const client = useClient(CLIENT_CONFIG);
-  const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
+  const client = useClient({ apiVersion: "2026-03-01" });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [refreshKey, setRefreshKey] = useState(0);
+  const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
 
   const fetchDashboardData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
 
-      // Execute atomic queries for real counts
-      const [
-        pubProjects,
-        draftProjects,
-        pubServices,
-        draftServices,
-        mediaCount,
-        snapshotCount,
-        recentDocs,
-        brokenSlugs,
-      ] = await Promise.all([
-        client.fetch<number>(`count(*[_type == "featuredWork" && !(_id in path("drafts.**"))])`),
-        client.fetch<number>(`count(*[_type == "featuredWork" && _id in path("drafts.**")])`),
-        client.fetch<number>(`count(*[_type == "serviceItem" && !(_id in path("drafts.**"))])`),
-        client.fetch<number>(`count(*[_type == "serviceItem" && _id in path("drafts.**")])`),
-        client.fetch<number>(`count(*[_type in ["sanity.imageAsset", "sanity.fileAsset"]])`),
-        client.fetch<number>(`count(*[_type == "versionSnapshot"])`),
-        client.fetch<any[]>(
-          `*[_type in ["featuredWork", "serviceItem", "homePage", "aboutPage", "servicesPage", "workPage", "contactPage", "siteSettings"]] | order(_updatedAt desc)[0...6] {
-            _id,
-            _type,
-            _updatedAt,
-            title,
-            name,
-            projectName
-          }`
-        ),
-        // Preliminary health check: count items missing titles or slugs
-        client.fetch<number>(
-          `count(*[_type in ["featuredWork", "serviceItem"] && (!defined(slug.current) || slug.current == "")])`
-        ),
-      ]);
+      const data = await client.fetch<any>(DASHBOARD_CONSOLIDATED_QUERY);
 
-      const issuesCount = brokenSlugs;
+      const pubProjects = data?.pubProjects || 0;
+      const pubServices = data?.pubServices || 0;
+      const brokenSlugs = data?.brokenSlugs || 0;
+
       const healthStatus: "healthy" | "warnings" | "errors" =
-        issuesCount === 0 ? "healthy" : issuesCount > 3 ? "errors" : "warnings";
+        brokenSlugs === 0 ? "healthy" : brokenSlugs > 3 ? "errors" : "warnings";
 
       setMetrics({
-        publishedProjects: pubProjects || 0,
-        draftProjects: draftProjects || 0,
-        publishedServices: pubServices || 0,
-        draftServices: draftServices || 0,
-        totalMediaAssets: mediaCount || 0,
-        totalSnapshots: snapshotCount || 0,
-        recentActivity: recentDocs || [],
+        publishedProjects: pubProjects,
+        draftProjects: data?.draftProjects || 0,
+        publishedServices: pubServices,
+        draftServices: data?.draftServices || 0,
+        totalMediaAssets: data?.mediaCount || 0,
+        totalSnapshots: data?.snapshotCount || 0,
+        recentActivity: data?.recentDocs || [],
         healthStats: {
-          totalChecked: (pubProjects || 0) + (pubServices || 0) + 8,
-          issuesFound: issuesCount,
+          totalChecked: pubProjects + pubServices + 8,
+          issuesFound: brokenSlugs,
           status: healthStatus,
         },
       });
     } catch (err: any) {
       console.error("[CmsDashboard] Error fetching metrics:", err);
-      setError(err?.message || "Failed to load dashboard metrics from Sanity Content Lake.");
+      setError(err?.message || "Failed to load dashboard metrics.");
     } finally {
       setLoading(false);
     }
@@ -144,7 +137,13 @@ export function CmsDashboardView() {
 
   useEffect(() => {
     fetchDashboardData();
-  }, [fetchDashboardData, refreshKey]);
+  }, [fetchDashboardData]);
+
+  // Universal Sanity Studio navigation using intent resolver
+  const handleOpenDocument = (docType: string, docId: string) => {
+    const cleanId = docId.replace("drafts.", "");
+    window.location.href = `/studio/intent/edit/id=${cleanId};type=${docType}/`;
+  };
 
   const handleNavigate = (path: string) => {
     window.location.href = path;
@@ -156,121 +155,121 @@ export function CmsDashboardView() {
 
   return (
     <Card height="fill" tone="inherit" padding={[3, 4, 5]} style={{ overflowY: "auto", height: "100%" }}>
-      <Stack gap={5} style={{ maxWidth: 1200, margin: "0 auto" }}>
-        {/* Top Header */}
+      <Stack gap={5} style={{ maxWidth: 1140, margin: "0 auto", paddingBottom: 40 }}>
+        {/* Header Bar */}
         <Flex justify="space-between" align="center" wrap="wrap" gap={3}>
           <Box>
             <Flex align="center" gap={2}>
-              <LayoutDashboard size={24} style={{ color: "var(--card-focus-ring-color, #2276fc)" }} />
+              <LayoutDashboard size={24} color="#3b82f6" />
               <Heading size={3}>Art Visual Content Studio</Heading>
             </Flex>
-            <Text size={1} muted style={{ marginTop: 4 }}>
-              Production management, content health, and quick actions for editors.
+            <Text size={1} muted style={{ marginTop: 6, lineHeight: 1.5 }}>
+              Manage website pages, portfolio reels, services, and live content health.
             </Text>
           </Box>
           <Flex align="center" gap={2}>
-            <Badge tone="positive" fontSize={1} padding={2} radius={2}>
-              Sanity Free Tier Active
-            </Badge>
             <Button
               icon={() => <RefreshCw size={14} className={loading ? "animate-spin" : ""} />}
               text={loading ? "Refreshing..." : "Refresh"}
               mode="ghost"
               fontSize={1}
               padding={2}
-              onClick={() => setRefreshKey((k) => k + 1)}
-              disabled={loading}
-            />
-            <Button
-              icon={() => <ExternalLink size={14} />}
-              text="Live Website Preview"
-              tone="primary"
-              fontSize={1}
-              padding={2}
-              onClick={handleOpenPreview}
+              onClick={fetchDashboardData}
             />
           </Flex>
         </Flex>
 
         {/* Error State */}
         {error && (
-          <Card tone="critical" padding={4} radius={2} border>
-            <Flex align="center" justify="space-between">
-              <Flex align="center" gap={3}>
-                <ShieldAlert size={20} />
-                <Box>
-                  <Text weight="bold" size={1}>Unable to load live dashboard statistics</Text>
-                  <Text size={1} muted style={{ marginTop: 2 }}>{error}</Text>
-                </Box>
-              </Flex>
-              <Button text="Retry" tone="critical" mode="ghost" onClick={fetchDashboardData} />
+          <Card padding={4} radius={3} tone="critical" border>
+            <Flex align="center" justify="space-between" gap={3}>
+              <Box>
+                <Text weight="semibold" size={1}>Unable to Load Dashboard</Text>
+                <Text size={1} muted style={{ marginTop: 4 }}>{error}</Text>
+              </Box>
+              <Button text="Retry" mode="ghost" onClick={fetchDashboardData} />
             </Flex>
           </Card>
         )}
 
         {/* Loading Skeleton */}
-        {loading && !metrics && (
-          <Card padding={6} tone="transparent" style={{ textAlign: "center" }}>
+        {loading && !metrics ? (
+          <Card padding={6} radius={3} border tone="inherit">
             <Flex direction="column" align="center" justify="center" gap={3}>
               <Spinner size={3} />
-              <Text size={1} muted>Querying Sanity Content Lake metrics...</Text>
+              <Text size={1} muted>Loading studio overview...</Text>
             </Flex>
           </Card>
-        )}
-
-        {metrics && (
+        ) : metrics && (
           <>
-            {/* Real Metrics Grid */}
-            <Grid style={{ gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))" }} gap={3}>
-              {/* Portfolio Projects Card */}
-              <Card padding={4} radius={3} border tone="inherit">
+            {/* Top Stat Cards */}
+            <Grid style={{ gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }} gap={3}>
+              {/* Portfolio Projects */}
+              <Card
+                padding={4}
+                radius={3}
+                border
+                tone="inherit"
+                style={{ cursor: "pointer" }}
+                onClick={() => handleNavigate("/studio/structure/orderableFeaturedWork")}
+              >
                 <Stack gap={3}>
                   <Flex justify="space-between" align="center">
-                    <Text size={1} weight="semibold" muted>Portfolio Projects</Text>
-                    <Briefcase size={16} style={{ color: "#3b82f6" }} />
+                    <Text size={1} weight="semibold">Portfolio Projects</Text>
+                    <Briefcase size={16} color="#3b82f6" />
                   </Flex>
                   <Heading size={4}>{metrics.publishedProjects}</Heading>
                   <Flex align="center" justify="space-between">
-                    <Text size={1} muted>Published Live</Text>
-                    {metrics.draftProjects > 0 ? (
-                      <Badge tone="caution" fontSize={0}>{metrics.draftProjects} draft in progress</Badge>
-                    ) : (
-                      <Badge tone="default" fontSize={0}>All published</Badge>
-                    )}
+                    <Text size={0} muted>
+                      {metrics.draftProjects > 0 ? `${metrics.draftProjects} drafts in progress` : "All published live"}
+                    </Text>
+                    <Badge tone="default" fontSize={0}>Reels</Badge>
                   </Flex>
                 </Stack>
               </Card>
 
-              {/* Services Card */}
-              <Card padding={4} radius={3} border tone="inherit">
+              {/* Services Offered */}
+              <Card
+                padding={4}
+                radius={3}
+                border
+                tone="inherit"
+                style={{ cursor: "pointer" }}
+                onClick={() => handleNavigate("/studio/structure/orderableServiceItem")}
+              >
                 <Stack gap={3}>
                   <Flex justify="space-between" align="center">
-                    <Text size={1} weight="semibold" muted>Creative Services</Text>
-                    <Layers size={16} style={{ color: "#10b981" }} />
+                    <Text size={1} weight="semibold">Services</Text>
+                    <Layers size={16} color="#8b5cf6" />
                   </Flex>
                   <Heading size={4}>{metrics.publishedServices}</Heading>
                   <Flex align="center" justify="space-between">
-                    <Text size={1} muted>Published Offerings</Text>
-                    {metrics.draftServices > 0 ? (
-                      <Badge tone="caution" fontSize={0}>{metrics.draftServices} draft</Badge>
-                    ) : (
-                      <Badge tone="default" fontSize={0}>Synced</Badge>
-                    )}
+                    <Text size={0} muted>
+                      {metrics.draftServices > 0 ? `${metrics.draftServices} draft edits` : "All published live"}
+                    </Text>
+                    <Badge tone="default" fontSize={0}>Offerings</Badge>
                   </Flex>
                 </Stack>
               </Card>
 
-              {/* Media Library Card */}
-              <Card padding={4} radius={3} border tone="inherit">
+              {/* Media Library */}
+              <Card
+                padding={4}
+                radius={3}
+                border
+                tone="inherit"
+                style={{ cursor: "pointer" }}
+                onClick={() => handleNavigate("/studio/media")}
+              >
                 <Stack gap={3}>
                   <Flex justify="space-between" align="center">
-                    <Text size={1} weight="semibold" muted>Media Assets (DAM)</Text>
-                    <ImageIcon size={16} style={{ color: "#8b5cf6" }} />
+                    <Text size={1} weight="semibold">Media Assets</Text>
+                    <ImageIcon size={16} color="#10b981" />
                   </Flex>
                   <Heading size={4}>{metrics.totalMediaAssets}</Heading>
                   <Flex align="center" justify="space-between">
-                    <Text size={1} muted>Images & Videos</Text>
-                    <Badge tone="primary" fontSize={0}>20MB Guardrail</Badge>
+                    <Text size={0} muted>Videos & Images</Text>
+                    <Badge tone="positive" fontSize={0}>Active</Badge>
                   </Flex>
                 </Stack>
               </Card>
@@ -280,27 +279,21 @@ export function CmsDashboardView() {
                 padding={4}
                 radius={3}
                 border
-                tone={metrics.healthStats.status === "healthy" ? "positive" : "caution"}
+                tone="inherit"
                 style={{ cursor: "pointer" }}
                 onClick={() => handleNavigate("/studio/structure/contentHealthChecker")}
               >
                 <Stack gap={3}>
                   <Flex justify="space-between" align="center">
-                    <Text size={1} weight="semibold">Content Health (Click to Inspect)</Text>
-                    {metrics.healthStats.status === "healthy" ? (
-                      <CheckCircle2 size={16} style={{ color: "#10b981" }} />
-                    ) : (
-                      <AlertTriangle size={16} style={{ color: "#f59e0b" }} />
-                    )}
+                    <Text size={1} weight="semibold">Content Health</Text>
+                    <ShieldCheck size={16} color="#22c55e" />
                   </Flex>
-                  <Heading size={4}>
-                    {metrics.healthStats.status === "healthy" ? "100%" : `${metrics.healthStats.issuesFound} Issues`}
+                  <Heading size={4} style={{ color: "#22c55e" }}>
+                    Inspect
                   </Heading>
                   <Flex align="center" justify="space-between">
-                    <Text size={1} muted>{metrics.healthStats.totalChecked} docs audited</Text>
-                    <Badge tone={metrics.healthStats.status === "healthy" ? "positive" : "caution"} fontSize={0}>
-                      {metrics.healthStats.status === "healthy" ? "Production Ready" : "Attention Needed"}
-                    </Badge>
+                    <Text size={0} muted>Run full quality scan</Text>
+                    <ArrowRight size={14} style={{ opacity: 0.6 }} />
                   </Flex>
                 </Stack>
               </Card>
@@ -309,70 +302,83 @@ export function CmsDashboardView() {
             {/* Quick Actions Bar */}
             <Card padding={4} radius={3} border tone="inherit">
               <Stack gap={4}>
-                <Flex justify="space-between" align="center">
-                  <Box>
-                    <Heading size={1}>Quick Editorial Actions</Heading>
-                    <Text size={1} muted style={{ marginTop: 2 }}>
-                      Direct shortcuts to frequently edited singleton pages and collection managers.
-                    </Text>
-                  </Box>
-                  <Badge tone="default" fontSize={0}>Editor Shortcuts</Badge>
-                </Flex>
+                <Box>
+                  <Heading size={2}>Quick Editorial Shortcuts</Heading>
+                  <Text size={1} muted style={{ marginTop: 4, lineHeight: 1.5 }}>
+                    Jump directly to edit pages, featured reels, or shared site sections.
+                  </Text>
+                </Box>
 
-                <Grid style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }} gap={2}>
+                <Grid style={{ gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))" }} gap={3}>
                   <Button
                     icon={() => <FileText size={15} />}
                     text="Edit Homepage"
                     mode="ghost"
-                    onClick={() => handleNavigate("/studio/structure/homePage")}
+                    fontSize={1}
+                    padding={3}
+                    onClick={() => handleOpenDocument("homePage", "homePage")}
                   />
                   <Button
                     icon={() => <FileText size={15} />}
-                    text="Edit About Us"
+                    text="Edit About Us Page"
                     mode="ghost"
-                    onClick={() => handleNavigate("/studio/structure/aboutPage")}
+                    fontSize={1}
+                    padding={3}
+                    onClick={() => handleOpenDocument("aboutPage", "aboutPage")}
+                  />
+                  <Button
+                    icon={() => <Briefcase size={15} />}
+                    text="Manage Portfolio Projects"
+                    mode="ghost"
+                    fontSize={1}
+                    padding={3}
+                    onClick={() => handleNavigate("/studio/structure/orderableFeaturedWork")}
                   />
                   <Button
                     icon={() => <Layers size={15} />}
                     text="Manage Services"
                     mode="ghost"
+                    fontSize={1}
+                    padding={3}
                     onClick={() => handleNavigate("/studio/structure/orderableServiceItem")}
                   />
                   <Button
-                    icon={() => <Briefcase size={15} />}
-                    text="Manage Portfolio"
+                    icon={() => <Megaphone size={15} />}
+                    text="Edit CTA Banner"
                     mode="ghost"
-                    onClick={() => handleNavigate("/studio/structure/orderableFeaturedWork")}
+                    fontSize={1}
+                    padding={3}
+                    onClick={() => handleOpenDocument("ctaBanner", "ctaBanner")}
+                  />
+                  <Button
+                    icon={() => <Phone size={15} />}
+                    text="Update Contact Info"
+                    mode="ghost"
+                    fontSize={1}
+                    padding={3}
+                    onClick={() => handleOpenDocument("contactPage", "contactPage")}
                   />
                   <Button
                     icon={() => <ImageIcon size={15} />}
                     text="Media Library (DAM)"
                     mode="ghost"
+                    fontSize={1}
+                    padding={3}
                     onClick={() => handleNavigate("/studio/media")}
                   />
                   <Button
-                    icon={() => <FileText size={15} />}
-                    text="Update Contact Info"
-                    mode="ghost"
-                    onClick={() => handleNavigate("/studio/structure/contactPage")}
-                  />
-                  <Button
                     icon={() => <Eye size={15} />}
-                    text="Website Live Preview"
+                    text="View Live Website ↗"
                     mode="ghost"
+                    fontSize={1}
+                    padding={3}
                     onClick={handleOpenPreview}
-                  />
-                  <Button
-                    icon={() => <History size={15} />}
-                    text="Version Checkpoints"
-                    mode="ghost"
-                    onClick={() => handleNavigate("/studio/structure/homePage")}
                   />
                 </Grid>
               </Stack>
             </Card>
 
-            {/* Bottom Row: Recent Activity & Free-Tier Plan Status */}
+            {/* Bottom Row: Recent Activity & Sitemap Reference */}
             <Grid style={{ gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))" }} gap={4}>
               {/* Recently Modified Documents */}
               <Card padding={4} radius={3} border tone="inherit">
@@ -380,9 +386,9 @@ export function CmsDashboardView() {
                   <Flex justify="space-between" align="center">
                     <Flex align="center" gap={2}>
                       <Clock size={16} />
-                      <Text weight="semibold" size={1}>Recently Modified Documents</Text>
+                      <Text weight="semibold" size={1}>Recent Document Updates</Text>
                     </Flex>
-                    <Text size={0} muted>Last 6 updates</Text>
+                    <Text size={0} muted>Latest 6 items</Text>
                   </Flex>
 
                   {metrics.recentActivity.length === 0 ? (
@@ -393,7 +399,7 @@ export function CmsDashboardView() {
                     <Stack gap={2}>
                       {metrics.recentActivity.map((doc) => {
                         const displayName =
-                          doc.title || doc.projectName || doc.name || TYPE_NAME_MAP[doc._type] || doc._type;
+                          doc.projectName || doc.title || doc.name || TYPE_NAME_MAP[doc._type] || doc._type;
                         const dateFormatted = new Date(doc._updatedAt).toLocaleDateString(undefined, {
                           month: "short",
                           day: "numeric",
@@ -409,15 +415,12 @@ export function CmsDashboardView() {
                             border
                             tone="transparent"
                             style={{ cursor: "pointer" }}
-                            onClick={() => {
-                              const cleanId = doc._id.replace("drafts.", "");
-                              handleNavigate(`/studio/structure/${doc._type};${cleanId}`);
-                            }}
+                            onClick={() => handleOpenDocument(doc._type, doc._id)}
                           >
                             <Flex justify="space-between" align="center">
                               <Box>
                                 <Text size={1} weight="medium">{displayName}</Text>
-                                <Text size={0} muted>{TYPE_NAME_MAP[doc._type] || doc._type}</Text>
+                                <Text size={0} muted style={{ marginTop: 2 }}>{TYPE_NAME_MAP[doc._type] || doc._type}</Text>
                               </Box>
                               <Flex align="center" gap={2}>
                                 <Text size={0} muted>{dateFormatted}</Text>
@@ -432,33 +435,33 @@ export function CmsDashboardView() {
                 </Stack>
               </Card>
 
-              {/* Sanity Free Tier Architecture Notes */}
+              {/* Website Content Editorial Guide */}
               <Card padding={4} radius={3} border tone="inherit">
                 <Stack gap={3}>
-                  <Flex justify="space-between" align="center">
-                    <Text weight="semibold" size={1}>Publishing & Plan Guardrails</Text>
-                    <Badge tone="positive" fontSize={0}>Free Tier Optimized</Badge>
+                  <Flex align="center" gap={2}>
+                    <Compass size={16} color="#3b82f6" />
+                    <Text weight="semibold" size={1}>Content Location Guide</Text>
                   </Flex>
 
                   <Stack gap={2}>
                     <Card padding={2} radius={2} border tone="transparent">
-                      <Text size={1} weight="semibold">Publishing Mode</Text>
-                      <Text size={0} muted style={{ marginTop: 2 }}>
-                        Immediate / Manual Publish. (Scheduled Publishing API requires an Enterprise Plan; client uses immediate publishing with Draft Preview verification).
+                      <Text size={1} weight="semibold">Featured Works Carousel</Text>
+                      <Text size={0} muted style={{ marginTop: 2, lineHeight: 1.4 }}>
+                        Cards are managed under <strong>Portfolio Projects</strong>. Turn on "Showcase in Home Page Carousel" to display a project on the homepage.
                       </Text>
                     </Card>
 
                     <Card padding={2} radius={2} border tone="transparent">
-                      <Text size={1} weight="semibold">Version Snapshots & History</Text>
-                      <Text size={0} muted style={{ marginTop: 2 }}>
-                        {metrics.totalSnapshots} custom durable snapshots stored in Content Lake. Replaces 3-day history cutoff with permanent manual and pre-restore checkpoints.
+                      <Text size={1} weight="semibold">Call to Action (CTA) Banner</Text>
+                      <Text size={0} muted style={{ marginTop: 2, lineHeight: 1.4 }}>
+                        The bottom banner ("Have a Story to Tell? Let's Create It.") is managed under <strong>CTA Banner</strong> so edits sync across all pages.
                       </Text>
                     </Card>
 
                     <Card padding={2} radius={2} border tone="transparent">
-                      <Text size={1} weight="semibold">Asset Quota Protection</Text>
-                      <Text size={0} muted style={{ marginTop: 2 }}>
-                        20MB hard ceiling enforced on direct video reel uploads to preserve bandwidth and cloud storage.
+                      <Text size={1} weight="semibold">Why Choose Us & Creative Process</Text>
+                      <Text size={0} muted style={{ marginTop: 2, lineHeight: 1.4 }}>
+                        Why Choose Us is edited in <strong>Home Page</strong>. The 5-step timeline is edited in <strong>About Page &gt; Creative Process</strong>.
                       </Text>
                     </Card>
                   </Stack>
@@ -471,3 +474,5 @@ export function CmsDashboardView() {
     </Card>
   );
 }
+
+export default CmsDashboardView;

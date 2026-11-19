@@ -3,10 +3,11 @@ import { defineField, defineType } from "sanity";
 export const ctaBanner = defineType({
   name: "ctaBanner",
   title: "CTA Banner",
+  description: "Global Call-to-Action banner ('Have a Story to Tell? Let's Create It.') displayed at the bottom of Home, About, Services, Work, and Contact pages.",
   type: "document",
   fieldsets: [
     { name: "content", title: "Banner Copy & Action Button", options: { collapsible: true, collapsed: false } },
-    { name: "media", title: "Dual Marquee Filmstrip Reels", options: { collapsible: true, collapsed: true } },
+    { name: "media", title: "Dual Marquee Filmstrip Reels (8 Images)", options: { collapsible: true, collapsed: false } },
   ],
   fields: [
     defineField({

@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { type FileInputProps, useClient } from "sanity";
-import { Card, Flex, Box, Text, Badge, Stack, Spinner } from "@sanity/ui";
-import { Film, AlertTriangle, CheckCircle2, HardDrive } from "lucide-react";
+import { Card, Flex, Box, Text, Badge, Stack, Spinner, Button } from "@sanity/ui";
+import { Film, AlertTriangle, HardDrive, Play, Pause } from "lucide-react";
 
 const CLIENT_CONFIG = { apiVersion: "2024-01-01" };
 const MAX_VIDEO_BYTES = 20 * 1024 * 1024; // 20MB
@@ -20,6 +20,8 @@ export function VideoPreviewInput(props: FileInputProps) {
   const assetRef = props.value?.asset?._ref;
   const [videoData, setVideoData] = useState<VideoAssetData | null>(null);
   const [loading, setLoading] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -58,6 +60,16 @@ export function VideoPreviewInput(props: FileInputProps) {
     };
   }, [client, assetRef]);
 
+  const togglePlay = () => {
+    if (!videoRef.current) return;
+    if (isPlaying) {
+      videoRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      videoRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
+    }
+  };
+
   const formatSize = (bytes?: number) => {
     if (!bytes) return "Unknown";
     const mb = bytes / (1024 * 1024);
@@ -76,34 +88,50 @@ export function VideoPreviewInput(props: FileInputProps) {
             <Flex justify="space-between" align="center">
               <Flex align="center" gap={2}>
                 <Film size={15} />
-                <Text size={1} weight="semibold">Video Reel Playback Preview</Text>
+                <Text size={1} weight="semibold">Video Preview</Text>
               </Flex>
-              {loading ? (
-                <Spinner size={1} />
-              ) : isOverSize ? (
-                <Badge tone="critical" fontSize={0}>Exceeds 20MB Guardrail</Badge>
-              ) : (
-                <Badge tone="positive" fontSize={0}>20MB Guardrail Verified</Badge>
+              {loading && <Spinner size={1} />}
+              {isOverSize && (
+                <Badge tone="critical" fontSize={0}>Exceeds 20MB limit</Badge>
               )}
             </Flex>
 
             {videoData?.url ? (
               <Box style={{ position: "relative", overflow: "hidden", borderRadius: 4, background: "#080808" }}>
                 <video
+                  ref={videoRef}
                   src={videoData.url}
-                  controls
                   muted
                   loop
                   playsInline
-                  preload="metadata"
+                  preload="none"
+                  onPlay={() => setIsPlaying(true)}
+                  onPause={() => setIsPlaying(false)}
                   style={{
                     width: "100%",
-                    maxHeight: 260,
+                    maxHeight: 240,
                     display: "block",
                     backgroundColor: "#000",
                     borderRadius: 4,
                   }}
                 />
+                <Box
+                  style={{
+                    position: "absolute",
+                    bottom: 10,
+                    left: 10,
+                    zIndex: 2,
+                  }}
+                >
+                  <Button
+                    icon={isPlaying ? Pause : Play}
+                    text={isPlaying ? "Pause" : "Play Preview"}
+                    fontSize={1}
+                    padding={2}
+                    tone="primary"
+                    onClick={togglePlay}
+                  />
+                </Box>
               </Box>
             ) : loading ? (
               <Card padding={4} tone="transparent" style={{ textAlign: "center" }}>
@@ -129,7 +157,7 @@ export function VideoPreviewInput(props: FileInputProps) {
                 <Flex align="center" gap={2}>
                   <AlertTriangle size={14} />
                   <Text size={0}>
-                    This video is larger than the 20MB free-tier recommended limit. Please compress it before publishing.
+                    This video is larger than the 20MB recommended limit.
                   </Text>
                 </Flex>
               </Card>
@@ -138,8 +166,10 @@ export function VideoPreviewInput(props: FileInputProps) {
         </Card>
       )}
 
-      {/* Standard Sanity File Input (upload/replace/browse buttons) */}
+      {/* Render native default file upload input */}
       {props.renderDefault(props)}
     </Stack>
   );
 }
+
+export default VideoPreviewInput;

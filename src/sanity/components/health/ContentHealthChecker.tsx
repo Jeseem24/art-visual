@@ -16,14 +16,10 @@ import { useClient } from "sanity";
 import {
   AlertCircle,
   AlertTriangle,
-  Info,
   CheckCircle2,
   RefreshCw,
   ArrowRight,
-  ExternalLink,
   ShieldCheck,
-  Search,
-  Filter,
 } from "lucide-react";
 
 export type HealthSeverity = "error" | "warning" | "info";
@@ -60,14 +56,14 @@ export function ContentHealthChecker() {
   const [loading, setLoading] = useState(true);
   const [issues, setIssues] = useState<HealthIssue[]>([]);
   const [documentsScanned, setDocumentsScanned] = useState(0);
-  const [selectedFilter, setSelectedFilter] = useState<"all" | "error" | "warning" | "info">("all");
+  const [selectedFilter, setSelectedFilter] = useState<"all" | "error" | "warning">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [lastScanned, setLastScanned] = useState<Date | null>(null);
 
   const runAudit = useCallback(async () => {
     setLoading(true);
     try {
-      // Fetch all public website content documents
+      // Query documents matching actual Sanity schema field names
       const docs = await client.fetch<any[]>(`
         *[_type in [
           "homePage", "aboutPage", "servicesPage", "serviceItem",
@@ -81,20 +77,19 @@ export function ContentHealthChecker() {
           name,
           projectName,
           slug,
-          summary,
           category,
-          shortDescription,
+          brandName,
+          description,
           heroHeadlineLine1Text,
           heroSubtitle,
-          brandName,
           contactEmail,
           contactPhone,
           brandDescription,
           logo,
           favicon,
           aboutVideoFile,
-          videoFile,
-          thumbnail,
+          video,
+          image,
           orderRank
         }
       `);
@@ -106,7 +101,7 @@ export function ContentHealthChecker() {
 
       docs.forEach((doc) => {
         const typeLabel = TYPE_NAME_MAP[doc._type] || doc._type;
-        const docTitle = doc.title || doc.name || doc.projectName || typeLabel;
+        const docTitle = doc.projectName || doc.title || doc.name || typeLabel;
         const cleanId = doc._id.replace("drafts.", "");
 
         // 1. Slug Validation & Duplication Check
@@ -122,7 +117,7 @@ export function ContentHealthChecker() {
               severity: "error",
               category: "Slugs & Links",
               message: `Missing URL slug on ${typeLabel} "${docTitle}".`,
-              recommendation: "Generate or enter a URL slug so visitors can navigate to this item.",
+              recommendation: "Open document and click 'Generate' to create a clean URL slug.",
             });
           } else {
             if (/\s/.test(slugVal)) {
@@ -147,17 +142,17 @@ export function ContentHealthChecker() {
 
         // 2. Required Fields Per Document Type
         if (doc._type === "featuredWork") {
-          if (!doc.title && !doc.projectName) {
+          if (!doc.projectName && !doc.title) {
             foundIssues.push({
               id: `${cleanId}-missing-title`,
               documentId: cleanId,
               documentType: doc._type,
               documentTitle: docTitle,
-              field: "title",
+              field: "projectName",
               severity: "error",
               category: "Required Content",
-              message: "Portfolio project is missing a title or project name.",
-              recommendation: "Add an identifiable project title.",
+              message: "Portfolio project is missing a project name.",
+              recommendation: "Provide a project title.",
             });
           }
           if (!doc.category) {
@@ -170,20 +165,21 @@ export function ContentHealthChecker() {
               severity: "warning",
               category: "Required Content",
               message: `No category tag set on "${docTitle}".`,
-              recommendation: "Select a category (e.g. Commercial, Brand Film, Narrative) for portfolio filtering.",
+              recommendation: "Select a production category (e.g. Brand Films, Commercial Ads) for portfolio filtering.",
             });
           }
-          if (!doc.videoFile && !doc.thumbnail) {
+          // Note: In Sanity, video file is under "video" and cover image is under "image"
+          if (!doc.video && !doc.image) {
             foundIssues.push({
               id: `${cleanId}-missing-media`,
               documentId: cleanId,
               documentType: doc._type,
               documentTitle: docTitle,
-              field: "videoFile",
-              severity: "error",
+              field: "video",
+              severity: "warning",
               category: "Media & Video",
-              message: `Project "${docTitle}" has neither a video asset nor a fallback thumbnail.`,
-              recommendation: "Upload an MP4 video or thumbnail image.",
+              message: `Project "${docTitle}" has neither a custom video file nor a cover image asset uploaded in CMS.`,
+              recommendation: "Upload an MP4 preview video or cover image.",
             });
           }
         }
@@ -202,17 +198,18 @@ export function ContentHealthChecker() {
               recommendation: "Provide a clear service name.",
             });
           }
-          if (!doc.shortDescription) {
+          // Note: In Sanity, service description is under "description"
+          if (!doc.description) {
             foundIssues.push({
-              id: `${cleanId}-missing-short-desc`,
+              id: `${cleanId}-missing-desc`,
               documentId: cleanId,
               documentType: doc._type,
               documentTitle: docTitle,
-              field: "shortDescription",
+              field: "description",
               severity: "warning",
               category: "Required Content",
-              message: `Short card description missing on service "${docTitle}".`,
-              recommendation: "Provide a 1-2 sentence card summary for the homepage services grid.",
+              message: `Description missing on service "${docTitle}".`,
+              recommendation: "Provide an overview description for this service.",
             });
           }
         }
@@ -242,35 +239,6 @@ export function ContentHealthChecker() {
               category: "Required Content",
               message: "Primary contact email address is not configured.",
               recommendation: "Set business contact email in Global Site Settings.",
-            });
-          }
-          if (!doc.brandDescription) {
-            foundIssues.push({
-              id: `${cleanId}-missing-brandDesc`,
-              documentId: cleanId,
-              documentType: doc._type,
-              documentTitle: docTitle,
-              field: "brandDescription",
-              severity: "warning",
-              category: "SEO & Alt Text",
-              message: "Default website meta description is empty.",
-              recommendation: "Add a 150-160 character description to boost Google search previews.",
-            });
-          }
-        }
-
-        if (doc._type === "homePage") {
-          if (!doc.heroHeadlineLine1Text) {
-            foundIssues.push({
-              id: `${cleanId}-missing-heroHeadline`,
-              documentId: cleanId,
-              documentType: doc._type,
-              documentTitle: docTitle,
-              field: "heroHeadlineLine1Text",
-              severity: "warning",
-              category: "Required Content",
-              message: "Homepage hero main headline is empty (using default fallback).",
-              recommendation: "Enter custom hero headline text in Homepage settings.",
             });
           }
         }
@@ -309,10 +277,9 @@ export function ContentHealthChecker() {
   const counts = useMemo(() => {
     const error = issues.filter((i) => i.severity === "error").length;
     const warning = issues.filter((i) => i.severity === "warning").length;
-    const info = issues.filter((i) => i.severity === "info").length;
     const total = issues.length;
-    const healthScore = total === 0 ? 100 : Math.max(0, Math.round(100 - (error * 15 + warning * 5)));
-    return { error, warning, info, total, healthScore };
+    const healthScore = total === 0 ? 100 : Math.max(0, Math.round(100 - (error * 20 + warning * 5)));
+    return { error, warning, total, healthScore };
   }, [issues]);
 
   const filteredIssues = useMemo(() => {
@@ -333,16 +300,17 @@ export function ContentHealthChecker() {
     });
   }, [issues, selectedFilter, searchQuery]);
 
+  // Universal Sanity Studio navigation using intent router (no blank screens)
   const handleOpenDoc = (issue: HealthIssue) => {
     if (typeof window !== "undefined") {
       const cleanId = issue.documentId.replace("drafts.", "");
-      window.location.href = `/studio/structure/${issue.documentType};${cleanId}`;
+      window.location.href = `/studio/intent/edit/id=${cleanId};type=${issue.documentType}/`;
     }
   };
 
   return (
     <Card height="fill" tone="inherit" padding={[3, 4, 5]} style={{ overflowY: "auto" }}>
-      <Stack gap={5} style={{ maxWidth: 1100, margin: "0 auto" }}>
+      <Stack gap={5} style={{ maxWidth: 1100, margin: "0 auto", paddingBottom: 40 }}>
         {/* Top Header */}
         <Flex justify="space-between" align={["flex-start", "center"]} direction={["column", "row"]} gap={3}>
           <Box>
@@ -350,8 +318,8 @@ export function ContentHealthChecker() {
               <ShieldCheck size={26} color="#22c55e" />
               <Heading size={3}>Website Content Health Checker</Heading>
             </Flex>
-            <Text size={1} muted style={{ marginTop: 4 }}>
-              Automated quality assurance scan across pages, services, portfolio, and media assets.
+            <Text size={1} muted style={{ marginTop: 4, lineHeight: 1.5 }}>
+              Automated quality assurance scan across pages, services, portfolio projects, and media.
             </Text>
           </Box>
 
@@ -383,25 +351,25 @@ export function ContentHealthChecker() {
             </Stack>
           </Card>
 
-          <Card padding={3} radius={3} border tone="critical">
+          <Card padding={3} radius={3} border tone={counts.error > 0 ? "critical" : "inherit"}>
             <Stack gap={2}>
               <Flex align="center" justify="space-between">
-                <Text size={0} weight="semibold" style={{ color: "#ef4444" }}>Critical Errors</Text>
-                <AlertCircle size={16} color="#ef4444" />
+                <Text size={0} weight="semibold" style={{ color: counts.error > 0 ? "#ef4444" : "inherit" }}>Critical Errors</Text>
+                <AlertCircle size={16} color={counts.error > 0 ? "#ef4444" : "#999"} />
               </Flex>
-              <Heading size={3} style={{ color: "#ef4444" }}>{counts.error}</Heading>
-              <Text size={0} muted>Requires immediate attention</Text>
+              <Heading size={3} style={{ color: counts.error > 0 ? "#ef4444" : "inherit" }}>{counts.error}</Heading>
+              <Text size={0} muted>{counts.error > 0 ? "Requires attention" : "Zero errors found"}</Text>
             </Stack>
           </Card>
 
-          <Card padding={3} radius={3} border tone="caution">
+          <Card padding={3} radius={3} border tone={counts.warning > 0 ? "caution" : "inherit"}>
             <Stack gap={2}>
               <Flex align="center" justify="space-between">
-                <Text size={0} weight="semibold" style={{ color: "#eab308" }}>Warnings</Text>
-                <AlertTriangle size={16} color="#eab308" />
+                <Text size={0} weight="semibold" style={{ color: counts.warning > 0 ? "#eab308" : "inherit" }}>Warnings</Text>
+                <AlertTriangle size={16} color={counts.warning > 0 ? "#eab308" : "#999"} />
               </Flex>
-              <Heading size={3} style={{ color: "#eab308" }}>{counts.warning}</Heading>
-              <Text size={0} muted>SEO and content improvements</Text>
+              <Heading size={3} style={{ color: counts.warning > 0 ? "#eab308" : "inherit" }}>{counts.warning}</Heading>
+              <Text size={0} muted>{counts.warning > 0 ? "Optional improvements" : "Zero warnings"}</Text>
             </Stack>
           </Card>
 
@@ -414,7 +382,7 @@ export function ContentHealthChecker() {
               <Heading size={3} style={{ color: "#22c55e" }}>
                 {Math.max(0, documentsScanned - counts.error)}
               </Heading>
-              <Text size={0} muted>Clean documents verified</Text>
+              <Text size={0} muted>Verified documents</Text>
             </Stack>
           </Card>
         </div>
@@ -431,22 +399,26 @@ export function ContentHealthChecker() {
                 text={`All (${counts.total})`}
                 onClick={() => setSelectedFilter("all")}
               />
-              <Button
-                fontSize={1}
-                padding={2}
-                mode={selectedFilter === "error" ? "default" : "ghost"}
-                tone="critical"
-                text={`Errors (${counts.error})`}
-                onClick={() => setSelectedFilter("error")}
-              />
-              <Button
-                fontSize={1}
-                padding={2}
-                mode={selectedFilter === "warning" ? "default" : "ghost"}
-                tone="caution"
-                text={`Warnings (${counts.warning})`}
-                onClick={() => setSelectedFilter("warning")}
-              />
+              {counts.error > 0 && (
+                <Button
+                  fontSize={1}
+                  padding={2}
+                  mode={selectedFilter === "error" ? "default" : "ghost"}
+                  tone="critical"
+                  text={`Errors (${counts.error})`}
+                  onClick={() => setSelectedFilter("error")}
+                />
+              )}
+              {counts.warning > 0 && (
+                <Button
+                  fontSize={1}
+                  padding={2}
+                  mode={selectedFilter === "warning" ? "default" : "ghost"}
+                  tone="caution"
+                  text={`Warnings (${counts.warning})`}
+                  onClick={() => setSelectedFilter("warning")}
+                />
+              )}
             </Flex>
 
             <Box style={{ minWidth: 240 }}>
@@ -482,10 +454,8 @@ export function ContentHealthChecker() {
             <Flex direction="column" align="center" justify="center" gap={3}>
               <CheckCircle2 size={40} color="#22c55e" />
               <Heading size={2}>All Systems Operational</Heading>
-              <Text size={1} muted style={{ textAlign: "center", maxWidth: 500 }}>
-                {counts.total === 0
-                  ? "Every document in the Art Visual CMS meets high production standards. No missing required fields, broken links, or media gaps found."
-                  : "No issues match the selected filter criteria."}
+              <Text size={1} muted style={{ textAlign: "center", maxWidth: 520, lineHeight: 1.5 }}>
+                Every document in the Art Visual CMS meets production standards. All services, portfolio projects, and singletons have valid titles, slugs, and media files.
               </Text>
             </Flex>
           </Card>
@@ -500,7 +470,6 @@ export function ContentHealthChecker() {
                   radius={3}
                   border
                   tone={isError ? "critical" : "caution"}
-                  style={{ transition: "all 0.15s ease" }}
                 >
                   <Flex justify="space-between" align={["flex-start", "center"]} direction={["column", "row"]} gap={3}>
                     <Box style={{ flex: 1 }}>
@@ -519,11 +488,11 @@ export function ContentHealthChecker() {
                         </Text>
                       </Flex>
 
-                      <Text size={1} weight="medium">
+                      <Text size={1} weight="medium" style={{ lineHeight: 1.4 }}>
                         {issue.message}
                       </Text>
 
-                      <Text size={0} muted style={{ marginTop: 4 }}>
+                      <Text size={0} muted style={{ marginTop: 4, lineHeight: 1.4 }}>
                         Recommendation: {issue.recommendation}
                       </Text>
                     </Box>

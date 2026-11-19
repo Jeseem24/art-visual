@@ -160,7 +160,7 @@ export const structure: StructureResolver = (S, context) =>
       // --- EDITABLE COLLECTIONS (Orderable with Drag-and-Drop Handles) ---
       orderableDocumentListDeskItem({
         type: "featuredWork",
-        title: "Portfolio Projects",
+        title: "Portfolio Projects (Featured Works)",
         id: "orderableFeaturedWork",
         icon: Briefcase,
         S,
@@ -207,13 +207,13 @@ export const structure: StructureResolver = (S, context) =>
             .views(getDocumentViews(S))
         ),
       S.listItem()
-        .title("CTA Banner")
+        .title("Global CTA Banner")
         .id("ctaBannerListItem")
         .schemaType("ctaBanner")
         .icon(Megaphone)
         .child(
           S.document()
-            .title("CTA Banner")
+            .title("Global Call to Action Banner")
             .schemaType("ctaBanner")
             .documentId("ctaBanner")
             .views(getDocumentViews(S))
