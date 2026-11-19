@@ -86,7 +86,7 @@ export function WorkShowcaseSection({
       aria-label="Portfolio showcase"
     >
       <div className={styles.container}>
-        {/* Category Filter Bar (Desktop & Mobile per Figma 247:2679 / 247:2659) */}
+        {/* Category Filter Bar (Desktop & Mobile ) */}
         <div
           ref={filterBarRef}
           className={styles.filterBar}

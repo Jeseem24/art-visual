@@ -38,7 +38,7 @@
   }
 }
 
-/* Desktop (1024px+) matches Figma 212:445 vertical rhythm under body { zoom: 0.8 }:
+/* Desktop (1024px+) matches design vertical rhythm under body { zoom: 0.8 }:
    - Hero bottom (78px) + Inquiry top (150px) = 228px toward y=779
    - Inquiry bottom (120px) + WhyChooseUs top (148px) = 268px (2076 - 1808)
    - WhyChooseUs bottom (120px) + CTA top (88px) = 208px (2993 - 2785)

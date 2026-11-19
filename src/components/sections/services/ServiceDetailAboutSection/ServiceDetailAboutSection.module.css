@@ -45,7 +45,7 @@
   word-break: break-word;
 }
 
-/* Desktop (1024px+): Exact Figma px under body { zoom: 0.8 } with fluid adaptation from 1440px */
+/* Desktop (1024px+): Exact exact px under body { zoom: 0.8 } with fluid adaptation from 1440px */
 @media (min-width: 1024px) {
   .section {
     --headline-font-size-compact: clamp(48px, calc(85.5385 / 1440 * 100vw), 85.538px);

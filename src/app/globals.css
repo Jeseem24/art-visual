@@ -39,9 +39,14 @@ body {
    Scales desktop layout to fit standard laptop screens comfortably
    without breaking component layouts. */
 @media (min-width: 1024px) {
-  body {
+  body:not(:has(#sanity)) {
     zoom: 0.8;
   }
+}
+
+body:has(#sanity) {
+  zoom: 1 !important;
+  background-color: #101112 !important;
 }
 
 /* Global Font Utility Classes */
@@ -51,6 +56,27 @@ body {
 
 .font-heading {
   font-family: var(--font-family-heading);
+}
+
+/* Lenis Smooth Scroll Core Rules */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
 }
 
 .font-body {

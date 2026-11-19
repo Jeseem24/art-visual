@@ -1,8 +1,8 @@
 /* Service Split Highlights Section Styles
  * Implements both "What We Offer" (imagePosition="left") and
- * "What You'll Receive" (imagePosition="right") from Figma 182:1807.
+ * "What You'll Receive" (imagePosition="right") 
  * Note: globals.css sets body { zoom: 0.8 } inside @media (min-width: 1024px),
- * so desktop rules use exact Figma px values rather than vw units.
+ * so desktop rules use exact exact px values rather than vw units.
  */
 
 .section {
@@ -140,7 +140,7 @@
   }
 }
 
-/* Desktop (1024px+): Fluidly adapted from 1440px Figma specs under body { zoom: 0.8 } */
+/* Desktop (1024px+): Fluidly adapted from 1440px design specs under body { zoom: 0.8 } */
 @media (min-width: 1024px) {
   .section {
     --headline-font-size-compact: clamp(44px, calc(85.5385 / 1440 * 100vw), 85.538px);

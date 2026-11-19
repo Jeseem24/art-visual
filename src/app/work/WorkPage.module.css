@@ -33,7 +33,7 @@
   }
 }
 
-/* Desktop (1024px+) matches Figma spacing below WorkShowcase -> CTABanner -> Footer
+/* Desktop (1024px+) matches design spacing below WorkShowcase -> CTABanner -> Footer
    (141px WorkShowcase bottom + 140px CTA top = 281px, matching 3205 - 2924 = 281px;
     210px bottom above Footer; exact px under body { zoom: 0.8 }) */
 @media (min-width: 1024px) {

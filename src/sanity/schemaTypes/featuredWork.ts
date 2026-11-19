@@ -48,26 +48,11 @@ export const featuredWork = defineType({
       description: "Name of the brand or client (e.g. Nike, Spotify, Sony).",
       validation: (Rule) => Rule.required(),
     }),
-    defineField({
-      name: "image",
-      title: "Cover / Thumbnail Image",
-      type: "image",
-      description: "Optional: 16:9 aspect ratio (1920x1080px or 3840x2160px), under 2MB WebP/JPEG. If omitted, the first frame of the preview video will be displayed automatically.",
-      options: {
-        hotspot: true,
-      },
-    }),
     defineVideoUploadField({
       name: "video",
       title: "Preview Video File",
-      description: "Short background video reel shown on project card hover and showcase details.",
+      description: "Direct MP4 upload of background video reel shown on project card hover and showcase details.",
       maxSizeMB: 20,
-    }),
-    defineField({
-      name: "imageAlt",
-      title: "Image Alt Text (Accessibility)",
-      type: "string",
-      description: "Descriptive alt text for screen readers and SEO (e.g. 'Model wearing luxury watch on sunny beach').",
     }),
     defineField({
       name: "featuredInHome",
@@ -96,7 +81,6 @@ export const featuredWork = defineType({
     select: {
       title: "projectName",
       subtitle: "brandName",
-      media: "image",
     },
   },
 });

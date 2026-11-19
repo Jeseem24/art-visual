@@ -88,7 +88,7 @@ export const CreativeProcessSection = memo(function CreativeProcessSection({
         ))}
       </div>
 
-      {/* Mobile & Tablet Horizontal Scroll Timeline (Figma 240:4218) */}
+      {/* Mobile & Tablet Horizontal Scroll Timeline  */}
       <div className={styles.mobileScrollContainer}>
         <div className={styles.mobileTimelineCanvas}>
           {/* Mobile Curved Ribbon Vector (Inline SVG for 100% reliable rendering across DevTools & mobile browsers) */}

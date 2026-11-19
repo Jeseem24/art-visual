@@ -20,7 +20,7 @@ export interface FooterSocialItem {
 }
 
 export const FOOTER_DATA = {
-  brandName: "art visual",
+  brandName: "Art Visual",
   brandDescription:
     "We bring ideas to life through creative storytelling and impactful video production that helps brands connect with their audience.",
   
@@ -33,12 +33,12 @@ export const FOOTER_DATA = {
   ] as FooterLinkItem[],
 
   servicesList: [
-    { label: "Brand Video Production", href: "/services#brand-video" },
-    { label: "Product Videography", href: "/services#product-videography" },
-    { label: "Corporate Video Production", href: "/services#corporate-video" },
-    { label: "Promotional Videos", href: "/services#promotional-videos" },
-    { label: "Event Video Production", href: "/services#event-video" },
-    { label: "Social Media Video Content", href: "/services#social-media" },
+    { label: "Brand Video Production", href: "/services/brand-video-production" },
+    { label: "Corporate Video Production", href: "/services/corporate-video-production" },
+    { label: "Product Videography", href: "/services/product-videography" },
+    { label: "Social Media Video Content", href: "/services/social-media-video-content" },
+    { label: "Promotional & Advertising Videos", href: "/services/promotional-advertising-videos" },
+    { label: "Commercial Video Production", href: "/services/commercial-video-production" },
   ] as FooterLinkItem[],
 
   contactItems: [

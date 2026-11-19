@@ -32,7 +32,7 @@
   }
 }
 
-/* Desktop (1024px+) matches Figma spacing below WhyChooseUs -> CTABanner -> Footer */
+/* Desktop (1024px+) matches design spacing below WhyChooseUs -> CTABanner -> Footer */
 @media (min-width: 1024px) {
   .servicesPage .ctaBanner {
     padding-top: clamp(72px, 5vw, 96px);

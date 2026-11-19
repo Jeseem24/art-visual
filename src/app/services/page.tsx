@@ -5,6 +5,13 @@ import { ServicesCatalogSection } from "@/components/sections/services/ServicesC
 import { ServicesProcessSection } from "@/components/sections/services/ServicesProcessSection";
 import { WhyChooseUsSection } from "@/components/sections/home/WhyChooseUsSection";
 import { CTABannerSection } from "@/components/sections/home/CTABannerSection";
+import { sanityFetch } from "@/sanity/lib/fetch";
+import { SERVICES_QUERY, SERVICES_PAGE_QUERY } from "@/sanity/lib/queries";
+import {
+  SERVICES_CATALOG_ITEMS,
+} from "@/components/sections/services/ServicesCatalogSection/constants";
+import { SERVICES_HERO_DEFAULTS } from "@/components/sections/services/ServicesHeroSection/constants";
+import type { ServiceItem } from "@/components/sections/home/ServicesSection/constants";
 import styles from "./ServicesPage.module.css";
 
 export const metadata: Metadata = {
@@ -13,14 +20,56 @@ export const metadata: Metadata = {
     "We bring ideas to life through creative video production, cinematic storytelling, and innovative visual solutions.",
 };
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const [pageData, rawServices] = await Promise.all([
+    sanityFetch<any>({
+      query: SERVICES_PAGE_QUERY,
+      fallback: null,
+      tags: ["servicesPage"],
+    }),
+    sanityFetch<any[]>({
+      query: SERVICES_QUERY,
+      fallback: SERVICES_CATALOG_ITEMS,
+      tags: ["serviceItem", "servicesPage"],
+    }),
+  ]);
+
+  const heroData = pageData
+    ? {
+        headline: {
+          line1:
+            pageData.heroHeadlineLine1 || SERVICES_HERO_DEFAULTS.headline.line1,
+          line2Prefix:
+            pageData.heroHeadlineLine2Prefix ||
+            SERVICES_HERO_DEFAULTS.headline.line2Prefix,
+          line2Highlight:
+            pageData.heroHeadlineLine2Highlight ||
+            SERVICES_HERO_DEFAULTS.headline.line2Highlight,
+        },
+        subtitle: pageData.heroSubtitle || SERVICES_HERO_DEFAULTS.subtitle,
+      }
+    : undefined;
+
+  const formattedServices: ServiceItem[] = rawServices.map((item, index) => {
+    const fallback = SERVICES_CATALOG_ITEMS[index] || SERVICES_CATALOG_ITEMS[0];
+    return {
+      id: item.id || item._id || fallback.id,
+      title: item.title || fallback.title,
+      description: item.description || fallback.description,
+      videoSrc: item.videoSrc || fallback.videoSrc,
+      posterSrc: item.posterSrc || fallback.posterSrc,
+      href: item.href || (item.slug ? `/services/${item.slug}` : fallback.href),
+      ctaLabel: item.ctaLabel || fallback.ctaLabel || "View service",
+    };
+  });
+
   return (
     <div className={styles.servicesPage}>
       {/* Hero Introduction */}
-      <ServicesHeroSection />
+      <ServicesHeroSection data={heroData} />
 
       {/* 3x3 Creative Services Grid */}
-      <ServicesCatalogSection />
+      <ServicesCatalogSection services={formattedServices} />
 
       {/* Our Creative Process 3-Column Grid */}
       <ServicesProcessSection />

@@ -1,5 +1,5 @@
-/* Scoped layout and spacing overrides for /services/[slug] (Figma 182:1807).
-   Desktop (1024px+) runs under body { zoom: 0.8 }, so exact Figma px values are used. */
+/* Scoped layout and spacing overrides for /services/[slug] .
+   Desktop (1024px+) runs under body { zoom: 0.8 }, so exact exact px values are used. */
 
 .serviceDetailPage {
   display: flex;
@@ -110,7 +110,7 @@
   }
 }
 
-/* Desktop (1024px+): Exact Figma 182:1807 vertical rhythm & 313px CTA button */
+/* Desktop (1024px+): Exact  vertical rhythm & 313px CTA button */
 @media (min-width: 1024px) {
   .serviceDetailPage .heroSection {
     padding-top: 119px;

@@ -60,6 +60,10 @@ export interface NavbarProps {
   ctaIcon?: React.ReactNode;
   /** Custom class name */
   className?: string;
+  /** Dynamic brand logo URL from Sanity */
+  logoUrl?: string;
+  /** Dynamic brand name for alt text */
+  brandName?: string;
 }
 
 /**
@@ -71,10 +75,16 @@ export const Navbar = memo(function Navbar({
   ctaLabel = NAVBAR_CONFIG.ctaLabel,
   ctaIcon,
   className = "",
+  logoUrl,
+  brandName = "Art Visual",
 }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const { openQuoteModal } = useQuoteModal();
+
+  if (pathname?.startsWith("/studio")) {
+    return null;
+  }
 
   const handleToggle = () => setMobileMenuOpen((prev) => !prev);
   const handleClose = () => setMobileMenuOpen(false);
@@ -90,7 +100,14 @@ export const Navbar = memo(function Navbar({
       <div className={styles.container}>
         {/* Brand Logo - Fixed 95px x 51px (54px x 29px on mobile) */}
         <div className={styles.logoArea}>
-          <Logo width={95} height={51} priority className={styles.mobileLogo} />
+          <Logo
+            src={logoUrl || undefined}
+            alt={brandName}
+            width={95}
+            height={51}
+            priority
+            className={styles.mobileLogo}
+          />
         </div>
 
         {/* Desktop Navigation Links - Gap: 47.3px, Small Caps, Opacity: 0.85 */}

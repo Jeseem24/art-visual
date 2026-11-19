@@ -143,8 +143,7 @@
 }
 
 /* =========================================================================
-   MOBILE & TABLET HORIZONTAL SCROLL TIMELINE (< 1024px) - Figma 240:4218
-   ========================================================================= */
+   MOBILE & TABLET HORIZONTAL SCROLL TIMELINE (< 1024px) ========================================================================= */
 .mobileScrollContainer {
   display: block;
   width: 100%;
@@ -280,7 +279,7 @@
   top: 499.35px;
 }
 
-/* Mobile Card Styling matching Figma 240:4449 */
+/* Mobile Card Styling  */
 .mobileCardOverride {
   background-color: #ffffff !important;
   border: 0.592px solid rgba(0, 0, 0, 0.1) !important;
@@ -317,7 +316,7 @@
   margin: 0 !important;
 }
 
-/* Mobile Badge Styling matching Figma 240:4449 */
+/* Mobile Badge Styling  */
 .mobileBadgeOverride {
   display: flex !important;
   flex-direction: column !important;

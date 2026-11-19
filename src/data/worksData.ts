@@ -2,8 +2,7 @@
  * Work Portfolio Data Contracts & Content Registry
  *
  * Powers `/work` portfolio showcase with Sanity-compatible structured data.
- * Categories and initial 9-card grid align with Figma frames `199:3206`
- * ("All Projects") and `212:301` ("Brand Films").
+ * Categories and initial 9-card grid align with production design specifications.
  */
 
 export type WorkCategory =

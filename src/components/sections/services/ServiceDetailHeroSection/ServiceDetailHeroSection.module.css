@@ -106,7 +106,7 @@
   color: var(--color-brand-red, #cd3743);
 }
 
-/* Desktop (1024px+): Exact Figma px under body { zoom: 0.8 } */
+/* Desktop (1024px+): Exact exact px under body { zoom: 0.8 } */
 @media (min-width: 1024px) {
   .hero {
     padding-top: 99px;

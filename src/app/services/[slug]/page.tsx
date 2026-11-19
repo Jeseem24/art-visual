@@ -48,7 +48,7 @@ export async function generateMetadata({
 }
 
 /**
- * Dynamic service detail page composed in exact Figma 182:1807 section order.
+ * Dynamic service detail page composed in section order.
  */
 export default async function ServiceDetailPage({
   params,

@@ -1,5 +1,8 @@
+"use client";
+
 import React, { memo } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   FOOTER_DATA,
   type FooterLinkItem,
@@ -41,6 +44,12 @@ export const Footer = memo(function Footer({
   legalLinks = FOOTER_DATA.legalLinks,
   socialLinks,
 }: FooterProps) {
+  const pathname = usePathname();
+
+  if (pathname?.startsWith("/studio")) {
+    return null;
+  }
+
   return (
     <footer
       className={`${styles.footer} ${className}`}

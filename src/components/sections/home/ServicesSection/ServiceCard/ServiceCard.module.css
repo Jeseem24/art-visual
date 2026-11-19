@@ -274,7 +274,7 @@
 }
 
 /* =========================================================================
-   MOBILE (<= 767px) — Figma 233:2185 (412px) with fluid adaptation down to 320px
+   MOBILE (<= 767px) (412px) with fluid adaptation down to 320px
    ========================================================================= */
 @media (max-width: 767px) {
   .card {

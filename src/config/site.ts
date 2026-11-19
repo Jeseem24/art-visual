@@ -5,7 +5,7 @@
 
 export const siteConfig = {
   // Brand identity
-  name: "art visual",
+  name: "Art Visual",
   tagline: "Films that make brands worth watching",
   description: "A creative video production company crafting high-impact brand films, product videos, social content, and commercial productions.",
   url: "https://artvisual.agency",
@@ -18,7 +18,7 @@ export const siteConfig = {
     location: "Chennai, India",
     locationDetail: "Chennai & on location worldwide",
     copyrightYear: 2026,
-    copyrightText: "© 2026 art visual. All Rights Reserved.",
+    copyrightText: "© 2026 Art Visual. All Rights Reserved.",
   },
 
   // WhatsApp configuration
@@ -26,11 +26,11 @@ export const siteConfig = {
     phoneNumber: "919876543210", 
 
     templates: {
-      default: "Hi art visual team! I visited your website and would like to discuss a video production project.",
+      default: "Hi Art Visual team! I visited your website and would like to discuss a video production project.",
       serviceEnquiry: (serviceName: string) => 
-        `Hi art visual! I'm interested in your ${serviceName} services. Can we discuss scope, timelines, and pricing?`,
+        `Hi Art Visual! I'm interested in your ${serviceName} services. Can we discuss scope, timelines, and pricing?`,
       projectEnquiry: (projectTitle: string) => 
-        `Hi art visual! I just watched "${projectTitle}" on your website and would like to explore something similar for my brand.`,
+        `Hi Art Visual! I just watched "${projectTitle}" on your website and would like to explore something similar for my brand.`,
       quickQuestion: "Hi! I have a quick question about video production for our brand.",
     },
   },

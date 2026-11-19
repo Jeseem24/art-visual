@@ -35,7 +35,7 @@ export interface ServicesCatalogSectionProps {
 
 /**
  * @component ServicesCatalogSection
- * @description Full services grid for the Services page with interactive Search Bar and Category Dropdown matching Figma 240:5718.
+ * @description Full services grid for the Services page with interactive Search Bar and Category Dropdown .
  */
 export const ServicesCatalogSection = memo(function ServicesCatalogSection({
   badgeText = SERVICES_CATALOG_HEADER.badge.text,
@@ -92,7 +92,7 @@ export const ServicesCatalogSection = memo(function ServicesCatalogSection({
           title={{ line1: titleLine1, line2: titleLine2 }}
         />
 
-        {/* Search & Category Filter Controls (Figma 240:6799 - 240:6801, 240:7702) */}
+        {/* Search & Category Filter Controls  */}
         <div className={styles.controlsRow}>
           {/* Search Bar */}
           <div className={styles.searchBar}>
