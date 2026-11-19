@@ -276,10 +276,17 @@ export function CmsDashboardView() {
               </Card>
 
               {/* Content Health Card */}
-              <Card padding={4} radius={3} border tone={metrics.healthStats.status === "healthy" ? "positive" : "caution"}>
+              <Card
+                padding={4}
+                radius={3}
+                border
+                tone={metrics.healthStats.status === "healthy" ? "positive" : "caution"}
+                style={{ cursor: "pointer" }}
+                onClick={() => handleNavigate("/studio/structure/contentHealthChecker")}
+              >
                 <Stack gap={3}>
                   <Flex justify="space-between" align="center">
-                    <Text size={1} weight="semibold">Content Health</Text>
+                    <Text size={1} weight="semibold">Content Health (Click to Inspect)</Text>
                     {metrics.healthStats.status === "healthy" ? (
                       <CheckCircle2 size={16} style={{ color: "#10b981" }} />
                     ) : (

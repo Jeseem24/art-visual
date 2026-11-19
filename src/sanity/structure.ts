@@ -5,8 +5,10 @@ import type {
 } from "sanity/structure";
 import { orderableDocumentListDeskItem } from "@sanity/orderable-document-list";
 import { CmsDashboardView } from "./components/dashboard/CmsDashboardView";
+import { ContentHealthChecker } from "./components/health/ContentHealthChecker";
 import {
   LayoutDashboard,
+  ShieldCheck,
   Home,
   Info,
   Layers,
@@ -77,6 +79,16 @@ export const structure: StructureResolver = (S, context) =>
         .child(
           S.component(CmsDashboardView)
             .title("Dashboard Overview")
+        ),
+
+      // --- WEBSITE CONTENT HEALTH CHECKER ---
+      S.listItem()
+        .title("Content Health Checker")
+        .id("contentHealthChecker")
+        .icon(ShieldCheck)
+        .child(
+          S.component(ContentHealthChecker)
+            .title("Content Health Checker")
         ),
 
       S.divider(),
