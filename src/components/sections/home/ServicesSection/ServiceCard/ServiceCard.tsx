@@ -78,13 +78,13 @@ export const ServiceCard = memo(function ServiceCard({
         <div className={styles.mediaWrapper}>
           {videoSrc ? (
             <video
-              src={videoSrc}
-              poster={posterSrc}
+              src={videoSrc.includes("#t=") ? videoSrc : `${videoSrc}#t=0.001`}
+              poster={posterSrc || imageSrc}
               autoPlay
               loop
               muted
               playsInline
-              preload="auto"
+              preload="metadata"
               className={styles.mediaVideo}
             />
           ) : imageSrc ? (
@@ -94,7 +94,6 @@ export const ServiceCard = memo(function ServiceCard({
               fill
               sizes="(max-width: 768px) 100vw, 504px"
               className={styles.mediaImage}
-              priority
             />
           ) : null}
         </div>

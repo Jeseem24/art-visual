@@ -38,17 +38,17 @@ export const WorkProjectCard = memo(function WorkProjectCard({
       <div className={styles.imageFrame}>
         {videoSrc ? (
           <video
-            src={videoSrc}
+            src={videoSrc.includes("#t=") ? videoSrc : `${videoSrc}#t=0.001`}
             poster={imageSrc}
             autoPlay
             loop
             muted
             playsInline
-            preload="auto"
+            preload="metadata"
             className={styles.video}
             aria-label={imageAlt}
           />
-        ) : (
+        ) : imageSrc ? (
           <Image
             src={imageSrc}
             alt={imageAlt}
@@ -56,7 +56,7 @@ export const WorkProjectCard = memo(function WorkProjectCard({
             sizes="(min-width: 1024px) 470px, (min-width: 640px) 45vw, 90vw"
             className={styles.image}
           />
-        )}
+        ) : null}
       </div>
 
       <div className={styles.metaContainer}>

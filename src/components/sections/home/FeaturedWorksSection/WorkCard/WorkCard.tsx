@@ -36,25 +36,25 @@ export const WorkCard = memo(function WorkCard({
       <div className={styles.mediaFrame}>
         {videoSrc ? (
           <video
-            src={videoSrc}
+            src={videoSrc.includes("#t=") ? videoSrc : `${videoSrc}#t=0.001`}
+            poster={imageSrc}
             autoPlay
             loop
             muted
             playsInline
-            preload="auto"
+            preload="metadata"
             className={styles.mediaVideo}
             aria-label={alt}
           />
-        ) : (
+        ) : imageSrc ? (
           <Image
             src={imageSrc}
             alt={alt}
             fill
             sizes="(max-width: 768px) 100vw, 446px"
             className={styles.mediaImage}
-            priority={true}
           />
-        )}
+        ) : null}
       </div>
 
       {/* Floating Title Badge */}

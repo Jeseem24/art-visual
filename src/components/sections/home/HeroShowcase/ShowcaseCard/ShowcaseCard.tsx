@@ -11,8 +11,8 @@ export interface ShowcaseCardProps {
   description: string;
   /** Optional video source URL */
   videoSrc?: string;
-  /** Poster image URL or local fallback asset path */
-  image: string;
+  /** Image URL or local fallback asset path */
+  image?: string;
   /** Accessible image alternative text */
   imageAlt?: string;
   /** Next.js Image priority loading */
@@ -23,7 +23,7 @@ export interface ShowcaseCardProps {
 
 /**
  * @component ShowcaseCard
- * @description Hanging polaroid showcase card component supporting video preview and poster fallback.
+ * @description Hanging polaroid showcase card component supporting video preview and image fallback.
  */
 export const ShowcaseCard = memo(function ShowcaseCard({
   id,
@@ -51,17 +51,17 @@ export const ShowcaseCard = memo(function ShowcaseCard({
         <div className={styles.imageFrame}>
           {videoSrc ? (
             <video
-              src={videoSrc}
+              src={videoSrc.includes("#t=") ? videoSrc : `${videoSrc}#t=0.001`}
               poster={image}
               autoPlay
               loop
               muted
               playsInline
-              preload="auto"
+              preload="metadata"
               className={styles.video}
               aria-label={title}
             />
-          ) : (
+          ) : image ? (
             <Image
               src={image}
               alt={imageAlt || title}
@@ -70,7 +70,7 @@ export const ShowcaseCard = memo(function ShowcaseCard({
               priority={priority}
               className={styles.image}
             />
-          )}
+          ) : null}
         </div>
 
         {/* Text Content */}
