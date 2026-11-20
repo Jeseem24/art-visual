@@ -87,8 +87,7 @@ const TYPE_TARGET_MAP: Record<string, InvalidationTarget> = {
  */
 export async function POST(req: NextRequest) {
   try {
-    const secret =
-      process.env.SANITY_REVALIDATE_SECRET || "artvisual_prod_reval_9b7c841f3e2a05d6";
+    const secret = process.env.SANITY_REVALIDATE_SECRET;
 
     if (!secret) {
       console.error("[Revalidate API] Missing SANITY_REVALIDATE_SECRET environment variable.");
@@ -180,8 +179,7 @@ export async function POST(req: NextRequest) {
  * Example: GET /api/revalidate?secret=...&tag=homePage
  */
 export async function GET(req: NextRequest) {
-  const secret =
-    process.env.SANITY_REVALIDATE_SECRET || "artvisual_prod_reval_9b7c841f3e2a05d6";
+  const secret = process.env.SANITY_REVALIDATE_SECRET;
   const providedSecret = req.nextUrl.searchParams.get("secret");
 
   if (!secret || providedSecret !== secret) {

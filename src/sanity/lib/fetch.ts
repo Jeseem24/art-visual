@@ -47,8 +47,7 @@ export async function sanityFetch<T>({
     const token =
       process.env.SANITY_API_WRITE_TOKEN ||
       process.env.SANITY_API_READ_TOKEN ||
-      process.env.SANITY_API_TOKEN ||
-      "skVe075yhbcTKLz9ErQXE9O2dHm5re0bM6ogj1Nucu5FApdt6L4PI1rvjZwsE2It7G1Ipo4voWBoesBRfOy9CCxHmAiPqlIoaeGy1aS2Qtv2VT1xlvHenhlTFiTOOlc5mdzRzBv4G36m2qcsVNRKKpmtIGfvyAi41LfmLtlEXpXXUtJsMhYa";
+      process.env.SANITY_API_TOKEN;
 
     const activeClient = isDraftMode
       ? client.withConfig({

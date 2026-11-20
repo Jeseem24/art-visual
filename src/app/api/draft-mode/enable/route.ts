@@ -24,7 +24,7 @@ const TYPE_REDIRECT_MAP: Record<string, string> = {
  * Example: /api/draft-mode/enable?secret=...&type=featuredWork
  */
 export async function GET(req: NextRequest) {
-  const secret = process.env.SANITY_REVALIDATE_SECRET || "artvisual_prod_reval_9b7c841f3e2a05d6";
+  const secret = process.env.SANITY_REVALIDATE_SECRET;
   const { searchParams } = req.nextUrl;
   const providedSecret = searchParams.get("secret");
   const docType = searchParams.get("type") || "homePage";
@@ -37,7 +37,7 @@ export async function GET(req: NextRequest) {
 
   // Allow authorization via matching secret OR Studio navigation origin
   const isAuthorized =
-    (providedSecret && (providedSecret === secret || providedSecret === "artvisual_prod_reval_9b7c841f3e2a05d6")) ||
+    (providedSecret && secret && providedSecret === secret) ||
     referer.includes("/studio") ||
     referer.startsWith(origin) ||
     secFetchSite === "same-origin";
