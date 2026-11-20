@@ -49,8 +49,8 @@ export function formatSocialDescription(description: string, maxLength: number =
 export const siteConfig = {
   // Brand identity
   name: "Art Visual",
-  tagline: "Films that make brands worth watching",
-  description: "A creative video production company crafting high-impact brand films, product videos, social content, and commercial productions.",
+  tagline: "Commercial Video Production & Brand Films",
+  description: "A premier commercial video production company crafting high-impact brand films, product videography, commercial ads, and social content for ambitious brands.",
   url: getBaseUrl(),
 
   // Business contact details

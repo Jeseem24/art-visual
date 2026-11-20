@@ -291,6 +291,7 @@ export const SITE_SETTINGS_QUERY = groq`
     "ogImageUrl": ogImage.asset->url,
     "ogImageAlt": ogImage.alt,
     googleSiteVerification,
+    googleAnalyticsId,
     whatsappNumber,
     contactEmail,
     contactPhone,

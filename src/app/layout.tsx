@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { Anton, Bebas_Neue, Outfit, Inter, Poppins, Geist } from "next/font/google";
 import { siteConfig, getBaseUrl, formatSocialDescription } from "@/config/site";
 import { SiteLayout } from "@/components/layout/SiteLayout";
@@ -59,6 +60,7 @@ interface SanitySiteSettings {
   ogImageUrl?: string;
   ogImageAlt?: string;
   googleSiteVerification?: string;
+  googleAnalyticsId?: string;
   faviconUrl?: string;
   logoUrl?: string;
   contactEmail?: string;
@@ -261,6 +263,7 @@ export default async function RootLayout({
 
   const rawBrand = siteSettings?.brandName || siteConfig.name;
   const brandName = rawBrand.toLowerCase() === "art visual" ? "Art Visual" : rawBrand;
+  const gaId = siteSettings?.googleAnalyticsId || process.env.NEXT_PUBLIC_GA_ID;
 
   return (
     <html
@@ -268,6 +271,24 @@ export default async function RootLayout({
       className={`${anton.variable} ${bebasNeue.variable} ${outfit.variable} ${inter.variable} ${poppins.variable} ${geist.variable} h-full antialiased`}
     >
       <body className="min-h-full font-sans antialiased">
+        {gaId && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${gaId}', {
+                  page_path: window.location.pathname,
+                });
+              `}
+            </Script>
+          </>
+        )}
         <OrganizationJsonLd
           brandName={brandName}
           logoUrl={siteSettings?.logoUrl}

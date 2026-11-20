@@ -12,37 +12,12 @@ import { siteConfig } from "@/config/site";
 export default function robots(): MetadataRoute.Robots {
   const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || siteConfig.url).replace(/\/+$/, "");
 
-  const disallowedPaths = [
-    "/studio",
-    "/studio/*",
-    "/api/*",
-    "/draft-mode/*",
-  ];
-
   return {
-    rules: [
-      {
-        userAgent: "*",
-        allow: "/",
-        disallow: disallowedPaths,
-      },
-      {
-        userAgent: "Googlebot",
-        allow: "/",
-        disallow: disallowedPaths,
-      },
-      {
-        userAgent: "Bingbot",
-        allow: "/",
-        disallow: disallowedPaths,
-      },
-      {
-        userAgent: "Applebot",
-        allow: "/",
-        disallow: disallowedPaths,
-      },
-    ],
+    rules: {
+      userAgent: "*",
+      allow: "/",
+      disallow: ["/studio/", "/api/", "/draft-mode/"],
+    },
     sitemap: `${baseUrl}/sitemap.xml`,
-    host: baseUrl,
   };
 }

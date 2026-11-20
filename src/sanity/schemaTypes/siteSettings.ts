@@ -127,6 +127,13 @@ export const siteSettings = defineType({
       description: "Google Search Console verification code (content attribute of google-site-verification meta tag).",
       fieldset: "seo",
     }),
+    defineField({
+      name: "googleAnalyticsId",
+      title: "Google Analytics Measurement ID (GA4)",
+      type: "string",
+      description: "Google Analytics 4 Measurement ID (e.g. G-XXXXXXXXXX) to track website visitors and conversions.",
+      fieldset: "seo",
+    }),
 
     // --- CONTACT ---
     defineField({
