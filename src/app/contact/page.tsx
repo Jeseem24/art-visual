@@ -57,7 +57,7 @@ export async function generateMetadata(): Promise<Metadata> {
     ...(siteSettings?.metaKeywords || []),
   ];
 
-  const ogImageUrl = contactData?.ogImageUrl || contactData?.studioImageSrc || siteSettings?.ogImageUrl || "/images/contact/studio-location.png";
+  const ogImageUrl = contactData?.ogImageUrl || siteSettings?.ogImageUrl || "/opengraph-image";
   const socialDescription = formatSocialDescription(description);
 
   return {

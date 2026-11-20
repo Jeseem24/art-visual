@@ -179,7 +179,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   const siteUrl = getBaseUrl();
   const socialDescription = formatSocialDescription(description);
-  const ogImageUrl = homeData?.ogImageUrl || siteSettings?.ogImageUrl || siteSettings?.logoUrl || "/images/art-visual-logo.png";
+  const ogImageUrl = homeData?.ogImageUrl || siteSettings?.ogImageUrl || "/opengraph-image";
   const ogImageAlt = homeData?.ogImageAlt || siteSettings?.ogImageAlt || `${brandName} Commercial Video Production`;
 
   return {

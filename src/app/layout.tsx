@@ -109,7 +109,7 @@ export async function generateMetadata(): Promise<Metadata> {
     siteConfig.description;
   const titleDefault = siteSettings?.metaTitle || `${brandName} | ${tagline}`;
   const faviconUrl = siteSettings?.faviconUrl;
-  const ogImageUrl = siteSettings?.ogImageUrl || "/images/art-visual-logo.png";
+  const ogImageUrl = siteSettings?.ogImageUrl || "/opengraph-image";
   const ogImageAlt = siteSettings?.ogImageAlt || brandName;
 
   const defaultKeywords = [

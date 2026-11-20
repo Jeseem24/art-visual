@@ -74,7 +74,7 @@ export async function generateMetadata(): Promise<Metadata> {
     ...(siteSettings?.metaKeywords || []),
   ];
 
-  const ogImageUrl = pageData?.ogImageUrl || siteSettings?.ogImageUrl || "/images/services/offer-shoot.png";
+  const ogImageUrl = pageData?.ogImageUrl || siteSettings?.ogImageUrl || "/opengraph-image";
   const socialDescription = formatSocialDescription(description);
 
   return {

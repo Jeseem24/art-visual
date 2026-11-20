@@ -266,7 +266,7 @@ export function buildServiceSchema(
   const siteUrl = getAbsoluteUrl("", options?.siteUrl);
   const brandName = options?.brandName || siteConfig.name;
   const serviceUrl = `${siteUrl}/services/${service.slug}`;
-  const image = service.imageSrc || service.posterSrc || "/images/art-visual-logo.png";
+  const image = service.imageSrc || service.posterSrc || "/opengraph-image";
 
   return {
     "@context": "https://schema.org",

@@ -251,8 +251,7 @@ export async function generateMetadata({
   const ogImage =
     service.offerSection.imageSrc ||
     service.receiveSection.imageSrc ||
-    service.posterSrc ||
-    "/images/services/offer-shoot.png";
+    "/opengraph-image";
   const socialDescription = formatSocialDescription(description);
 
   return {
@@ -314,7 +313,7 @@ export default async function ServiceDetailPage({
           title: service.fullTitle,
           description: service.aboutSection.paragraphs[0] || "",
           slug: service.slug,
-          posterSrc: service.posterSrc || "/images/art-visual-logo.png",
+          posterSrc: service.posterSrc || "/opengraph-image",
           imageSrc: service.offerSection?.imageSrc,
         }}
       />
@@ -325,7 +324,7 @@ export default async function ServiceDetailPage({
           description:
             service.aboutSection.paragraphs[0] ||
             `Cinematic ${service.fullTitle} showcase by Art Visual.`,
-          thumbnailUrl: service.posterSrc || "/images/art-visual-logo.png",
+          thumbnailUrl: service.posterSrc || "/opengraph-image",
           contentUrl: service.videoSrc,
           duration: "PT1M15S",
         }}
