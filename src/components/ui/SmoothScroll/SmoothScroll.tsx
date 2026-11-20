@@ -32,6 +32,15 @@ export function SmoothScroll() {
       return;
     }
 
+    // Disable smooth scroll emulation on mobile/touch screens where native momentum scrolling is faster and uses less CPU
+    const isMobileTouch =
+      window.matchMedia("(max-width: 768px)").matches ||
+      (window.matchMedia("(pointer: coarse)").matches && window.innerWidth < 1024);
+
+    if (isMobileTouch) {
+      return;
+    }
+
     // Initialize Lenis
     const lenis = new Lenis({
       duration: 1.15,

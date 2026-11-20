@@ -1,5 +1,6 @@
 import React, { memo } from "react";
 import Image from "next/image";
+import { LazyVideo } from "@/components/ui/LazyVideo";
 import styles from "./ShowcaseCard.module.css";
 
 export interface ShowcaseCardProps {
@@ -50,13 +51,9 @@ export const ShowcaseCard = memo(function ShowcaseCard({
         {/* Media Frame */}
         <div className={styles.imageFrame}>
           {videoSrc ? (
-            <video
-              src={videoSrc.includes("#t=") ? videoSrc : `${videoSrc}#t=0.001`}
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="metadata"
+            <LazyVideo
+              src={videoSrc}
+              priority={priority}
               className={styles.video}
               aria-label={title}
             />

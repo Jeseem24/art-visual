@@ -76,6 +76,12 @@ export function OverlayScrollbar() {
   }, []);
 
   useEffect(() => {
+    // Coarse pointer / mobile devices have native touch scrollbars and CSS hides the track.
+    // Skip attaching scroll listeners to eliminate forced reflows and background computations on mobile.
+    if (window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 768) {
+      return;
+    }
+
     let rafId: number | null = null;
 
     const handleScroll = () => {

@@ -80,6 +80,7 @@ export const FeaturedWorksSection = memo(function FeaturedWorksSection({
                 videoSrc={item.videoSrc}
                 href={item.href}
                 alt={item.alt}
+                isDuplicate={true}
               />
             ))}
           </div>

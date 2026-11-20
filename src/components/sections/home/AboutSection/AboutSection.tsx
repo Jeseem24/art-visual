@@ -2,6 +2,7 @@ import React, { memo } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/Button";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { LazyVideo } from "@/components/ui/LazyVideo";
 import { ABOUT_SECTION_DEFAULTS, type AboutSectionData } from "./constants";
 import styles from "./AboutSection.module.css";
 
@@ -86,17 +87,9 @@ export const AboutSection = memo(function AboutSection({
         <div className={styles.photoContainer}>
           <div className={styles.photoImageWrapper}>
             {content.media.videoSrc ? (
-              <video
-                src={
-                  content.media.videoSrc.includes("#t=")
-                    ? content.media.videoSrc
-                    : `${content.media.videoSrc}#t=0.001`
-                }
-                autoPlay
-                loop
-                muted
-                playsInline
-                preload="metadata"
+              <LazyVideo
+                src={content.media.videoSrc}
+                priority={false}
                 className={styles.mediaVideo}
                 aria-label={content.media.alt}
               />

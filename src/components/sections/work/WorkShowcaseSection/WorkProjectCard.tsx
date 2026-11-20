@@ -1,5 +1,6 @@
 import React, { memo } from "react";
 import Image from "next/image";
+import { LazyVideo } from "@/components/ui/LazyVideo";
 import styles from "./WorkProjectCard.module.css";
 
 export interface WorkProjectCardProps {
@@ -37,13 +38,9 @@ export const WorkProjectCard = memo(function WorkProjectCard({
     <article className={`${styles.card} ${className}`.trim()}>
       <div className={styles.imageFrame}>
         {videoSrc ? (
-          <video
-            src={videoSrc.includes("#t=") ? videoSrc : `${videoSrc}#t=0.001`}
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
+          <LazyVideo
+            src={videoSrc}
+            priority={false}
             className={styles.video}
             aria-label={imageAlt}
           />

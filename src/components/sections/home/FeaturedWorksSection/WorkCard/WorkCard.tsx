@@ -1,6 +1,7 @@
 import React, { memo } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { LazyVideo } from "@/components/ui/LazyVideo";
 import styles from "./WorkCard.module.css";
 
 export interface WorkCardProps {
@@ -16,6 +17,8 @@ export interface WorkCardProps {
   href?: string;
   /** Custom class name */
   className?: string;
+  /** Whether this card is rendered in a duplicate/decorative track */
+  isDuplicate?: boolean;
 }
 
 /**
@@ -29,19 +32,16 @@ export const WorkCard = memo(function WorkCard({
   videoSrc,
   href,
   className = "",
+  isDuplicate = false,
 }: WorkCardProps) {
   const cardContent = (
     <>
       {/* Media Frame */}
       <div className={styles.mediaFrame}>
         {videoSrc ? (
-          <video
-            src={videoSrc.includes("#t=") ? videoSrc : `${videoSrc}#t=0.001`}
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
+          <LazyVideo
+            src={videoSrc}
+            priority={false}
             className={styles.mediaVideo}
             aria-label={alt}
           />
@@ -73,6 +73,8 @@ export const WorkCard = memo(function WorkCard({
         href={href}
         className={combinedClasses}
         aria-label={`View project: ${title}`}
+        tabIndex={isDuplicate ? -1 : undefined}
+        aria-hidden={isDuplicate ? "true" : undefined}
       >
         {cardContent}
       </Link>
@@ -80,7 +82,7 @@ export const WorkCard = memo(function WorkCard({
   }
 
   return (
-    <article className={combinedClasses}>
+    <article className={combinedClasses} aria-hidden={isDuplicate ? "true" : undefined}>
       {cardContent}
     </article>
   );

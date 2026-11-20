@@ -1,6 +1,7 @@
 import React, { memo } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { LazyVideo } from "@/components/ui/LazyVideo";
 import styles from "./ServiceCard.module.css";
 
 export interface ServiceCardProps {
@@ -74,13 +75,9 @@ export const ServiceCard = memo(function ServiceCard({
         {/* Media Frame */}
         <div className={styles.mediaWrapper}>
           {videoSrc ? (
-            <video
-              src={videoSrc.includes("#t=") ? videoSrc : `${videoSrc}#t=0.001`}
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="metadata"
+            <LazyVideo
+              src={videoSrc}
+              priority={false}
               className={styles.mediaVideo}
               aria-label={title}
             />
