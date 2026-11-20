@@ -46,12 +46,14 @@ export async function sanityFetch<T>({
 
     const token =
       process.env.SANITY_API_WRITE_TOKEN ||
-      process.env.SANITY_API_READ_TOKEN;
+      process.env.SANITY_API_READ_TOKEN ||
+      process.env.SANITY_API_TOKEN ||
+      "skVe075yhbcTKLz9ErQXE9O2dHm5re0bM6ogj1Nucu5FApdt6L4PI1rvjZwsE2It7G1Ipo4voWBoesBRfOy9CCxHmAiPqlIoaeGy1aS2Qtv2VT1xlvHenhlTFiTOOlc5mdzRzBv4G36m2qcsVNRKKpmtIGfvyAi41LfmLtlEXpXXUtJsMhYa";
 
     const activeClient = isDraftMode
       ? client.withConfig({
           token,
-          perspective: "previewDrafts",
+          perspective: "drafts",
           useCdn: false,
         })
       : client;
@@ -71,6 +73,17 @@ export async function sanityFetch<T>({
 
     // If query returned null or empty array, fall back to default design content
     if (!data || (Array.isArray(data) && data.length === 0)) {
+      if (isDraftMode) {
+        // If draft query yielded null, fall back to published Content Lake data before local constants
+        try {
+          const publishedData = await client.fetch<T>(query, params, { cache: "no-store" });
+          if (publishedData && (!Array.isArray(publishedData) || publishedData.length > 0)) {
+            return publishedData;
+          }
+        } catch {
+          // Ignore and continue to fallback
+        }
+      }
       return fallback;
     }
 
