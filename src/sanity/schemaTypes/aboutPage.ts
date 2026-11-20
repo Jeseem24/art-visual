@@ -1,10 +1,12 @@
 import { defineField, defineType } from "sanity";
+import { seoFieldset, definePageSeoFields } from "./seoFields";
 
 export const aboutPage = defineType({
   name: "aboutPage",
   title: "About Page",
   type: "document",
   fieldsets: [
+    seoFieldset,
     { name: "hero", title: "1. Hero Section", options: { collapsible: true, collapsed: false } },
     { name: "whoWeAre", title: "2. Who We Are Section", options: { collapsible: true, collapsed: false } },
     { name: "visionMission", title: "3. Vision & Mission Section", options: { collapsible: true, collapsed: false } },
@@ -12,6 +14,8 @@ export const aboutPage = defineType({
     { name: "creativeProcess", title: "5. Creative Process (5 Timeline Steps)", options: { collapsible: true, collapsed: false } },
   ],
   fields: [
+    ...definePageSeoFields("About Page"),
+
     // --- HERO SECTION ---
     defineField({
       name: "heroHeadlineLine1",

@@ -56,15 +56,17 @@ export async function generateMetadata(): Promise<Metadata> {
 
   const rawBrand = siteSettings?.brandName || siteConfig.name;
   const brandName = rawBrand.toLowerCase() === "art visual" ? "Art Visual" : rawBrand;
-  const pageTitle = "About Us";
+  const pageTitle = aboutData?.seoTitle || "About Us";
   const fullTitle = `${pageTitle} | ${brandName}`;
 
   const description =
+    aboutData?.seoDescription ||
     aboutData?.heroSubtitle ||
     aboutData?.whoWeAreParagraph1 ||
     "We plan, shoot and finish brand films, product videos, social content and event coverage. We turn stories into visual experiences.";
 
   const aboutKeywords = [
+    ...(aboutData?.seoKeywords || []),
     "about Art Visual",
     "video production team Chennai",
     "cinematographers Chennai",
@@ -79,7 +81,7 @@ export async function generateMetadata(): Promise<Metadata> {
     ...(siteSettings?.metaKeywords || []),
   ];
 
-  const ogImageUrl = aboutData?.whoWeAreImageSrc || siteSettings?.ogImageUrl || "/images/about/who-we-are.png";
+  const ogImageUrl = aboutData?.ogImageUrl || aboutData?.whoWeAreImageSrc || siteSettings?.ogImageUrl || "/images/about/who-we-are.png";
 
   return {
     title: pageTitle,
@@ -138,6 +140,11 @@ interface ProcessCmsStep {
 
 interface AboutPageCmsData {
   [key: string]: unknown;
+  seoTitle?: string;
+  seoDescription?: string;
+  seoKeywords?: string[];
+  ogImageUrl?: string;
+  ogImageAlt?: string;
   heroHeadlineLine1?: string;
   heroHeadlineLine2Prefix?: string;
   heroHeadlineLine2Highlight?: string;

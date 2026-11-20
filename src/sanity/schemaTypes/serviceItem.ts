@@ -47,6 +47,27 @@ export const serviceItem = defineType({
       initialValue: "View service",
     }),
     defineField({
+      name: "seoTitle",
+      title: "Custom SEO Title",
+      type: "string",
+      description: "Custom browser and Google search title for this service (leave blank to auto-generate).",
+    }),
+    defineField({
+      name: "seoDescription",
+      title: "Custom Meta Description",
+      type: "text",
+      rows: 3,
+      description: "Custom search engine snippet for this service (leave blank to use service description).",
+    }),
+    defineField({
+      name: "seoKeywords",
+      title: "Target Keywords",
+      type: "array",
+      of: [{ type: "string" }],
+      options: { layout: "tags" },
+      description: "Service-specific SEO keywords.",
+    }),
+    defineField({
       name: "order",
       title: "Display Order Rank (Legacy)",
       type: "number",

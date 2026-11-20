@@ -75,6 +75,11 @@ interface SanitySiteSettings {
 
 interface HomePageCmsData {
   [key: string]: unknown;
+  seoTitle?: string;
+  seoDescription?: string;
+  seoKeywords?: string[];
+  ogImageUrl?: string;
+  ogImageAlt?: string;
   heroLocationPill?: string;
   heroHeadlineLine1Text?: string;
   heroHeadlineLine1Highlight?: string;
@@ -144,34 +149,37 @@ export async function generateMetadata(): Promise<Metadata> {
   const rawBrand = siteSettings?.brandName || siteConfig.name;
   const brandName = rawBrand.toLowerCase() === "art visual" ? "Art Visual" : rawBrand;
   const tagline = siteSettings?.tagline || siteConfig.tagline;
-  const title = siteSettings?.metaTitle || `${brandName} | ${tagline}`;
+  const title = homeData?.seoTitle || siteSettings?.metaTitle || `${brandName} | ${tagline}`;
 
   const description =
+    homeData?.seoDescription ||
     siteSettings?.metaDescription ||
     siteSettings?.brandDescription ||
     (homeData?.heroSubtitle ? `${homeData.heroSubtitle} ${siteConfig.description}` : siteConfig.description);
 
   const homeKeywords =
-    siteSettings?.metaKeywords && siteSettings.metaKeywords.length > 0
-      ? siteSettings.metaKeywords
-      : [
-          "commercial video production company",
-          "brand films",
-          "corporate videography",
-          "product commercial production",
-          "video production studio Chennai",
-          "creative video agency India",
-          "promotional video production",
-          "commercial film directors",
-          "high impact video content",
-          "cinematography and post-production",
-          "commercial advertisement films",
-          "event coverage video",
-        ];
+    homeData?.seoKeywords && homeData.seoKeywords.length > 0
+      ? homeData.seoKeywords
+      : siteSettings?.metaKeywords && siteSettings.metaKeywords.length > 0
+        ? siteSettings.metaKeywords
+        : [
+            "commercial video production company",
+            "brand films",
+            "corporate videography",
+            "product commercial production",
+            "video production studio Chennai",
+            "creative video agency India",
+            "promotional video production",
+            "commercial film directors",
+            "high impact video content",
+            "cinematography and post-production",
+            "commercial advertisement films",
+            "event coverage video",
+          ];
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || siteConfig.url;
-  const ogImageUrl = siteSettings?.ogImageUrl || siteSettings?.logoUrl || "/images/art-visual-logo.png";
-  const ogImageAlt = siteSettings?.ogImageAlt || `${brandName} Commercial Video Production`;
+  const ogImageUrl = homeData?.ogImageUrl || siteSettings?.ogImageUrl || siteSettings?.logoUrl || "/images/art-visual-logo.png";
+  const ogImageAlt = homeData?.ogImageAlt || siteSettings?.ogImageAlt || `${brandName} Commercial Video Production`;
 
   return {
     title: {

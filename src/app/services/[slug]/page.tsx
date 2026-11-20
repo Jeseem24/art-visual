@@ -60,11 +60,17 @@ async function resolveService(slug: string): Promise<ServiceDetailData | null> {
     title?: string;
     description?: string;
     videoSrc?: string;
+    seoTitle?: string;
+    seoDescription?: string;
+    seoKeywords?: string[];
   } | null>({
     query: `*[_type == "serviceItem" && slug.current == $slug][0]{
       title,
       description,
-      "videoSrc": video.asset->url
+      "videoSrc": video.asset->url,
+      seoTitle,
+      seoDescription,
+      seoKeywords
     }`,
     params: { slug },
     fallback: null,
@@ -86,6 +92,9 @@ async function resolveService(slug: string): Promise<ServiceDetailData | null> {
         ? sanityItem.title.split(" ").slice(-1)[0]
         : localService.titleHighlight,
       videoSrc: sanityItem?.videoSrc || localService.videoSrc,
+      seoTitle: sanityItem?.seoTitle,
+      seoDescription: sanityItem?.seoDescription,
+      seoKeywords: sanityItem?.seoKeywords,
       aboutSection: {
         ...localService.aboutSection,
         paragraphs: sanityItem?.description
@@ -107,6 +116,9 @@ async function resolveService(slug: string): Promise<ServiceDetailData | null> {
     fullTitle: title,
     videoSrc: sanityItem?.videoSrc || "/videos/reel.mp4",
     posterSrc: "",
+    seoTitle: sanityItem?.seoTitle,
+    seoDescription: sanityItem?.seoDescription,
+    seoKeywords: sanityItem?.seoKeywords,
     aboutSection: {
       badgeText: "Our Offering",
       headline: {
@@ -214,12 +226,14 @@ export async function generateMetadata({
     };
   }
 
-  const title = service.fullTitle;
+  const title = service.seoTitle || service.fullTitle;
   const description =
+    service.seoDescription ||
     service.aboutSection.paragraphs[0] ||
     `High-impact ${service.fullTitle} services tailored for modern brands. Production, cinematography, and post-production.`;
 
   const serviceKeywords = [
+    ...(service.seoKeywords || []),
     service.fullTitle.toLowerCase(),
     `${service.fullTitle.toLowerCase()} services`,
     `${service.fullTitle.toLowerCase()} Chennai`,

@@ -60,6 +60,9 @@ export interface ServiceDetailData {
       body: string;
     };
   };
+  seoTitle?: string;
+  seoDescription?: string;
+  seoKeywords?: string[];
 }
 
 const OFFER_SHOOT_IMAGE = "/images/services/offer-shoot.png";

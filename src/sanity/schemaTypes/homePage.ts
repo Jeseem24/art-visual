@@ -1,11 +1,13 @@
 import { defineField, defineType } from "sanity";
 import { defineVideoUploadField } from "../lib/validators";
+import { seoFieldset, definePageSeoFields } from "./seoFields";
 
 export const homePage = defineType({
   name: "homePage",
   title: "Home Page",
   type: "document",
   fieldsets: [
+    seoFieldset,
     { name: "hero", title: "Hero Section", options: { collapsible: true, collapsed: false } },
     { name: "heroShowcase", title: "Hero Showcase Cards", options: { collapsible: true, collapsed: true } },
     {
@@ -41,6 +43,8 @@ export const homePage = defineType({
     },
   ],
   fields: [
+    ...definePageSeoFields("Home Page"),
+
     // --- 1. HERO SECTION ---
     defineField({
       name: "heroLocationPill",

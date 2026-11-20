@@ -45,10 +45,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
   const rawBrand = siteSettings?.brandName || siteConfig.name;
   const brandName = rawBrand.toLowerCase() === "art visual" ? "Art Visual" : rawBrand;
-  const pageTitle = "Services";
+  const pageTitle = pageData?.seoTitle || "Services";
   const fullTitle = `${pageTitle} | ${brandName}`;
 
   const description =
+    pageData?.seoDescription ||
     pageData?.heroSubtitle ||
     "We bring ideas to life through creative video production, cinematic storytelling, and innovative visual solutions.";
 
@@ -58,6 +59,7 @@ export async function generateMetadata(): Promise<Metadata> {
     .map((t) => t.toLowerCase());
 
   const catalogKeywords = [
+    ...(pageData?.seoKeywords || []),
     "video production services",
     "commercial video production services",
     "brand films",
@@ -72,7 +74,7 @@ export async function generateMetadata(): Promise<Metadata> {
     ...(siteSettings?.metaKeywords || []),
   ];
 
-  const ogImageUrl = siteSettings?.ogImageUrl || "/images/services/offer-shoot.png";
+  const ogImageUrl = pageData?.ogImageUrl || siteSettings?.ogImageUrl || "/images/services/offer-shoot.png";
 
   return {
     title: pageTitle,
@@ -108,6 +110,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 interface ServicesPageCmsData {
+  seoTitle?: string;
+  seoDescription?: string;
+  seoKeywords?: string[];
+  ogImageUrl?: string;
+  ogImageAlt?: string;
   heroHeadlineLine1?: string;
   heroHeadlineLine2Prefix?: string;
   heroHeadlineLine2Highlight?: string;

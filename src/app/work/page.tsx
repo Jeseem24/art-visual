@@ -40,10 +40,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
   const rawBrand = siteSettings?.brandName || siteConfig.name;
   const brandName = rawBrand.toLowerCase() === "art visual" ? "Art Visual" : rawBrand;
-  const pageTitle = "Our Work";
+  const pageTitle = pageData?.seoTitle || "Our Work";
   const fullTitle = `${pageTitle} | ${brandName}`;
 
   const description =
+    pageData?.seoDescription ||
     pageData?.heroSubtitle ||
     "Explore our creative portfolio of brand films, commercials, product videos, and visual stories crafted with creativity and passion.";
 
@@ -54,6 +55,7 @@ export async function generateMetadata(): Promise<Metadata> {
     .map((t) => `${t.toLowerCase()} film`);
 
   const portfolioKeywords = [
+    ...(pageData?.seoKeywords || []),
     "video production portfolio",
     "commercial showreel",
     "brand film portfolio",
@@ -68,7 +70,7 @@ export async function generateMetadata(): Promise<Metadata> {
   ];
 
   const firstProjectImage = rawProjects.find((p) => p.imageSrc)?.imageSrc;
-  const ogImageUrl = siteSettings?.ogImageUrl || firstProjectImage || "/images/works/monsoon-roast.png";
+  const ogImageUrl = pageData?.ogImageUrl || siteSettings?.ogImageUrl || firstProjectImage || "/images/works/monsoon-roast.png";
 
   return {
     title: pageTitle,
@@ -104,6 +106,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 interface WorkPageCmsData {
+  seoTitle?: string;
+  seoDescription?: string;
+  seoKeywords?: string[];
+  ogImageUrl?: string;
+  ogImageAlt?: string;
   heroHeadlineLine1?: string;
   heroHeadlineLine2Prefix?: string;
   heroHeadlineLine2Highlight?: string;

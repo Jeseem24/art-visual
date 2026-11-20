@@ -1,10 +1,12 @@
 import { defineField, defineType } from "sanity";
+import { seoFieldset, definePageSeoFields } from "./seoFields";
 
 export const workPage = defineType({
   name: "workPage",
   title: "Work Page",
   type: "document",
   fieldsets: [
+    seoFieldset,
     { name: "hero", title: "Hero Section", options: { collapsible: true, collapsed: false } },
     {
       name: "filterBar",
@@ -14,6 +16,8 @@ export const workPage = defineType({
     },
   ],
   fields: [
+    ...definePageSeoFields("Work Page"),
+
     defineField({
       name: "heroHeadlineLine1",
       title: "Hero Headline Line 1",

@@ -61,7 +61,21 @@ export const WorkProjectCard = memo(function WorkProjectCard({
       <div className={styles.metaContainer}>
         <div className={styles.alignedMetaGrid}>
           <strong className={styles.label}>PROJECT NAME</strong>
-          <span className={styles.value}>: {projectName}</span>
+          <h3
+            className={styles.value}
+            style={{
+              display: "inline",
+              margin: 0,
+              padding: 0,
+              font: "inherit",
+              fontWeight: "inherit",
+              fontSize: "inherit",
+              lineHeight: "inherit",
+              color: "inherit",
+            }}
+          >
+            : {projectName}
+          </h3>
 
           <strong className={styles.label}>CATEGORY</strong>
           <span className={styles.value}>: {category}</span>

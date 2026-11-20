@@ -36,14 +36,16 @@ export async function generateMetadata(): Promise<Metadata> {
 
   const rawBrand = siteSettings?.brandName || siteConfig.name;
   const brandName = rawBrand.toLowerCase() === "art visual" ? "Art Visual" : rawBrand;
-  const pageTitle = "Contact Us";
+  const pageTitle = contactData?.seoTitle || "Contact Us";
   const fullTitle = `${pageTitle} | ${brandName}`;
 
   const description =
+    contactData?.seoDescription ||
     contactData?.heroSubtitle ||
     "Have a creative idea or a project in mind? Let's connect and bring your vision to life through powerful visual storytelling.";
 
   const contactKeywords = [
+    ...(contactData?.seoKeywords || []),
     "contact video production company",
     "hire commercial video agency",
     "video production quote Chennai",
@@ -55,7 +57,7 @@ export async function generateMetadata(): Promise<Metadata> {
     ...(siteSettings?.metaKeywords || []),
   ];
 
-  const ogImageUrl = contactData?.studioImageSrc || siteSettings?.ogImageUrl || "/images/contact/studio-location.png";
+  const ogImageUrl = contactData?.ogImageUrl || contactData?.studioImageSrc || siteSettings?.ogImageUrl || "/images/contact/studio-location.png";
 
   return {
     title: pageTitle,
@@ -91,6 +93,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 interface ContactPageCmsData {
+  seoTitle?: string;
+  seoDescription?: string;
+  seoKeywords?: string[];
+  ogImageUrl?: string;
+  ogImageAlt?: string;
   heroHeadlineLine1Prefix?: string;
   heroHeadlineLine1Highlight?: string;
   heroHeadlineLine2?: string;

@@ -46,7 +46,12 @@ export const HOME_PAGE_QUERY = groq`
     testimonialsHeadlineLine1,
     testimonialsHeadlineLine2,
     faqBadge,
-    faqHeadline
+    faqHeadline,
+    seoTitle,
+    seoDescription,
+    seoKeywords,
+    "ogImageUrl": ogImage.asset->url,
+    "ogImageAlt": ogImage.alt
   }
 `;
 
@@ -55,6 +60,11 @@ export const HOME_PAGE_QUERY = groq`
  */
 export const ABOUT_PAGE_QUERY = groq`
   *[_type == "aboutPage"][0] {
+    seoTitle,
+    seoDescription,
+    seoKeywords,
+    "ogImageUrl": ogImage.asset->url,
+    "ogImageAlt": ogImage.alt,
     heroHeadlineLine1,
     heroHeadlineLine2Prefix,
     heroHeadlineLine2Highlight,
@@ -94,6 +104,11 @@ export const ABOUT_PAGE_QUERY = groq`
  */
 export const SERVICES_PAGE_QUERY = groq`
   *[_type == "servicesPage"][0] {
+    seoTitle,
+    seoDescription,
+    seoKeywords,
+    "ogImageUrl": ogImage.asset->url,
+    "ogImageAlt": ogImage.alt,
     heroHeadlineLine1,
     heroHeadlineLine2Prefix,
     heroHeadlineLine2Highlight,
@@ -109,6 +124,11 @@ export const SERVICES_PAGE_QUERY = groq`
  */
 export const WORK_PAGE_QUERY = groq`
   *[_type == "workPage"][0] {
+    seoTitle,
+    seoDescription,
+    seoKeywords,
+    "ogImageUrl": ogImage.asset->url,
+    "ogImageAlt": ogImage.alt,
     heroHeadlineLine1,
     heroHeadlineLine2Prefix,
     heroHeadlineLine2Highlight,
@@ -122,6 +142,11 @@ export const WORK_PAGE_QUERY = groq`
  */
 export const CONTACT_PAGE_QUERY = groq`
   *[_type == "contactPage"][0] {
+    seoTitle,
+    seoDescription,
+    seoKeywords,
+    "ogImageUrl": ogImage.asset->url,
+    "ogImageAlt": ogImage.alt,
     heroHeadlineLine1Prefix,
     heroHeadlineLine1Highlight,
     heroHeadlineLine2,
@@ -152,6 +177,9 @@ export const SERVICES_QUERY = groq`
     "slug": slug.current,
     "videoSrc": video.asset->url,
     ctaLabel,
+    seoTitle,
+    seoDescription,
+    seoKeywords,
     order
   }
 `;

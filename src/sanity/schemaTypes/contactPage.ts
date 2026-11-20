@@ -1,15 +1,19 @@
 import { defineField, defineType } from "sanity";
+import { seoFieldset, definePageSeoFields } from "./seoFields";
 
 export const contactPage = defineType({
   name: "contactPage",
   title: "Contact Page",
   type: "document",
   fieldsets: [
+    seoFieldset,
     { name: "hero", title: "Hero Section", options: { collapsible: true, collapsed: false } },
     { name: "inquiry", title: "Inquiry & Form Settings", options: { collapsible: true, collapsed: true } },
     { name: "contactInfo", title: "Direct Contact Information", options: { collapsible: true, collapsed: true } },
   ],
   fields: [
+    ...definePageSeoFields("Contact Page"),
+
     // --- HERO SECTION ---
     defineField({
       name: "heroHeadlineLine1Prefix",
