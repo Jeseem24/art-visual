@@ -21,52 +21,31 @@ export function wrapPublishAction(originalPublish: DocumentActionComponent): Doc
 
     if (!originalResult) return null;
 
-    const hasNoDraft = !props.draft;
-    let isIdenticalToPublished = false;
-
-    if (props.draft && props.published) {
-      const cleanDraft = extractCleanContent(props.draft as Record<string, unknown>);
-      const cleanPublished = extractCleanContent(props.published as Record<string, unknown>);
-      isIdenticalToPublished = JSON.stringify(cleanDraft) === JSON.stringify(cleanPublished);
-    }
-
-    const isDisabled = Boolean(
-      originalResult.disabled || hasNoDraft || isIdenticalToPublished
-    );
-
-    const disabledTitle = hasNoDraft
-      ? "No draft changes to publish"
-      : isIdenticalToPublished
-      ? "Draft has no new changes compared to published"
-      : originalResult.title;
-
     const originalOnHandle = originalResult.onHandle;
 
     return {
       ...originalResult,
       tone: "primary",
-      disabled: isDisabled,
-      title: isDisabled ? disabledTitle : originalResult.title,
-      onHandle: async () => {
-        const activeDoc = props.draft || props.published;
-        if (activeDoc) {
-          try {
-            await createSnapshot({
-              client,
-              documentId: props.id,
-              documentType: props.type,
-              trigger: "publish",
-              content: extractCleanContent(activeDoc as Record<string, unknown>),
-              note: "Published website version",
-              authorName: currentUser?.name || "Editor",
-            });
-          } catch (err) {
-            console.warn("[Versioning Plugin] Auto-publish snapshot warning:", err);
-          }
-        }
-
+      onHandle: () => {
+        // 1. Immediately trigger Sanity's native publish for zero-latency UI feedback
         if (originalOnHandle) {
           originalOnHandle();
+        }
+
+        // 2. Run version snapshot asynchronously in the background (non-blocking)
+        const activeDoc = props.draft || props.published;
+        if (activeDoc) {
+          createSnapshot({
+            client,
+            documentId: props.id,
+            documentType: props.type,
+            trigger: "publish",
+            content: extractCleanContent(activeDoc as Record<string, unknown>),
+            note: "Published website version",
+            authorName: currentUser?.name || "Editor",
+          }).catch((err) => {
+            console.warn("[Versioning Plugin] Background publish snapshot error:", err);
+          });
         }
       },
     };
