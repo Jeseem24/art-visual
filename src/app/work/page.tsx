@@ -6,7 +6,7 @@ import { CTABannerSection } from "@/components/sections/home/CTABannerSection";
 import { BreadcrumbJsonLd, VideoObjectJsonLd } from "@/components/seo";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { PORTFOLIO_WORKS_QUERY, WORK_PAGE_QUERY, SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
-import { siteConfig } from "@/config/site";
+import { siteConfig, formatSocialDescription } from "@/config/site";
 import { WORK_PROJECTS, type WorkProjectItem, type WorkCategory } from "@/data/worksData";
 import { WORK_HERO_DEFAULTS } from "@/components/sections/work/WorkHeroSection/constants";
 import styles from "./WorkPage.module.css";
@@ -71,6 +71,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   const firstProjectImage = rawProjects.find((p) => p.imageSrc)?.imageSrc;
   const ogImageUrl = pageData?.ogImageUrl || siteSettings?.ogImageUrl || firstProjectImage || "/images/works/monsoon-roast.png";
+  const socialDescription = formatSocialDescription(description);
 
   return {
     title: pageTitle,
@@ -85,7 +86,7 @@ export async function generateMetadata(): Promise<Metadata> {
       url: "/work",
       siteName: brandName,
       title: fullTitle,
-      description,
+      description: socialDescription,
       images: [
         {
           url: ogImageUrl,
@@ -98,7 +99,7 @@ export async function generateMetadata(): Promise<Metadata> {
     twitter: {
       card: "summary_large_image",
       title: fullTitle,
-      description,
+      description: socialDescription,
       creator: "@artvisual",
       images: [ogImageUrl],
     },

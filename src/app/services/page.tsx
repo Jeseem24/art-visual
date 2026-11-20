@@ -8,7 +8,7 @@ import { CTABannerSection } from "@/components/sections/home/CTABannerSection";
 import { BreadcrumbJsonLd, ServicesCatalogJsonLd } from "@/components/seo";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { SERVICES_QUERY, SERVICES_PAGE_QUERY, SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
-import { siteConfig } from "@/config/site";
+import { siteConfig, formatSocialDescription } from "@/config/site";
 import {
   SERVICES_CATALOG_ITEMS,
 } from "@/components/sections/services/ServicesCatalogSection/constants";
@@ -75,6 +75,7 @@ export async function generateMetadata(): Promise<Metadata> {
   ];
 
   const ogImageUrl = pageData?.ogImageUrl || siteSettings?.ogImageUrl || "/images/services/offer-shoot.png";
+  const socialDescription = formatSocialDescription(description);
 
   return {
     title: pageTitle,
@@ -89,7 +90,7 @@ export async function generateMetadata(): Promise<Metadata> {
       url: "/services",
       siteName: brandName,
       title: fullTitle,
-      description,
+      description: socialDescription,
       images: [
         {
           url: ogImageUrl,
@@ -102,7 +103,7 @@ export async function generateMetadata(): Promise<Metadata> {
     twitter: {
       card: "summary_large_image",
       title: fullTitle,
-      description,
+      description: socialDescription,
       creator: "@artvisual",
       images: [ogImageUrl],
     },

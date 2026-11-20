@@ -7,7 +7,7 @@ import { CTABannerSection } from "@/components/sections/home/CTABannerSection";
 import { BreadcrumbJsonLd } from "@/components/seo";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { CONTACT_PAGE_QUERY, SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
-import { siteConfig } from "@/config/site";
+import { siteConfig, formatSocialDescription } from "@/config/site";
 import { CONTACT_HERO_DEFAULTS } from "@/components/sections/contact/ContactHeroSection/constants";
 import { CONTACT_INQUIRY_DEFAULTS } from "@/components/sections/contact/ContactInquirySection/constants";
 import styles from "./ContactPage.module.css";
@@ -58,6 +58,7 @@ export async function generateMetadata(): Promise<Metadata> {
   ];
 
   const ogImageUrl = contactData?.ogImageUrl || contactData?.studioImageSrc || siteSettings?.ogImageUrl || "/images/contact/studio-location.png";
+  const socialDescription = formatSocialDescription(description);
 
   return {
     title: pageTitle,
@@ -72,7 +73,7 @@ export async function generateMetadata(): Promise<Metadata> {
       url: "/contact",
       siteName: brandName,
       title: fullTitle,
-      description,
+      description: socialDescription,
       images: [
         {
           url: ogImageUrl,
@@ -85,7 +86,7 @@ export async function generateMetadata(): Promise<Metadata> {
     twitter: {
       card: "summary_large_image",
       title: fullTitle,
-      description,
+      description: socialDescription,
       creator: "@artvisual",
       images: [ogImageUrl],
     },

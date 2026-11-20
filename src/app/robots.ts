@@ -10,7 +10,7 @@ import { siteConfig } from "@/config/site";
  * - Declares the canonical host domain.
  */
 export default function robots(): MetadataRoute.Robots {
-  const rawBaseUrl = process.env.NEXT_PUBLIC_SITE_URL || siteConfig.url || "https://artvisual.agency";
+  const rawBaseUrl = process.env.NEXT_PUBLIC_SITE_URL || siteConfig.url || "https://art-visual.vercel.app";
   const baseUrl = rawBaseUrl.replace(/\/+$/, "");
 
   const disallowedPaths = [

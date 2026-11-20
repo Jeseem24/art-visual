@@ -22,7 +22,7 @@ import {
   VideoObjectJsonLd,
 } from "@/components/seo";
 import { sanityFetch } from "@/sanity/lib/fetch";
-import { siteConfig } from "@/config/site";
+import { siteConfig, formatSocialDescription } from "@/config/site";
 import styles from "./ServiceDetailPage.module.css";
 
 interface ServiceDetailPageProps {
@@ -253,6 +253,7 @@ export async function generateMetadata({
     service.receiveSection.imageSrc ||
     service.posterSrc ||
     "/images/services/offer-shoot.png";
+  const socialDescription = formatSocialDescription(description);
 
   return {
     title,
@@ -267,7 +268,7 @@ export async function generateMetadata({
       url: `/services/${slug}`,
       siteName: siteConfig.name,
       title: `${title} | ${siteConfig.name}`,
-      description,
+      description: socialDescription,
       images: [
         {
           url: ogImage,
@@ -280,7 +281,7 @@ export async function generateMetadata({
     twitter: {
       card: "summary_large_image",
       title: `${title} | ${siteConfig.name}`,
-      description,
+      description: socialDescription,
       creator: "@artvisual",
       images: [ogImage],
     },

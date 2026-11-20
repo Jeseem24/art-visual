@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Anton, Bebas_Neue, Outfit, Inter, Poppins, Geist } from "next/font/google";
-import { siteConfig } from "@/config/site";
+import { siteConfig, getBaseUrl, formatSocialDescription } from "@/config/site";
 import { SiteLayout } from "@/components/layout/SiteLayout";
 import { DraftModeBanner } from "@/components/ui/DraftModeBanner";
 import { sanityFetch } from "@/sanity/lib/fetch";
@@ -133,7 +133,8 @@ export async function generateMetadata(): Promise<Metadata> {
       ? siteSettings.metaKeywords
       : defaultKeywords;
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || siteConfig.url;
+  const siteUrl = getBaseUrl();
+  const socialDescription = formatSocialDescription(description);
 
   return {
     metadataBase: new URL(siteUrl),
@@ -160,7 +161,7 @@ export async function generateMetadata(): Promise<Metadata> {
       url: siteUrl,
       siteName: brandName,
       title: titleDefault,
-      description,
+      description: socialDescription,
       images: [
         {
           url: ogImageUrl,
@@ -173,7 +174,7 @@ export async function generateMetadata(): Promise<Metadata> {
     twitter: {
       card: "summary_large_image",
       title: titleDefault,
-      description,
+      description: socialDescription,
       creator: "@artvisual",
       images: [ogImageUrl],
     },

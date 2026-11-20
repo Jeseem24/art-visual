@@ -20,7 +20,7 @@ import {
   SITE_SETTINGS_QUERY,
   CTA_BANNER_QUERY,
 } from "@/sanity/lib/queries";
-import { siteConfig } from "@/config/site";
+import { siteConfig, getBaseUrl, formatSocialDescription } from "@/config/site";
 import {
   HERO_DEFAULTS,
 } from "@/components/sections/home/HeroSection/constants";
@@ -177,7 +177,8 @@ export async function generateMetadata(): Promise<Metadata> {
             "event coverage video",
           ];
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || siteConfig.url;
+  const siteUrl = getBaseUrl();
+  const socialDescription = formatSocialDescription(description);
   const ogImageUrl = homeData?.ogImageUrl || siteSettings?.ogImageUrl || siteSettings?.logoUrl || "/images/art-visual-logo.png";
   const ogImageAlt = homeData?.ogImageAlt || siteSettings?.ogImageAlt || `${brandName} Commercial Video Production`;
 
@@ -196,7 +197,7 @@ export async function generateMetadata(): Promise<Metadata> {
       url: siteUrl,
       siteName: brandName,
       title,
-      description,
+      description: socialDescription,
       images: [
         {
           url: ogImageUrl,
@@ -209,7 +210,7 @@ export async function generateMetadata(): Promise<Metadata> {
     twitter: {
       card: "summary_large_image",
       title,
-      description,
+      description: socialDescription,
       creator: "@artvisual",
       images: [ogImageUrl],
     },

@@ -3,12 +3,45 @@
  * Central source of truth for business contact details, routing, and brand metadata.
  */
 
+/**
+ * Resolves the primary canonical site base URL.
+ * Automatically adapts between custom domain, Vercel production preview, and fallback.
+ */
+export function getBaseUrl(): string {
+  if (process.env.NEXT_PUBLIC_SITE_URL) {
+    return process.env.NEXT_PUBLIC_SITE_URL.replace(/\/+$/, "");
+  }
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  }
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+  return "https://art-visual.vercel.app";
+}
+
+/**
+ * Formats meta descriptions for social sharing preview cards (OpenGraph & Twitter),
+ * ensuring they stay comfortably under the 125-character mobile truncation threshold.
+ */
+export function formatSocialDescription(description: string, maxLength: number = 120): string {
+  if (!description || description.length <= maxLength) {
+    return description;
+  }
+  const truncated = description.slice(0, maxLength);
+  const lastSpace = truncated.lastIndexOf(" ");
+  if (lastSpace > 60) {
+    return `${truncated.slice(0, lastSpace)}...`;
+  }
+  return `${truncated}...`;
+}
+
 export const siteConfig = {
   // Brand identity
   name: "Art Visual",
   tagline: "Films that make brands worth watching",
   description: "A creative video production company crafting high-impact brand films, product videos, social content, and commercial productions.",
-  url: "https://artvisual.agency",
+  url: getBaseUrl(),
 
   // Business contact details
   contact: {

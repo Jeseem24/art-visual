@@ -16,7 +16,7 @@ import {
   TESTIMONIALS_QUERY,
   SITE_SETTINGS_QUERY,
 } from "@/sanity/lib/queries";
-import { siteConfig } from "@/config/site";
+import { siteConfig, formatSocialDescription } from "@/config/site";
 import { ABOUT_HERO_DEFAULTS } from "@/components/sections/about/AboutHeroSection/constants";
 import { WHO_WE_ARE_DEFAULTS } from "@/components/sections/about/WhoWeAreSection/constants";
 import { VISION_MISSION_DEFAULTS } from "@/components/sections/about/VisionMissionSection/constants";
@@ -82,6 +82,7 @@ export async function generateMetadata(): Promise<Metadata> {
   ];
 
   const ogImageUrl = aboutData?.ogImageUrl || aboutData?.whoWeAreImageSrc || siteSettings?.ogImageUrl || "/images/about/who-we-are.png";
+  const socialDescription = formatSocialDescription(description);
 
   return {
     title: pageTitle,
@@ -96,7 +97,7 @@ export async function generateMetadata(): Promise<Metadata> {
       url: "/about",
       siteName: brandName,
       title: fullTitle,
-      description,
+      description: socialDescription,
       images: [
         {
           url: ogImageUrl,
@@ -109,7 +110,7 @@ export async function generateMetadata(): Promise<Metadata> {
     twitter: {
       card: "summary_large_image",
       title: fullTitle,
-      description,
+      description: socialDescription,
       creator: "@artvisual",
       images: [ogImageUrl],
     },
