@@ -20,6 +20,8 @@ export const metadata: Metadata = {
     "We bring ideas to life through creative video production, cinematic storytelling, and innovative visual solutions.",
 };
 
+export const revalidate = 10;
+
 export default async function ServicesPage() {
   const [pageData, rawServices] = await Promise.all([
     sanityFetch<any>({

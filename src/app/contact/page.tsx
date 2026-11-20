@@ -16,6 +16,8 @@ export const metadata: Metadata = {
     "Have a creative idea or a project in mind? Let's connect and bring your vision to life through powerful visual storytelling.",
 };
 
+export const revalidate = 10;
+
 export default async function ContactPage() {
   const contactData = await sanityFetch<any>({
     query: CONTACT_PAGE_QUERY,

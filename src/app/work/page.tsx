@@ -15,6 +15,8 @@ export const metadata: Metadata = {
     "Explore our creative portfolio of brand films, commercials, product videos, and visual stories crafted with creativity and passion.",
 };
 
+export const revalidate = 10;
+
 export default async function WorkPage() {
   const [pageData, rawProjects] = await Promise.all([
     sanityFetch<any>({

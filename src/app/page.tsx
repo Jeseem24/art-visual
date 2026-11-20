@@ -87,6 +87,8 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
+export const revalidate = 10;
+
 export default async function HomePage() {
   // Fetch live CMS content in parallel with resilient local defaults
   const [

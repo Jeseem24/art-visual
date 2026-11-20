@@ -1,5 +1,6 @@
 import { draftMode } from "next/headers";
 import { client } from "./client";
+import { projectId } from "../env";
 
 export interface SanityFetchOptions<T> {
   query: string;
@@ -10,8 +11,8 @@ export interface SanityFetchOptions<T> {
 }
 
 const isDev = process.env.NODE_ENV === "development";
-// In development, bypass cache (0). In production, rely on on-demand tag revalidation (false).
-const DEFAULT_REVALIDATE: number | false = isDev ? 0 : false;
+// In development, bypass cache (0). In production, revalidate every 10 seconds for instant live updates.
+const DEFAULT_REVALIDATE: number | false = isDev ? 0 : 10;
 
 /**
  * Resilient Sanity Fetch Helper
@@ -29,7 +30,7 @@ export async function sanityFetch<T>({
   fallback,
 }: SanityFetchOptions<T>): Promise<T> {
   // If no projectId is configured, immediately return fallback
-  if (!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
+  if (!projectId) {
     return fallback;
   }
 

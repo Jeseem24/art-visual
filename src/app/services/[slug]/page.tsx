@@ -26,6 +26,8 @@ export function generateStaticParams() {
   return SERVICE_DETAIL_SLUGS.map((slug) => ({ slug }));
 }
 
+export const revalidate = 10;
+
 /**
  * Generate dynamic SEO title and description per service slug.
  */

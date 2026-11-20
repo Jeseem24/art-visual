@@ -35,6 +35,8 @@ export const metadata: Metadata = {
     "We plan, shoot and finish brand films, product videos, social content and event coverage. We turn stories into visual experiences.",
 };
 
+export const revalidate = 10;
+
 export default async function AboutPage() {
   const [aboutData, featuredWorksData, testimonialsData] = await Promise.all([
     sanityFetch<any>({
