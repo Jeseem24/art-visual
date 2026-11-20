@@ -5,8 +5,10 @@ import { ServicesCatalogSection } from "@/components/sections/services/ServicesC
 import { ServicesProcessSection } from "@/components/sections/services/ServicesProcessSection";
 import { WhyChooseUsSection } from "@/components/sections/home/WhyChooseUsSection";
 import { CTABannerSection } from "@/components/sections/home/CTABannerSection";
+import { BreadcrumbJsonLd, ServicesCatalogJsonLd } from "@/components/seo";
 import { sanityFetch } from "@/sanity/lib/fetch";
-import { SERVICES_QUERY, SERVICES_PAGE_QUERY } from "@/sanity/lib/queries";
+import { SERVICES_QUERY, SERVICES_PAGE_QUERY, SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
+import { siteConfig } from "@/config/site";
 import {
   SERVICES_CATALOG_ITEMS,
 } from "@/components/sections/services/ServicesCatalogSection/constants";
@@ -14,23 +16,96 @@ import { SERVICES_HERO_DEFAULTS } from "@/components/sections/services/ServicesH
 import type { ServiceItem } from "@/components/sections/home/ServicesSection/constants";
 import styles from "./ServicesPage.module.css";
 
-export const metadata: Metadata = {
-  title: "Services",
-  description:
-    "We bring ideas to life through creative video production, cinematic storytelling, and innovative visual solutions.",
-  openGraph: {
-    title: "Services | Art Visual",
-    description:
-      "We bring ideas to life through creative video production, cinematic storytelling, and innovative visual solutions.",
-    url: "/services",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Services | Art Visual",
-    description:
-      "We bring ideas to life through creative video production, cinematic storytelling, and innovative visual solutions.",
-  },
-};
+/**
+ * Dynamic SEO metadata for the Services catalog page.
+ * Synchronizes with Sanity Services Page data and Site Settings.
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const [pageData, siteSettings, rawServices] = await Promise.all([
+    sanityFetch<ServicesPageCmsData | null>({
+      query: SERVICES_PAGE_QUERY,
+      fallback: null,
+      tags: ["servicesPage"],
+    }),
+    sanityFetch<{
+      brandName?: string;
+      metaKeywords?: string[];
+      ogImageUrl?: string;
+    } | null>({
+      query: SITE_SETTINGS_QUERY,
+      fallback: null,
+      tags: ["siteSettings", "servicesPage"],
+    }),
+    sanityFetch<RawServiceCmsItem[]>({
+      query: SERVICES_QUERY,
+      fallback: SERVICES_CATALOG_ITEMS,
+      tags: ["serviceItem", "servicesPage"],
+    }),
+  ]);
+
+  const rawBrand = siteSettings?.brandName || siteConfig.name;
+  const brandName = rawBrand.toLowerCase() === "art visual" ? "Art Visual" : rawBrand;
+  const pageTitle = "Services";
+  const fullTitle = `${pageTitle} | ${brandName}`;
+
+  const description =
+    pageData?.heroSubtitle ||
+    "We bring ideas to life through creative video production, cinematic storytelling, and innovative visual solutions.";
+
+  const dynamicServiceKeywords = rawServices
+    .map((s) => s.title)
+    .filter((title): title is string => Boolean(title))
+    .map((t) => t.toLowerCase());
+
+  const catalogKeywords = [
+    "video production services",
+    "commercial video production services",
+    "brand films",
+    "corporate video production",
+    "product videography",
+    "promotional advertising video",
+    "event video coverage",
+    "social media video content",
+    "full-service video production Chennai",
+    "cinematography and post-production services",
+    ...dynamicServiceKeywords,
+    ...(siteSettings?.metaKeywords || []),
+  ];
+
+  const ogImageUrl = siteSettings?.ogImageUrl || "/images/services/offer-shoot.png";
+
+  return {
+    title: pageTitle,
+    description,
+    keywords: Array.from(new Set(catalogKeywords)),
+    alternates: {
+      canonical: "/services",
+    },
+    openGraph: {
+      type: "website",
+      locale: "en_US",
+      url: "/services",
+      siteName: brandName,
+      title: fullTitle,
+      description,
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: `${brandName} Video Production Services`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: fullTitle,
+      description,
+      creator: "@artvisual",
+      images: [ogImageUrl],
+    },
+  };
+}
 
 interface ServicesPageCmsData {
   heroHeadlineLine1?: string;
@@ -101,6 +176,15 @@ export default async function ServicesPage() {
 
   return (
     <div className={styles.servicesPage}>
+      <BreadcrumbJsonLd items={[{ name: "Services", path: "/services" }]} />
+      <ServicesCatalogJsonLd
+        services={formattedServices.map((s) => ({
+          title: s.title,
+          description: s.description,
+          slug: s.href?.replace(/^\/services\//, "") || "",
+          posterSrc: s.posterSrc,
+        }))}
+      />
       {/* Hero Introduction */}
       <ServicesHeroSection data={heroData} />
 

@@ -4,25 +4,46 @@ import { siteConfig } from "@/config/site";
 /**
  * Next.js App Router robots.txt generation
  * Controls search engine crawler behavior:
- * - Allows indexing of all public marketing pages.
- * - Explicitly blocks all search crawlers from /studio and /api routes.
+ * - Configures dedicated userAgent directives for major search engines (Googlebot, Bingbot, Applebot, *).
+ * - Disallows private studio, internal API routes, and draft-mode preview endpoints.
+ * - Points crawlers to the canonical absolute sitemap URL with resilient siteConfig fallback.
+ * - Declares the canonical host domain.
  */
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || siteConfig.url;
+  const rawBaseUrl = process.env.NEXT_PUBLIC_SITE_URL || siteConfig.url || "https://artvisual.agency";
+  const baseUrl = rawBaseUrl.replace(/\/+$/, "");
+
+  const disallowedPaths = [
+    "/studio",
+    "/studio/*",
+    "/api/*",
+    "/draft-mode/*",
+  ];
 
   return {
     rules: [
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/studio", "/studio/", "/api/"],
+        disallow: disallowedPaths,
       },
       {
-        userAgent: ["Googlebot", "Bingbot", "Applebot"],
+        userAgent: "Googlebot",
         allow: "/",
-        disallow: ["/studio", "/studio/", "/api/"],
+        disallow: disallowedPaths,
+      },
+      {
+        userAgent: "Bingbot",
+        allow: "/",
+        disallow: disallowedPaths,
+      },
+      {
+        userAgent: "Applebot",
+        allow: "/",
+        disallow: disallowedPaths,
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,
+    host: baseUrl,
   };
 }

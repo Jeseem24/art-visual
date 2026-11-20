@@ -8,12 +8,15 @@ import { CreativeProcessSection } from "@/components/sections/about/CreativeProc
 import { FeaturedWorksSection } from "@/components/sections/home/FeaturedWorksSection";
 import { TestimonialsSection } from "@/components/sections/home/TestimonialsSection";
 import { CTABannerSection } from "@/components/sections/home/CTABannerSection";
+import { BreadcrumbJsonLd, VideoObjectJsonLd } from "@/components/seo";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import {
   ABOUT_PAGE_QUERY,
   FEATURED_WORKS_QUERY,
   TESTIMONIALS_QUERY,
+  SITE_SETTINGS_QUERY,
 } from "@/sanity/lib/queries";
+import { siteConfig } from "@/config/site";
 import { ABOUT_HERO_DEFAULTS } from "@/components/sections/about/AboutHeroSection/constants";
 import { WHO_WE_ARE_DEFAULTS } from "@/components/sections/about/WhoWeAreSection/constants";
 import { VISION_MISSION_DEFAULTS } from "@/components/sections/about/VisionMissionSection/constants";
@@ -29,23 +32,87 @@ import {
 } from "@/components/sections/home/TestimonialsSection/constants";
 import styles from "./AboutPage.module.css";
 
-export const metadata: Metadata = {
-  title: "About Us",
-  description:
-    "We plan, shoot and finish brand films, product videos, social content and event coverage. We turn stories into visual experiences.",
-  openGraph: {
-    title: "About Us | Art Visual",
-    description:
-      "We plan, shoot and finish brand films, product videos, social content and event coverage. We turn stories into visual experiences.",
-    url: "/about",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "About Us | Art Visual",
-    description:
-      "We plan, shoot and finish brand films, product videos, social content and event coverage. We turn stories into visual experiences.",
-  },
-};
+/**
+ * Dynamic SEO metadata for the About page.
+ * Synchronizes with Sanity About Page data and Site Settings.
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const [aboutData, siteSettings] = await Promise.all([
+    sanityFetch<AboutPageCmsData | null>({
+      query: ABOUT_PAGE_QUERY,
+      fallback: null,
+      tags: ["aboutPage"],
+    }),
+    sanityFetch<{
+      brandName?: string;
+      metaKeywords?: string[];
+      ogImageUrl?: string;
+    } | null>({
+      query: SITE_SETTINGS_QUERY,
+      fallback: null,
+      tags: ["siteSettings", "aboutPage"],
+    }),
+  ]);
+
+  const rawBrand = siteSettings?.brandName || siteConfig.name;
+  const brandName = rawBrand.toLowerCase() === "art visual" ? "Art Visual" : rawBrand;
+  const pageTitle = "About Us";
+  const fullTitle = `${pageTitle} | ${brandName}`;
+
+  const description =
+    aboutData?.heroSubtitle ||
+    aboutData?.whoWeAreParagraph1 ||
+    "We plan, shoot and finish brand films, product videos, social content and event coverage. We turn stories into visual experiences.";
+
+  const aboutKeywords = [
+    "about Art Visual",
+    "video production team Chennai",
+    "cinematographers Chennai",
+    "creative film directors",
+    "commercial video agency",
+    "brand storytelling studio",
+    "film production company India",
+    "commercial directors",
+    "post-production specialists",
+    "video production vision and mission",
+    "video agency capabilities",
+    ...(siteSettings?.metaKeywords || []),
+  ];
+
+  const ogImageUrl = aboutData?.whoWeAreImageSrc || siteSettings?.ogImageUrl || "/images/about/who-we-are.png";
+
+  return {
+    title: pageTitle,
+    description,
+    keywords: aboutKeywords,
+    alternates: {
+      canonical: "/about",
+    },
+    openGraph: {
+      type: "website",
+      locale: "en_US",
+      url: "/about",
+      siteName: brandName,
+      title: fullTitle,
+      description,
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: `${brandName} Studio & Creative Team`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: fullTitle,
+      description,
+      creator: "@artvisual",
+      images: [ogImageUrl],
+    },
+  };
+}
 
 interface VisionMissionCmsItem {
   _key?: string;
@@ -273,7 +340,7 @@ export default async function AboutPage() {
       imageSrc: item.imageSrc || fallback.imageSrc,
       alt: item.title || fallback.alt,
       category: item.category || fallback.category,
-      href: item.slug ? `/work/${item.slug}` : fallback.href,
+      href: item.slug ? `/work` : (fallback.href || "/work"),
     };
   });
 
@@ -294,6 +361,17 @@ export default async function AboutPage() {
 
   return (
     <div className={styles.aboutPage}>
+      <BreadcrumbJsonLd items={[{ name: "About Us", path: "/about" }]} />
+      <VideoObjectJsonLd
+        video={{
+          name: "Art Visual Studio Creative Reel",
+          description:
+            "Behind-the-scenes and studio creative film documenting our camera crews, directing talent, and post-production suites.",
+          thumbnailUrl: "/images/about/studio-inspiration.png",
+          contentUrl: "/videos/about/studio-reel.mp4",
+          duration: "PT1M30S",
+        }}
+      />
       {/* Hero Header */}
       <AboutHeroSection data={heroData} />
 

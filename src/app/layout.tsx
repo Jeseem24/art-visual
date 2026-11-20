@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Anton, Bebas_Neue, Outfit, Inter, Poppins, Geist } from "next/font/google";
 import { siteConfig } from "@/config/site";
 import { SiteLayout } from "@/components/layout/SiteLayout";
 import { DraftModeBanner } from "@/components/ui/DraftModeBanner";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { SITE_SETTINGS_QUERY, NAVBAR_QUERY } from "@/sanity/lib/queries";
+import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo";
 import "./globals.css";
 
 const anton = Anton({
@@ -52,6 +53,12 @@ interface SanitySiteSettings {
   brandName?: string;
   tagline?: string;
   brandDescription?: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  metaKeywords?: string[];
+  ogImageUrl?: string;
+  ogImageAlt?: string;
+  googleSiteVerification?: string;
   faviconUrl?: string;
   logoUrl?: string;
   contactEmail?: string;
@@ -75,6 +82,17 @@ interface SanityNavbarData {
   whatsappDefaultMsg?: string;
 }
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#000000" },
+    { media: "(prefers-color-scheme: light)", color: "#000000" },
+  ],
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  colorScheme: "dark",
+};
+
 export async function generateMetadata(): Promise<Metadata> {
   const siteSettings = await sanityFetch<SanitySiteSettings | null>({
     query: SITE_SETTINGS_QUERY,
@@ -85,37 +103,79 @@ export async function generateMetadata(): Promise<Metadata> {
   const rawBrand = siteSettings?.brandName || siteConfig.name;
   const brandName = rawBrand.toLowerCase() === "art visual" ? "Art Visual" : rawBrand;
   const tagline = siteSettings?.tagline || siteConfig.tagline;
-  const description = siteSettings?.brandDescription || siteConfig.description;
+  const description =
+    siteSettings?.metaDescription ||
+    siteSettings?.brandDescription ||
+    siteConfig.description;
+  const titleDefault = siteSettings?.metaTitle || `${brandName} | ${tagline}`;
   const faviconUrl = siteSettings?.faviconUrl;
+  const ogImageUrl = siteSettings?.ogImageUrl || "/images/art-visual-logo.png";
+  const ogImageAlt = siteSettings?.ogImageAlt || brandName;
+
+  const defaultKeywords = [
+    "commercial video production",
+    "video production company",
+    "brand films",
+    "product videography",
+    "corporate video production",
+    "promotional videos",
+    "event videography",
+    "social media video content",
+    "cinematography",
+    "video agency Chennai",
+    "commercial film production India",
+    "creative agency",
+    "video storytelling",
+    "high impact video",
+  ];
+  const keywords =
+    siteSettings?.metaKeywords && siteSettings.metaKeywords.length > 0
+      ? siteSettings.metaKeywords
+      : defaultKeywords;
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || siteConfig.url;
 
   return {
+    metadataBase: new URL(siteUrl),
     title: {
-      default: `${brandName} | ${tagline}`,
+      default: titleDefault,
       template: `%s | ${brandName}`,
     },
     description,
-    metadataBase: new URL(siteConfig.url),
+    keywords,
+    authors: [{ name: brandName, url: siteUrl }],
+    creator: brandName,
+    publisher: brandName,
+    formatDetection: {
+      email: false,
+      address: false,
+      telephone: false,
+    },
+    alternates: {
+      canonical: "/",
+    },
     openGraph: {
       type: "website",
       locale: "en_US",
-      url: siteConfig.url,
+      url: siteUrl,
       siteName: brandName,
-      title: `${brandName} | ${tagline}`,
+      title: titleDefault,
       description,
       images: [
         {
-          url: "/images/art-visual-logo.png",
+          url: ogImageUrl,
           width: 1200,
           height: 630,
-          alt: brandName,
+          alt: ogImageAlt,
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title: `${brandName} | ${tagline}`,
+      title: titleDefault,
       description,
-      images: ["/images/art-visual-logo.png"],
+      creator: "@artvisual",
+      images: [ogImageUrl],
     },
     icons: {
       icon: [
@@ -127,6 +187,22 @@ export async function generateMetadata(): Promise<Metadata> {
         { url: faviconUrl || "/apple-icon.png", sizes: "180x180", type: "image/png" },
       ],
     },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
+    verification: siteSettings?.googleSiteVerification
+      ? {
+          google: siteSettings.googleSiteVerification,
+        }
+      : undefined,
   };
 }
 
@@ -191,6 +267,14 @@ export default async function RootLayout({
       className={`${anton.variable} ${bebasNeue.variable} ${outfit.variable} ${inter.variable} ${poppins.variable} ${geist.variable} h-full antialiased`}
     >
       <body className="min-h-full font-sans antialiased">
+        <OrganizationJsonLd
+          brandName={brandName}
+          logoUrl={siteSettings?.logoUrl}
+          email={siteSettings?.contactEmail}
+          phone={siteSettings?.contactPhone}
+          location={siteSettings?.location}
+        />
+        <WebSiteJsonLd brandName={brandName} />
         <SiteLayout
           navItems={navbarData?.navItems}
           ctaLabel={navbarData?.ctaLabel}

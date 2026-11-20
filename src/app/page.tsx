@@ -8,6 +8,7 @@ import { WhyChooseUsSection } from "@/components/sections/home/WhyChooseUsSectio
 import { TestimonialsSection } from "@/components/sections/home/TestimonialsSection";
 import { FAQSection } from "@/components/sections/home/FAQSection";
 import { CTABannerSection } from "@/components/sections/home/CTABannerSection";
+import { FAQJsonLd, FeaturedVideosJsonLd } from "@/components/seo";
 import { CTA_BANNER_DEFAULTS } from "@/components/sections/home/CTABannerSection/constants";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import {
@@ -58,6 +59,12 @@ interface SanitySiteSettings {
   brandName?: string;
   tagline?: string;
   brandDescription?: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  metaKeywords?: string[];
+  ogImageUrl?: string;
+  ogImageAlt?: string;
+  googleSiteVerification?: string;
   faviconUrl?: string;
   logoUrl?: string;
   contactEmail?: string;
@@ -121,35 +128,82 @@ interface CtaBannerCmsData {
  * Synchronizes with Sanity Site Settings (Brand Name, Tagline, Bio Description).
  */
 export async function generateMetadata(): Promise<Metadata> {
-  const siteSettings = await sanityFetch<SanitySiteSettings | null>({
-    query: SITE_SETTINGS_QUERY,
-    fallback: null,
-    tags: ["siteSettings", "homePage"],
-  });
+  const [siteSettings, homeData] = await Promise.all([
+    sanityFetch<SanitySiteSettings | null>({
+      query: SITE_SETTINGS_QUERY,
+      fallback: null,
+      tags: ["siteSettings", "homePage"],
+    }),
+    sanityFetch<HomePageCmsData | null>({
+      query: HOME_PAGE_QUERY,
+      fallback: null,
+      tags: ["homePage"],
+    }),
+  ]);
 
   const rawBrand = siteSettings?.brandName || siteConfig.name;
   const brandName = rawBrand.toLowerCase() === "art visual" ? "Art Visual" : rawBrand;
-  const title = `${brandName} | ${siteSettings?.tagline || siteConfig.tagline}`;
+  const tagline = siteSettings?.tagline || siteConfig.tagline;
+  const title = siteSettings?.metaTitle || `${brandName} | ${tagline}`;
 
   const description =
-    siteSettings?.brandDescription || siteConfig.description;
+    siteSettings?.metaDescription ||
+    siteSettings?.brandDescription ||
+    (homeData?.heroSubtitle ? `${homeData.heroSubtitle} ${siteConfig.description}` : siteConfig.description);
+
+  const homeKeywords =
+    siteSettings?.metaKeywords && siteSettings.metaKeywords.length > 0
+      ? siteSettings.metaKeywords
+      : [
+          "commercial video production company",
+          "brand films",
+          "corporate videography",
+          "product commercial production",
+          "video production studio Chennai",
+          "creative video agency India",
+          "promotional video production",
+          "commercial film directors",
+          "high impact video content",
+          "cinematography and post-production",
+          "commercial advertisement films",
+          "event coverage video",
+        ];
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || siteConfig.url;
+  const ogImageUrl = siteSettings?.ogImageUrl || siteSettings?.logoUrl || "/images/art-visual-logo.png";
+  const ogImageAlt = siteSettings?.ogImageAlt || `${brandName} Commercial Video Production`;
 
   return {
-    title,
+    title: {
+      absolute: title,
+    },
     description,
+    keywords: homeKeywords,
+    alternates: {
+      canonical: "/",
+    },
     openGraph: {
+      type: "website",
+      locale: "en_US",
+      url: siteUrl,
+      siteName: brandName,
       title,
       description,
-      url: siteConfig.url,
-      siteName: brandName,
-      images: siteSettings?.logoUrl
-        ? [{ url: siteSettings.logoUrl, alt: brandName }]
-        : [{ url: "/images/art-visual-logo.png", alt: brandName }],
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: ogImageAlt,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
+      creator: "@artvisual",
+      images: [ogImageUrl],
     },
   };
 }
@@ -354,6 +408,8 @@ export default async function HomePage() {
 
   return (
     <div className={styles.homePage}>
+      <FAQJsonLd items={faqsData} />
+      <FeaturedVideosJsonLd />
       {/* Hero Section */}
       <HeroSection
         badgeText={heroBadge}

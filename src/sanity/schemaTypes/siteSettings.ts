@@ -6,6 +6,7 @@ export const siteSettings = defineType({
   type: "document",
   fieldsets: [
     { name: "branding", title: "Branding & Bio", options: { collapsible: true, collapsed: false } },
+    { name: "seo", title: "Search Engine Optimization (SEO)", options: { collapsible: true, collapsed: false } },
     { name: "contact", title: "Contact Information", options: { collapsible: true, collapsed: true } },
     { name: "navigation", title: "Footer Navigation Lists", options: { collapsible: true, collapsed: true } },
     { name: "social", title: "Social Media Links", options: { collapsible: true, collapsed: true } },
@@ -62,6 +63,71 @@ export const siteSettings = defineType({
       validation: (Rule) => Rule.required(),
     }),
 
+    // --- SEARCH ENGINE OPTIMIZATION (SEO) ---
+    defineField({
+      name: "metaTitle",
+      title: "Meta Title",
+      type: "string",
+      description: "Default search engine and browser tab title (fallback for pages without custom title).",
+      fieldset: "seo",
+      initialValue: "Art Visual | Films that make brands worth watching",
+    }),
+    defineField({
+      name: "metaDescription",
+      title: "Meta Description",
+      type: "text",
+      rows: 3,
+      description: "Default search engine description summary shown in search results.",
+      fieldset: "seo",
+      initialValue:
+        "We bring ideas to life through creative storytelling and impactful video production that helps brands connect with their audience.",
+    }),
+    defineField({
+      name: "metaKeywords",
+      title: "Meta Keywords",
+      type: "array",
+      of: [{ type: "string" }],
+      options: {
+        layout: "tags",
+      },
+      description: "Target search keywords and indexing tags for SEO.",
+      fieldset: "seo",
+      initialValue: [
+        "video production",
+        "brand films",
+        "commercial video",
+        "creative agency",
+        "corporate video",
+        "product videography",
+      ],
+    }),
+    defineField({
+      name: "ogImage",
+      title: "Open Graph (Social Share) Image",
+      type: "image",
+      description: "Default social preview image displayed when sharing links on social platforms (1200x630px recommended).",
+      fieldset: "seo",
+      options: {
+        hotspot: true,
+      },
+      fields: [
+        defineField({
+          name: "alt",
+          title: "Alternative Text",
+          type: "string",
+          description: "Accessibility and SEO description for social share image.",
+          initialValue: "Art Visual - Films that make brands worth watching",
+        }),
+      ],
+    }),
+    defineField({
+      name: "googleSiteVerification",
+      title: "Google Search Console Verification Token",
+      type: "string",
+      description: "Google Search Console verification code (content attribute of google-site-verification meta tag).",
+      fieldset: "seo",
+    }),
+
     // --- CONTACT ---
     defineField({
       name: "contactEmail",
@@ -69,7 +135,7 @@ export const siteSettings = defineType({
       type: "string",
       description: "Primary client inquiry email displayed across footer and contact points.",
       fieldset: "contact",
-      initialValue: "hello@sbsc.com",
+      initialValue: "hello@artvisual.com",
       validation: (Rule) => Rule.required().email(),
     }),
     defineField({
@@ -209,7 +275,7 @@ export const siteSettings = defineType({
     prepare() {
       return {
         title: "Site Settings & Footer",
-        subtitle: "Global Branding, Contacts, Navigation & Social Links",
+        subtitle: "Global Branding, SEO, Contacts, Navigation & Social Links",
       };
     },
   },

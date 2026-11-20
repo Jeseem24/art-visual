@@ -14,7 +14,15 @@ import { FeaturedWorksSection } from "@/components/sections/home/FeaturedWorksSe
 import { WhyChooseUsSection } from "@/components/sections/home/WhyChooseUsSection";
 import { FAQSection } from "@/components/sections/home/FAQSection";
 import { CTABannerSection } from "@/components/sections/home/CTABannerSection";
+import { FAQ_DEFAULTS } from "@/components/sections/home/FAQSection/constants";
+import {
+  BreadcrumbJsonLd,
+  ServiceJsonLd,
+  FAQJsonLd,
+  VideoObjectJsonLd,
+} from "@/components/seo";
 import { sanityFetch } from "@/sanity/lib/fetch";
+import { siteConfig } from "@/config/site";
 import styles from "./ServiceDetailPage.module.css";
 
 interface ServiceDetailPageProps {
@@ -187,7 +195,7 @@ async function resolveService(slug: string): Promise<ServiceDetailData | null> {
 }
 
 /**
- * Generate dynamic SEO title and description per service slug.
+ * Generate dynamic SEO metadata, service-specific keywords, canonical, and OpenGraph per service slug.
  */
 export async function generateMetadata({
   params,
@@ -198,12 +206,70 @@ export async function generateMetadata({
   if (!service) {
     return {
       title: "Service Not Found",
+      description: "The requested video production service could not be found.",
+      robots: {
+        index: false,
+        follow: false,
+      },
     };
   }
 
+  const title = service.fullTitle;
+  const description =
+    service.aboutSection.paragraphs[0] ||
+    `High-impact ${service.fullTitle} services tailored for modern brands. Production, cinematography, and post-production.`;
+
+  const serviceKeywords = [
+    service.fullTitle.toLowerCase(),
+    `${service.fullTitle.toLowerCase()} services`,
+    `${service.fullTitle.toLowerCase()} Chennai`,
+    `${service.fullTitle.toLowerCase()} India`,
+    "commercial video production",
+    "brand film production",
+    "creative cinematography",
+    "professional video agency",
+    service.titlePrefix.toLowerCase(),
+    service.titleHighlight.toLowerCase(),
+    "high-impact brand video",
+    "video production company",
+  ];
+
+  const ogImage =
+    service.offerSection.imageSrc ||
+    service.receiveSection.imageSrc ||
+    service.posterSrc ||
+    "/images/services/offer-shoot.png";
+
   return {
-    title: service.fullTitle,
-    description: service.aboutSection.paragraphs[0],
+    title,
+    description,
+    keywords: serviceKeywords,
+    alternates: {
+      canonical: `/services/${slug}`,
+    },
+    openGraph: {
+      type: "website",
+      locale: "en_US",
+      url: `/services/${slug}`,
+      siteName: siteConfig.name,
+      title: `${title} | ${siteConfig.name}`,
+      description,
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: `${title} - ${siteConfig.name} Commercial Video Production`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${title} | ${siteConfig.name}`,
+      description,
+      creator: "@artvisual",
+      images: [ogImage],
+    },
   };
 }
 
@@ -222,6 +288,33 @@ export default async function ServiceDetailPage({
 
   return (
     <div className={styles.serviceDetailPage}>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Services", path: "/services" },
+          { name: service.fullTitle, path: `/services/${slug}` },
+        ]}
+      />
+      <ServiceJsonLd
+        service={{
+          title: service.fullTitle,
+          description: service.aboutSection.paragraphs[0] || "",
+          slug: service.slug,
+          posterSrc: service.posterSrc || "/images/art-visual-logo.png",
+          imageSrc: service.offerSection?.imageSrc,
+        }}
+      />
+      <FAQJsonLd items={FAQ_DEFAULTS.items} />
+      <VideoObjectJsonLd
+        video={{
+          name: `${service.fullTitle} Production Reel`,
+          description:
+            service.aboutSection.paragraphs[0] ||
+            `Cinematic ${service.fullTitle} showcase by Art Visual.`,
+          thumbnailUrl: service.posterSrc || "/images/art-visual-logo.png",
+          contentUrl: service.videoSrc,
+          duration: "PT1M15S",
+        }}
+      />
       {/* Filmstrip Hero & Service Title */}
       <ServiceDetailHeroSection
         titlePrefix={service.titlePrefix}

@@ -3,29 +3,105 @@ import type { Metadata } from "next";
 import { WorkHeroSection } from "@/components/sections/work/WorkHeroSection";
 import { WorkShowcaseSection } from "@/components/sections/work/WorkShowcaseSection";
 import { CTABannerSection } from "@/components/sections/home/CTABannerSection";
+import { BreadcrumbJsonLd, VideoObjectJsonLd } from "@/components/seo";
 import { sanityFetch } from "@/sanity/lib/fetch";
-import { PORTFOLIO_WORKS_QUERY, WORK_PAGE_QUERY } from "@/sanity/lib/queries";
+import { PORTFOLIO_WORKS_QUERY, WORK_PAGE_QUERY, SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
+import { siteConfig } from "@/config/site";
 import { WORK_PROJECTS, type WorkProjectItem, type WorkCategory } from "@/data/worksData";
 import { WORK_HERO_DEFAULTS } from "@/components/sections/work/WorkHeroSection/constants";
 import styles from "./WorkPage.module.css";
 
-export const metadata: Metadata = {
-  title: "Our Work",
-  description:
-    "Explore our creative portfolio of brand films, commercials, product videos, and visual stories crafted with creativity and passion.",
-  openGraph: {
-    title: "Our Work | Art Visual",
-    description:
-      "Explore our creative portfolio of brand films, commercials, product videos, and visual stories crafted with creativity and passion.",
-    url: "/work",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Our Work | Art Visual",
-    description:
-      "Explore our creative portfolio of brand films, commercials, product videos, and visual stories crafted with creativity and passion.",
-  },
-};
+/**
+ * Dynamic SEO metadata for the Work / Portfolio page.
+ * Synchronizes with Sanity Work Page data, projects catalog, and Site Settings.
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const [pageData, siteSettings, rawProjects] = await Promise.all([
+    sanityFetch<WorkPageCmsData | null>({
+      query: WORK_PAGE_QUERY,
+      fallback: null,
+      tags: ["workPage"],
+    }),
+    sanityFetch<{
+      brandName?: string;
+      metaKeywords?: string[];
+      ogImageUrl?: string;
+    } | null>({
+      query: SITE_SETTINGS_QUERY,
+      fallback: null,
+      tags: ["siteSettings", "workPage"],
+    }),
+    sanityFetch<readonly WorkProjectCmsItem[]>({
+      query: PORTFOLIO_WORKS_QUERY,
+      fallback: WORK_PROJECTS,
+      tags: ["featuredWork", "workPage"],
+    }),
+  ]);
+
+  const rawBrand = siteSettings?.brandName || siteConfig.name;
+  const brandName = rawBrand.toLowerCase() === "art visual" ? "Art Visual" : rawBrand;
+  const pageTitle = "Our Work";
+  const fullTitle = `${pageTitle} | ${brandName}`;
+
+  const description =
+    pageData?.heroSubtitle ||
+    "Explore our creative portfolio of brand films, commercials, product videos, and visual stories crafted with creativity and passion.";
+
+  const projectKeywords = rawProjects
+    .slice(0, 8)
+    .map((p) => p.projectName || p.title)
+    .filter((title): title is string => Boolean(title))
+    .map((t) => `${t.toLowerCase()} film`);
+
+  const portfolioKeywords = [
+    "video production portfolio",
+    "commercial showreel",
+    "brand film portfolio",
+    "client video showcase",
+    "product commercial examples",
+    "corporate films Chennai",
+    "cinematography portfolio",
+    "commercial director showreel",
+    "high impact video case studies",
+    ...projectKeywords,
+    ...(siteSettings?.metaKeywords || []),
+  ];
+
+  const firstProjectImage = rawProjects.find((p) => p.imageSrc)?.imageSrc;
+  const ogImageUrl = siteSettings?.ogImageUrl || firstProjectImage || "/images/works/monsoon-roast.png";
+
+  return {
+    title: pageTitle,
+    description,
+    keywords: Array.from(new Set(portfolioKeywords)),
+    alternates: {
+      canonical: "/work",
+    },
+    openGraph: {
+      type: "website",
+      locale: "en_US",
+      url: "/work",
+      siteName: brandName,
+      title: fullTitle,
+      description,
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: `${brandName} Portfolio of Commercial Films & Brand Videos`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: fullTitle,
+      description,
+      creator: "@artvisual",
+      images: [ogImageUrl],
+    },
+  };
+}
 
 interface WorkPageCmsData {
   heroHeadlineLine1?: string;
@@ -91,8 +167,27 @@ export default async function WorkPage() {
     };
   });
 
+  const videoProjects = projects
+    .filter((p) => Boolean(p.videoSrc))
+    .slice(0, 6)
+    .map((p) => ({
+      name: `${p.projectName} - ${p.brandName} (${p.category})`,
+      description: `${p.category} film for ${p.brandName} produced by Art Visual.`,
+      thumbnailUrl: p.imageSrc,
+      contentUrl: p.videoSrc,
+      duration: "PT1M00S",
+    }));
+
   return (
     <div className={styles.workPage}>
+      <BreadcrumbJsonLd items={[{ name: "Our Work", path: "/work" }]} />
+      {videoProjects.map((v, i) => (
+        <VideoObjectJsonLd
+          key={`video-proj-${i}`}
+          video={v}
+          id={`video-work-${i}`}
+        />
+      ))}
       {/* Hero Header */}
       <WorkHeroSection data={heroData} />
 

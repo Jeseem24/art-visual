@@ -4,29 +4,91 @@ import { ContactHeroSection } from "@/components/sections/contact/ContactHeroSec
 import { ContactInquirySection } from "@/components/sections/contact/ContactInquirySection";
 import { WhyChooseUsSection } from "@/components/sections/home/WhyChooseUsSection";
 import { CTABannerSection } from "@/components/sections/home/CTABannerSection";
+import { BreadcrumbJsonLd } from "@/components/seo";
 import { sanityFetch } from "@/sanity/lib/fetch";
-import { CONTACT_PAGE_QUERY } from "@/sanity/lib/queries";
+import { CONTACT_PAGE_QUERY, SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
+import { siteConfig } from "@/config/site";
 import { CONTACT_HERO_DEFAULTS } from "@/components/sections/contact/ContactHeroSection/constants";
 import { CONTACT_INQUIRY_DEFAULTS } from "@/components/sections/contact/ContactInquirySection/constants";
 import styles from "./ContactPage.module.css";
 
-export const metadata: Metadata = {
-  title: "Contact Us",
-  description:
-    "Have a creative idea or a project in mind? Let's connect and bring your vision to life through powerful visual storytelling.",
-  openGraph: {
-    title: "Contact Us | Art Visual",
-    description:
-      "Have a creative idea or a project in mind? Let's connect and bring your vision to life through powerful visual storytelling.",
-    url: "/contact",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Contact Us | Art Visual",
-    description:
-      "Have a creative idea or a project in mind? Let's connect and bring your vision to life through powerful visual storytelling.",
-  },
-};
+/**
+ * Dynamic SEO metadata for the Contact page.
+ * Synchronizes with Sanity Contact Page data and Site Settings.
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const [contactData, siteSettings] = await Promise.all([
+    sanityFetch<ContactPageCmsData | null>({
+      query: CONTACT_PAGE_QUERY,
+      fallback: null,
+      tags: ["contactPage"],
+    }),
+    sanityFetch<{
+      brandName?: string;
+      metaKeywords?: string[];
+      ogImageUrl?: string;
+    } | null>({
+      query: SITE_SETTINGS_QUERY,
+      fallback: null,
+      tags: ["siteSettings", "contactPage"],
+    }),
+  ]);
+
+  const rawBrand = siteSettings?.brandName || siteConfig.name;
+  const brandName = rawBrand.toLowerCase() === "art visual" ? "Art Visual" : rawBrand;
+  const pageTitle = "Contact Us";
+  const fullTitle = `${pageTitle} | ${brandName}`;
+
+  const description =
+    contactData?.heroSubtitle ||
+    "Have a creative idea or a project in mind? Let's connect and bring your vision to life through powerful visual storytelling.";
+
+  const contactKeywords = [
+    "contact video production company",
+    "hire commercial video agency",
+    "video production quote Chennai",
+    "commercial film production inquiry",
+    "brand film estimate",
+    "hire videographer Chennai",
+    "video production consultation",
+    "video agency contact details",
+    ...(siteSettings?.metaKeywords || []),
+  ];
+
+  const ogImageUrl = contactData?.studioImageSrc || siteSettings?.ogImageUrl || "/images/contact/studio-location.png";
+
+  return {
+    title: pageTitle,
+    description,
+    keywords: Array.from(new Set(contactKeywords)),
+    alternates: {
+      canonical: "/contact",
+    },
+    openGraph: {
+      type: "website",
+      locale: "en_US",
+      url: "/contact",
+      siteName: brandName,
+      title: fullTitle,
+      description,
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: `Contact ${brandName} Video Production Studio`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: fullTitle,
+      description,
+      creator: "@artvisual",
+      images: [ogImageUrl],
+    },
+  };
+}
 
 interface ContactPageCmsData {
   heroHeadlineLine1Prefix?: string;
@@ -120,6 +182,7 @@ export default async function ContactPage() {
 
   return (
     <div className={styles.contactPage}>
+      <BreadcrumbJsonLd items={[{ name: "Contact Us", path: "/contact" }]} />
       {/* Hero Header */}
       <ContactHeroSection data={heroData} />
 
