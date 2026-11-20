@@ -14,10 +14,20 @@ export function getBaseUrl(): string {
   if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
     return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
   }
+  if (process.env.VERCEL_BRANCH_URL) {
+    return `https://${process.env.VERCEL_BRANCH_URL}`;
+  }
   if (process.env.VERCEL_URL) {
     return `https://${process.env.VERCEL_URL}`;
   }
-  return "https://artvisual.agency";
+  if (process.env.RENDER_EXTERNAL_URL) {
+    return process.env.RENDER_EXTERNAL_URL.replace(/\/+$/, "");
+  }
+  if (process.env.URL) {
+    return process.env.URL.replace(/\/+$/, "");
+  }
+  const port = process.env.PORT || 3000;
+  return `http://localhost:${port}`;
 }
 
 /**

@@ -10,8 +10,7 @@ import { siteConfig } from "@/config/site";
  * - Declares the canonical host domain.
  */
 export default function robots(): MetadataRoute.Robots {
-  const rawBaseUrl = process.env.NEXT_PUBLIC_SITE_URL || siteConfig.url || "https://artvisual.agency";
-  const baseUrl = rawBaseUrl.replace(/\/+$/, "");
+  const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || siteConfig.url).replace(/\/+$/, "");
 
   const disallowedPaths = [
     "/studio",

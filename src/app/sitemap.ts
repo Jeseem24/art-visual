@@ -9,8 +9,7 @@ import { sanityFetch } from "@/sanity/lib/fetch";
  * Ensures resilient fallback to siteConfig.url if NEXT_PUBLIC_SITE_URL is not set.
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const rawBaseUrl = process.env.NEXT_PUBLIC_SITE_URL || siteConfig.url || "https://artvisual.agency";
-  const baseUrl = rawBaseUrl.replace(/\/+$/, "");
+  const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || siteConfig.url).replace(/\/+$/, "");
   const lastModified = new Date();
 
   // Static core routes with calibrated priority and changeFrequency
