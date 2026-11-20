@@ -25,7 +25,9 @@ export const PreviewAction: DocumentActionComponent = (props): DocumentActionDes
     title: "Open draft live preview in new tab",
     group: ["default", "paneActions"],
     onHandle: () => {
-      const slug = (draft?.slug as any)?.current || (published?.slug as any)?.current;
+      const draftSlug = (draft?.slug as { current?: string } | undefined)?.current;
+      const pubSlug = (published?.slug as { current?: string } | undefined)?.current;
+      const slug = draftSlug || pubSlug;
       let path = TYPE_PATH_MAP[type] || "/";
       if (type === "serviceItem" && slug) {
         path = `/services/${slug}`;

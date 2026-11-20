@@ -33,13 +33,79 @@ export const metadata: Metadata = {
   title: "About Us",
   description:
     "We plan, shoot and finish brand films, product videos, social content and event coverage. We turn stories into visual experiences.",
+  openGraph: {
+    title: "About Us | Art Visual",
+    description:
+      "We plan, shoot and finish brand films, product videos, social content and event coverage. We turn stories into visual experiences.",
+    url: "/about",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About Us | Art Visual",
+    description:
+      "We plan, shoot and finish brand films, product videos, social content and event coverage. We turn stories into visual experiences.",
+  },
 };
+
+interface VisionMissionCmsItem {
+  _key?: string;
+  title?: string;
+  description?: string;
+  variant?: "solidRed" | "outlined";
+}
+
+interface WhatWeDoCmsCard {
+  _key?: string;
+  title?: string;
+  description?: string;
+  icon?: string;
+}
+
+interface ProcessCmsStep {
+  _key?: string;
+  number?: number;
+  label?: string;
+  title?: string;
+  description?: string;
+}
+
+interface AboutPageCmsData {
+  [key: string]: unknown;
+  heroHeadlineLine1?: string;
+  heroHeadlineLine2Prefix?: string;
+  heroHeadlineLine2Highlight?: string;
+  heroSubtitle?: string;
+  whoWeAreBadge?: string;
+  whoWeAreHeadlineLine1?: string;
+  whoWeAreHeadlineLine2?: string;
+  whoWeAreStoryHighlight?: string;
+  whoWeAreStoryBody?: string;
+  whoWeAreParagraph1?: string;
+  whoWeAreParagraph2?: string;
+  whoWeAreParagraphs?: string[];
+  whoWeAreVideoSrc?: string;
+  whoWeAreImageSrc?: string;
+  whoWeAreVideoAlt?: string;
+  visionTitle?: string;
+  visionDescription?: string;
+  missionTitle?: string;
+  missionDescription?: string;
+  visionMissionItems?: VisionMissionCmsItem[];
+  whatWeDoBadge?: string;
+  whatWeDoHeadlineLine1?: string;
+  whatWeDoHeadlineLine2?: string;
+  whatWeDoCards?: WhatWeDoCmsCard[];
+  processBadge?: string;
+  processHeadlineLine1?: string;
+  processHeadlineLine2?: string;
+  processSteps?: ProcessCmsStep[];
+}
 
 export const revalidate = 10;
 
 export default async function AboutPage() {
   const [aboutData, featuredWorksData, testimonialsData] = await Promise.all([
-    sanityFetch<any>({
+    sanityFetch<AboutPageCmsData | null>({
       query: ABOUT_PAGE_QUERY,
       fallback: null,
       tags: ["aboutPage"],
@@ -107,10 +173,10 @@ export default async function AboutPage() {
         items:
           aboutData.visionMissionItems &&
           aboutData.visionMissionItems.length > 0
-            ? aboutData.visionMissionItems.map((item: any, idx: number) => ({
+            ? aboutData.visionMissionItems.map((item: VisionMissionCmsItem, idx: number) => ({
                 id: item._key || `vm-${idx}`,
-                title: item.title,
-                description: item.description,
+                title: item.title || "",
+                description: item.description || "",
                 variant: item.variant || (idx === 0 ? "solidRed" : "outlined"),
               }))
             : [
@@ -151,7 +217,7 @@ export default async function AboutPage() {
         },
         items:
           aboutData.whatWeDoCards && aboutData.whatWeDoCards.length > 0
-            ? aboutData.whatWeDoCards.map((card: any, idx: number) => {
+            ? aboutData.whatWeDoCards.map((card: WhatWeDoCmsCard, idx: number) => {
                 const fallback =
                   WHAT_WE_DO_DEFAULTS.items[idx] || WHAT_WE_DO_DEFAULTS.items[0];
                 return {
@@ -180,7 +246,7 @@ export default async function AboutPage() {
         },
         steps:
           aboutData.processSteps && aboutData.processSteps.length > 0
-            ? aboutData.processSteps.map((step: any, idx: number) => {
+            ? aboutData.processSteps.map((step: ProcessCmsStep, idx: number) => {
                 const fallback =
                   CREATIVE_PROCESS_DEFAULTS.steps[idx] ||
                   CREATIVE_PROCESS_DEFAULTS.steps[0];

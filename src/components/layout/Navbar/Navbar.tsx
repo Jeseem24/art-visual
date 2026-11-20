@@ -53,7 +53,7 @@ const TalkButtonPlayIcon = () => (
 
 export interface NavbarProps {
   /** Optional custom navigation items */
-  navItems?: typeof NAV_ITEMS;
+  navItems?: readonly { label: string; href: string }[];
   /** CTA button text */
   ctaLabel?: string;
   /** Custom vector icon element */

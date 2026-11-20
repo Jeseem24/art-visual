@@ -7,6 +7,7 @@ export interface WorkItem {
   title: string;
   slug: string;
   imageSrc: string;
+  videoSrc?: string;
   alt: string;
   href?: string;
   category?: string;

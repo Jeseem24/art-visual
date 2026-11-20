@@ -93,6 +93,7 @@ function formatWhatsAppQuoteMessage(
  */
 export function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
   const baseId = useId();
+  const modalRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
 
@@ -109,6 +110,32 @@ export function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         onClose();
+        return;
+      }
+
+      if (event.key === "Tab") {
+        const modalElement = modalRef.current;
+        if (!modalElement) return;
+
+        const focusableElements = modalElement.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusableElements.length === 0) return;
+
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        if (event.shiftKey) {
+          if (document.activeElement === firstElement) {
+            lastElement.focus();
+            event.preventDefault();
+          }
+        } else {
+          if (document.activeElement === lastElement) {
+            firstElement.focus();
+            event.preventDefault();
+          }
+        }
       }
     };
 
@@ -186,7 +213,7 @@ export function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
       aria-modal="true"
       aria-labelledby={headingId}
     >
-      <div className={styles.modalCard}>
+      <div ref={modalRef} className={styles.modalCard}>
         <button
           ref={closeButtonRef}
           type="button"
@@ -217,7 +244,7 @@ export function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
         <div className={styles.imageColumn}>
           <Image
             src="/images/contact/quote-modal-studio.png"
-            alt="SBSC Video Production Studio"
+            alt="Art Visual Video Production Studio"
             width={568}
             height={827}
             sizes="568px"

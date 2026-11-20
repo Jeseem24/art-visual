@@ -48,8 +48,35 @@ const geist = Geist({
   display: "swap",
 });
 
+interface SanitySiteSettings {
+  brandName?: string;
+  tagline?: string;
+  brandDescription?: string;
+  faviconUrl?: string;
+  logoUrl?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  location?: string;
+  whatsappNumber?: string;
+  socialInstagram?: string;
+  socialFacebook?: string;
+  socialTwitter?: string;
+  socialYoutube?: string;
+  copyright?: string;
+  quickLinks?: Array<{ label: string; href: string }>;
+  servicesList?: Array<{ label: string; href: string }>;
+  legalLinks?: Array<{ label: string; href: string }>;
+}
+
+interface SanityNavbarData {
+  navItems?: Array<{ label: string; href: string }>;
+  ctaLabel?: string;
+  ctaHref?: string;
+  whatsappDefaultMsg?: string;
+}
+
 export async function generateMetadata(): Promise<Metadata> {
-  const siteSettings = await sanityFetch<any>({
+  const siteSettings = await sanityFetch<SanitySiteSettings | null>({
     query: SITE_SETTINGS_QUERY,
     fallback: null,
     tags: ["siteSettings", "layout"],
@@ -68,6 +95,28 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     description,
     metadataBase: new URL(siteConfig.url),
+    openGraph: {
+      type: "website",
+      locale: "en_US",
+      url: siteConfig.url,
+      siteName: brandName,
+      title: `${brandName} | ${tagline}`,
+      description,
+      images: [
+        {
+          url: "/images/art-visual-logo.png",
+          width: 1200,
+          height: 630,
+          alt: brandName,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${brandName} | ${tagline}`,
+      description,
+      images: ["/images/art-visual-logo.png"],
+    },
     icons: {
       icon: [
         ...(faviconUrl ? [{ url: faviconUrl, sizes: "any" }] : []),
@@ -87,12 +136,12 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const [siteSettings, navbarData] = await Promise.all([
-    sanityFetch<any>({
+    sanityFetch<SanitySiteSettings | null>({
       query: SITE_SETTINGS_QUERY,
       fallback: null,
       tags: ["siteSettings", "layout"],
     }),
-    sanityFetch<any>({
+    sanityFetch<SanityNavbarData | null>({
       query: NAVBAR_QUERY,
       fallback: null,
       tags: ["navbarSettings", "layout"],
@@ -103,8 +152,8 @@ export default async function RootLayout({
     ? [
         {
           label: "Email Address",
-          value: siteSettings.contactEmail || "hello@sbsc.com",
-          href: `mailto:${siteSettings.contactEmail || "hello@sbsc.com"}`,
+          value: siteSettings.contactEmail || siteConfig.contact.email,
+          href: `mailto:${siteSettings.contactEmail || siteConfig.contact.email}`,
         },
         {
           label: "Phone Number",

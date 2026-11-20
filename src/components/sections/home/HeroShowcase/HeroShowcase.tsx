@@ -51,7 +51,7 @@ export const HeroShowcase = memo(function HeroShowcase({
       <div className={styles.cardsArea}>
         {cards.map((card, index) => {
           const slotClass = slotClassNames[index] ?? styles.cardSlot3;
-          const cardKey = card.id || (card as any)._key || `hero-card-${index}`;
+          const cardKey = card.id || (card as { _key?: string })._key || `hero-card-${index}`;
           return (
             <div
               key={cardKey}

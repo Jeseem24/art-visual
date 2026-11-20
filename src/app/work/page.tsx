@@ -5,7 +5,7 @@ import { WorkShowcaseSection } from "@/components/sections/work/WorkShowcaseSect
 import { CTABannerSection } from "@/components/sections/home/CTABannerSection";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { PORTFOLIO_WORKS_QUERY, WORK_PAGE_QUERY } from "@/sanity/lib/queries";
-import { WORK_PROJECTS, type WorkProjectItem } from "@/data/worksData";
+import { WORK_PROJECTS, type WorkProjectItem, type WorkCategory } from "@/data/worksData";
 import { WORK_HERO_DEFAULTS } from "@/components/sections/work/WorkHeroSection/constants";
 import styles from "./WorkPage.module.css";
 
@@ -13,18 +13,49 @@ export const metadata: Metadata = {
   title: "Our Work",
   description:
     "Explore our creative portfolio of brand films, commercials, product videos, and visual stories crafted with creativity and passion.",
+  openGraph: {
+    title: "Our Work | Art Visual",
+    description:
+      "Explore our creative portfolio of brand films, commercials, product videos, and visual stories crafted with creativity and passion.",
+    url: "/work",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Our Work | Art Visual",
+    description:
+      "Explore our creative portfolio of brand films, commercials, product videos, and visual stories crafted with creativity and passion.",
+  },
 };
+
+interface WorkPageCmsData {
+  heroHeadlineLine1?: string;
+  heroHeadlineLine2Prefix?: string;
+  heroHeadlineLine2Highlight?: string;
+  heroSubtitle?: string;
+  categories?: string[];
+}
+
+interface WorkProjectCmsItem {
+  id?: string;
+  projectName?: string;
+  title?: string;
+  category?: Exclude<WorkCategory, "All Projects">;
+  brandName?: string;
+  imageSrc?: string;
+  videoSrc?: string;
+  imageAlt?: string;
+}
 
 export const revalidate = 10;
 
 export default async function WorkPage() {
   const [pageData, rawProjects] = await Promise.all([
-    sanityFetch<any>({
+    sanityFetch<WorkPageCmsData | null>({
       query: WORK_PAGE_QUERY,
       fallback: null,
       tags: ["workPage"],
     }),
-    sanityFetch<readonly any[]>({
+    sanityFetch<readonly WorkProjectCmsItem[]>({
       query: PORTFOLIO_WORKS_QUERY,
       fallback: WORK_PROJECTS,
       tags: ["featuredWork", "workPage"],

@@ -89,8 +89,8 @@ export function OverlayScrollbar() {
       rafId = requestAnimationFrame(updateThumb);
     };
 
-    // Initial calculation
-    updateThumb();
+    // Initial calculation asynchronously to avoid synchronous effect setState warning
+    rafId = requestAnimationFrame(updateThumb);
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("resize", handleResize, { passive: true });

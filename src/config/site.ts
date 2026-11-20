@@ -12,7 +12,7 @@ export const siteConfig = {
 
   // Business contact details
   contact: {
-    email: "hello@sbsc.com",
+    email: "hello@artvisual.com",
     phone: "+91 98765 43210",
     phoneRaw: "+919876543210",
     location: "Chennai, India",

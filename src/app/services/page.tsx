@@ -18,18 +18,52 @@ export const metadata: Metadata = {
   title: "Services",
   description:
     "We bring ideas to life through creative video production, cinematic storytelling, and innovative visual solutions.",
+  openGraph: {
+    title: "Services | Art Visual",
+    description:
+      "We bring ideas to life through creative video production, cinematic storytelling, and innovative visual solutions.",
+    url: "/services",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Services | Art Visual",
+    description:
+      "We bring ideas to life through creative video production, cinematic storytelling, and innovative visual solutions.",
+  },
 };
+
+interface ServicesPageCmsData {
+  heroHeadlineLine1?: string;
+  heroHeadlineLine2Prefix?: string;
+  heroHeadlineLine2Highlight?: string;
+  heroSubtitle?: string;
+  catalogBadge?: string;
+  catalogTitleLine1?: string;
+  catalogTitleLine2?: string;
+}
+
+interface RawServiceCmsItem {
+  id?: string;
+  _id?: string;
+  title?: string;
+  description?: string;
+  videoSrc?: string;
+  posterSrc?: string;
+  href?: string;
+  slug?: string;
+  ctaLabel?: string;
+}
 
 export const revalidate = 10;
 
 export default async function ServicesPage() {
   const [pageData, rawServices] = await Promise.all([
-    sanityFetch<any>({
+    sanityFetch<ServicesPageCmsData | null>({
       query: SERVICES_PAGE_QUERY,
       fallback: null,
       tags: ["servicesPage"],
     }),
-    sanityFetch<any[]>({
+    sanityFetch<RawServiceCmsItem[]>({
       query: SERVICES_QUERY,
       fallback: SERVICES_CATALOG_ITEMS,
       tags: ["serviceItem", "servicesPage"],
@@ -71,7 +105,12 @@ export default async function ServicesPage() {
       <ServicesHeroSection data={heroData} />
 
       {/* 3x3 Creative Services Grid */}
-      <ServicesCatalogSection services={formattedServices} />
+      <ServicesCatalogSection
+        badgeText={pageData?.catalogBadge}
+        titleLine1={pageData?.catalogTitleLine1}
+        titleLine2={pageData?.catalogTitleLine2}
+        services={formattedServices}
+      />
 
       {/* Our Creative Process 3-Column Grid */}
       <ServicesProcessSection />

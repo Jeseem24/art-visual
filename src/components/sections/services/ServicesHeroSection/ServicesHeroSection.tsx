@@ -18,6 +18,9 @@ export const ServicesHeroSection = memo(function ServicesHeroSection({
 }: ServicesHeroSectionProps) {
   const headline = data?.headline ?? SERVICES_HERO_DEFAULTS.headline;
   const subtitle = data?.subtitle ?? SERVICES_HERO_DEFAULTS.subtitle;
+  const isDefaultHeadline =
+    headline.line1 === SERVICES_HERO_DEFAULTS.headline.line1 &&
+    headline.line2Prefix === SERVICES_HERO_DEFAULTS.headline.line2Prefix;
 
   return (
     <section
@@ -35,8 +38,14 @@ export const ServicesHeroSection = memo(function ServicesHeroSection({
               <>
                 <span className={styles.desktopOnly}>{headline.line1}</span>
                 <span className={styles.mobileOnly}>
-                  <span className={styles.mobileLine}>Creative Vision.</span>
-                  <span className={styles.mobileLine}>Powerful Visuals.</span>
+                  {isDefaultHeadline ? (
+                    <>
+                      <span className={styles.mobileLine}>Creative Vision.</span>
+                      <span className={styles.mobileLine}>Powerful Visuals.</span>
+                    </>
+                  ) : (
+                    <span className={styles.mobileLine}>{headline.line1}</span>
+                  )}
                 </span>
               </>
             ),
@@ -47,7 +56,9 @@ export const ServicesHeroSection = memo(function ServicesHeroSection({
                   <span className={styles.highlight}>{headline.line2Highlight}</span>
                 </span>
                 <span className={styles.mobileOnly}>
-                  <span className={styles.mobileLine}>Meaningful</span>
+                  <span className={styles.mobileLine}>
+                    {isDefaultHeadline ? "Meaningful" : headline.line2Prefix}
+                  </span>
                   <span className={`${styles.mobileLine} ${styles.highlight}`}>
                     {headline.line2Highlight}
                   </span>

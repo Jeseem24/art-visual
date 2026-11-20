@@ -22,6 +22,10 @@ export const CreativeProcessSection = memo(function CreativeProcessSection({
     ...data,
   };
 
+  const isDefaultHeadline =
+    content.headline.line1 === CREATIVE_PROCESS_DEFAULTS.headline.line1 &&
+    content.headline.line2 === CREATIVE_PROCESS_DEFAULTS.headline.line2;
+
   return (
     <section
       className={`${styles.section} ${className}`.trim()}
@@ -41,9 +45,18 @@ export const CreativeProcessSection = memo(function CreativeProcessSection({
                 <span className={styles.desktopLine}>{content.headline.line2}</span>
               </span>
               <span className={styles.mobileHeadline}>
-                <span className={styles.mobileLine}>From the First Idea to</span>
-                <span className={styles.mobileLine}>The Final Frame, We</span>
-                <span className={styles.mobileLine}>Make Every Step Count.</span>
+                {isDefaultHeadline ? (
+                  <>
+                    <span className={styles.mobileLine}>From the First Idea to</span>
+                    <span className={styles.mobileLine}>The Final Frame, We</span>
+                    <span className={styles.mobileLine}>Make Every Step Count.</span>
+                  </>
+                ) : (
+                  <>
+                    <span className={styles.mobileLine}>{content.headline.line1}</span>
+                    <span className={styles.mobileLine}>{content.headline.line2}</span>
+                  </>
+                )}
               </span>
             </>
           }

@@ -63,6 +63,8 @@ export const FeaturedWorksSection = memo(function FeaturedWorksSection({
                 key={`primary-${item.id}`}
                 title={item.title}
                 imageSrc={item.imageSrc}
+                videoSrc={item.videoSrc}
+                href={item.href}
                 alt={item.alt}
               />
             ))}
@@ -75,6 +77,8 @@ export const FeaturedWorksSection = memo(function FeaturedWorksSection({
                 key={`duplicate-${item.id}`}
                 title={item.title}
                 imageSrc={item.imageSrc}
+                videoSrc={item.videoSrc}
+                href={item.href}
                 alt={item.alt}
               />
             ))}

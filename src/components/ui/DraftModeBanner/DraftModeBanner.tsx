@@ -1,6 +1,5 @@
 import React from "react";
 import { draftMode } from "next/headers";
-import Link from "next/link";
 
 /**
  * DraftModeBanner

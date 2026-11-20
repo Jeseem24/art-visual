@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import {
   Card,
   Stack,
@@ -51,7 +52,44 @@ const TYPE_NAME_MAP: Record<string, string> = {
   faqItem: "FAQ Item",
 };
 
+interface HealthDocRecord {
+  _id: string;
+  _type: string;
+  _updatedAt?: string;
+  title?: string;
+  name?: string;
+  role?: string;
+  quote?: string;
+  question?: string;
+  answer?: string;
+  projectName?: string;
+  slug?: { current?: string };
+  category?: string;
+  brandName?: string;
+  description?: string;
+  heroHeadlineLine1Text?: string;
+  heroHeadlineLine1?: string;
+  heroHeadlineLine2Text?: string;
+  heroHeadlineLine2?: string;
+  heroSubtitle?: string;
+  headlineLine1?: string;
+  buttonLabel?: string;
+  buttonHref?: string;
+  navItems?: Array<{ label?: string; href?: string }>;
+  ctaLabel?: string;
+  ctaHref?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  brandDescription?: string;
+  logo?: unknown;
+  favicon?: unknown;
+  aboutVideoFile?: unknown;
+  video?: unknown;
+  orderRank?: string;
+}
+
 export function ContentHealthChecker() {
+  const router = useRouter();
   const client = useClient({ apiVersion: "2026-03-01" });
   const [loading, setLoading] = useState(true);
   const [issues, setIssues] = useState<HealthIssue[]>([]);
@@ -60,11 +98,9 @@ export function ContentHealthChecker() {
   const [searchQuery, setSearchQuery] = useState("");
   const [lastScanned, setLastScanned] = useState<Date | null>(null);
 
-  const runAudit = useCallback(async () => {
-    setLoading(true);
-    try {
-      // Query documents matching actual Sanity schema field names
-      const docs = await client.fetch<any[]>(`
+  const runAudit = useCallback(() => {
+    return client
+      .fetch<HealthDocRecord[]>(`
         *[_type in [
           "homePage", "aboutPage", "servicesPage", "serviceItem",
           "workPage", "featuredWork", "contactPage", "siteSettings",
@@ -75,13 +111,26 @@ export function ContentHealthChecker() {
           _updatedAt,
           title,
           name,
+          role,
+          quote,
+          question,
+          answer,
           projectName,
           slug,
           category,
           brandName,
           description,
           heroHeadlineLine1Text,
+          heroHeadlineLine1,
+          heroHeadlineLine2Text,
+          heroHeadlineLine2,
           heroSubtitle,
+          headlineLine1,
+          buttonLabel,
+          buttonHref,
+          navItems,
+          ctaLabel,
+          ctaHref,
           contactEmail,
           contactPhone,
           brandDescription,
@@ -91,16 +140,16 @@ export function ContentHealthChecker() {
           video,
           orderRank
         }
-      `);
+      `)
+      .then((docs) => {
+        setDocumentsScanned(docs.length);
 
-      setDocumentsScanned(docs.length);
+        const foundIssues: HealthIssue[] = [];
+        const slugMap = new Map<string, string[]>();
 
-      const foundIssues: HealthIssue[] = [];
-      const slugMap = new Map<string, string[]>();
-
-      docs.forEach((doc) => {
+        docs.forEach((doc) => {
         const typeLabel = TYPE_NAME_MAP[doc._type] || doc._type;
-        const docTitle = doc.projectName || doc.title || doc.name || typeLabel;
+        const docTitle = doc.projectName || doc.title || doc.name || doc.question || typeLabel;
         const cleanId = doc._id.replace("drafts.", "");
 
         // 1. Slug Validation & Duplication Check
@@ -119,17 +168,18 @@ export function ContentHealthChecker() {
               recommendation: "Open document and click 'Generate' to create a clean URL slug.",
             });
           } else {
-            if (/\s/.test(slugVal)) {
+            const isValidSlug = /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slugVal);
+            if (!isValidSlug) {
               foundIssues.push({
-                id: `${cleanId}-slug-whitespace`,
+                id: `${cleanId}-invalid-slug`,
                 documentId: cleanId,
                 documentType: doc._type,
                 documentTitle: docTitle,
                 field: "slug",
                 severity: "error",
                 category: "Slugs & Links",
-                message: `Slug contains whitespace: "${slugVal}".`,
-                recommendation: "Replace spaces with hyphens in the slug.",
+                message: `Slug "${slugVal}" is invalid. Must consist of lowercase alphanumeric characters and single hyphens.`,
+                recommendation: "Update the slug to contain only lowercase letters, numbers, and hyphens (e.g. brand-films).",
               });
             }
 
@@ -197,7 +247,6 @@ export function ContentHealthChecker() {
               recommendation: "Provide a clear service name.",
             });
           }
-          // Note: In Sanity, service description is under "description"
           if (!doc.description) {
             foundIssues.push({
               id: `${cleanId}-missing-desc`,
@@ -209,6 +258,173 @@ export function ContentHealthChecker() {
               category: "Required Content",
               message: `Description missing on service "${docTitle}".`,
               recommendation: "Provide an overview description for this service.",
+            });
+          }
+        }
+
+        if (doc._type === "homePage") {
+          if (!doc.heroHeadlineLine1Text) {
+            foundIssues.push({
+              id: `${cleanId}-missing-heroHeadline`,
+              documentId: cleanId,
+              documentType: doc._type,
+              documentTitle: docTitle,
+              field: "heroHeadlineLine1Text",
+              severity: "error",
+              category: "Required Content",
+              message: "Homepage hero headline is missing.",
+              recommendation: "Configure hero headline line 1 text.",
+            });
+          }
+        }
+
+        if (doc._type === "aboutPage") {
+          if (!doc.heroHeadlineLine1) {
+            foundIssues.push({
+              id: `${cleanId}-missing-aboutHero`,
+              documentId: cleanId,
+              documentType: doc._type,
+              documentTitle: docTitle,
+              field: "heroHeadlineLine1",
+              severity: "error",
+              category: "Required Content",
+              message: "About page hero headline is missing.",
+              recommendation: "Configure About page hero headline line 1.",
+            });
+          }
+        }
+
+        if (doc._type === "servicesPage") {
+          if (!doc.heroHeadlineLine1) {
+            foundIssues.push({
+              id: `${cleanId}-missing-servicesHero`,
+              documentId: cleanId,
+              documentType: doc._type,
+              documentTitle: docTitle,
+              field: "heroHeadlineLine1",
+              severity: "error",
+              category: "Required Content",
+              message: "Services page hero headline is missing.",
+              recommendation: "Configure Services page hero headline line 1.",
+            });
+          }
+        }
+
+        if (doc._type === "workPage") {
+          if (!doc.heroHeadlineLine1) {
+            foundIssues.push({
+              id: `${cleanId}-missing-workHero`,
+              documentId: cleanId,
+              documentType: doc._type,
+              documentTitle: docTitle,
+              field: "heroHeadlineLine1",
+              severity: "error",
+              category: "Required Content",
+              message: "Work portfolio page hero headline is missing.",
+              recommendation: "Configure Work page hero headline line 1.",
+            });
+          }
+        }
+
+        if (doc._type === "ctaBanner") {
+          if (!doc.headlineLine1) {
+            foundIssues.push({
+              id: `${cleanId}-missing-ctaHeadline`,
+              documentId: cleanId,
+              documentType: doc._type,
+              documentTitle: docTitle,
+              field: "headlineLine1",
+              severity: "error",
+              category: "Required Content",
+              message: "CTA banner main headline is missing.",
+              recommendation: "Provide headline line 1 for the global CTA banner.",
+            });
+          }
+          if (!doc.buttonLabel) {
+            foundIssues.push({
+              id: `${cleanId}-missing-ctaButton`,
+              documentId: cleanId,
+              documentType: doc._type,
+              documentTitle: docTitle,
+              field: "buttonLabel",
+              severity: "warning",
+              category: "Required Content",
+              message: "CTA banner action button label is missing.",
+              recommendation: "Set CTA action button label (e.g. 'Let's Talk').",
+            });
+          }
+        }
+
+        if (doc._type === "navbarSettings") {
+          if (!doc.navItems || doc.navItems.length === 0) {
+            foundIssues.push({
+              id: `${cleanId}-missing-navItems`,
+              documentId: cleanId,
+              documentType: doc._type,
+              documentTitle: docTitle,
+              field: "navItems",
+              severity: "warning",
+              category: "Required Content",
+              message: "Navigation header has no menu links defined.",
+              recommendation: "Add primary navigation links (Home, About, Services, Work, Contact).",
+            });
+          }
+        }
+
+        if (doc._type === "testimonial") {
+          if (!doc.name) {
+            foundIssues.push({
+              id: `${cleanId}-missing-clientName`,
+              documentId: cleanId,
+              documentType: doc._type,
+              documentTitle: docTitle,
+              field: "name",
+              severity: "error",
+              category: "Required Content",
+              message: "Testimonial is missing a client name.",
+              recommendation: "Enter the client or reviewer's name.",
+            });
+          }
+          if (!doc.quote) {
+            foundIssues.push({
+              id: `${cleanId}-missing-quote`,
+              documentId: cleanId,
+              documentType: doc._type,
+              documentTitle: docTitle,
+              field: "quote",
+              severity: "error",
+              category: "Required Content",
+              message: `Testimonial quote missing for "${docTitle}".`,
+              recommendation: "Provide the client's testimonial text.",
+            });
+          }
+        }
+
+        if (doc._type === "faqItem") {
+          if (!doc.question) {
+            foundIssues.push({
+              id: `${cleanId}-missing-question`,
+              documentId: cleanId,
+              documentType: doc._type,
+              documentTitle: docTitle,
+              field: "question",
+              severity: "error",
+              category: "Required Content",
+              message: "FAQ item is missing a question.",
+              recommendation: "Enter a common client inquiry question.",
+            });
+          }
+          if (!doc.answer) {
+            foundIssues.push({
+              id: `${cleanId}-missing-answer`,
+              documentId: cleanId,
+              documentType: doc._type,
+              documentTitle: docTitle,
+              field: "answer",
+              severity: "error",
+              category: "Required Content",
+              message: `FAQ answer missing for "${docTitle}".`,
+              recommendation: "Provide a reassuring, direct answer for this FAQ item.",
             });
           }
         }
@@ -260,17 +476,24 @@ export function ContentHealthChecker() {
         }
       });
 
-      setIssues(foundIssues);
-      setLastScanned(new Date());
-    } catch (err) {
-      console.error("[ContentHealthChecker] Audit failed:", err);
-    } finally {
-      setLoading(false);
-    }
+        setIssues(foundIssues);
+        setLastScanned(new Date());
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("[ContentHealthChecker] Audit failed:", err);
+        setLoading(false);
+      });
   }, [client]);
 
   useEffect(() => {
-    runAudit();
+    let isCancelled = false;
+    void runAudit().then(() => {
+      if (isCancelled) return;
+    });
+    return () => {
+      isCancelled = true;
+    };
   }, [runAudit]);
 
   const counts = useMemo(() => {
@@ -278,8 +501,10 @@ export function ContentHealthChecker() {
     const warning = issues.filter((i) => i.severity === "warning").length;
     const total = issues.length;
     const healthScore = total === 0 ? 100 : Math.max(0, Math.round(100 - (error * 20 + warning * 5)));
-    return { error, warning, total, healthScore };
-  }, [issues]);
+    const uniqueErrorDocIds = new Set(issues.filter((i) => i.severity === "error").map((i) => i.documentId));
+    const productionReadyDocs = Math.max(0, documentsScanned - uniqueErrorDocIds.size);
+    return { error, warning, total, healthScore, productionReadyDocs };
+  }, [issues, documentsScanned]);
 
   const filteredIssues = useMemo(() => {
     return issues.filter((issue) => {
@@ -301,10 +526,8 @@ export function ContentHealthChecker() {
 
   // Universal Sanity Studio navigation using intent router (no blank screens)
   const handleOpenDoc = (issue: HealthIssue) => {
-    if (typeof window !== "undefined") {
-      const cleanId = issue.documentId.replace("drafts.", "");
-      window.location.href = `/studio/intent/edit/id=${cleanId};type=${issue.documentType}/`;
-    }
+    const cleanId = issue.documentId.replace("drafts.", "");
+    router.push(`/studio/intent/edit/id=${cleanId};type=${issue.documentType}/`);
   };
 
   return (
@@ -333,7 +556,10 @@ export function ContentHealthChecker() {
               text={loading ? "Scanning..." : "Re-Scan Website"}
               tone="primary"
               disabled={loading}
-              onClick={runAudit}
+              onClick={() => {
+                setLoading(true);
+                void runAudit();
+              }}
             />
           </Flex>
         </Flex>
@@ -379,7 +605,7 @@ export function ContentHealthChecker() {
                 <CheckCircle2 size={16} color="#22c55e" />
               </Flex>
               <Heading size={3} style={{ color: "#22c55e" }}>
-                {Math.max(0, documentsScanned - counts.error)}
+                {counts.productionReadyDocs}
               </Heading>
               <Text size={0} muted>Verified documents</Text>
             </Stack>

@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useClient } from "sanity";
-import { Card, Flex, Box, Text, Badge, Stack, Spinner, Button } from "@sanity/ui";
+import { Card, Flex, Box, Text, Badge, Stack, Spinner } from "@sanity/ui";
 import { Layers, CheckCircle2, AlertTriangle, ExternalLink, HardDrive } from "lucide-react";
 
 const CLIENT_CONFIG = { apiVersion: "2024-01-01" };
@@ -30,19 +31,20 @@ interface ReferencingDoc {
   projectName?: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function AssetUsageDetails(props: any) {
   const { currentAsset, renderDefaultDetails } = props;
+  const router = useRouter();
   const client = useClient(CLIENT_CONFIG);
   const [references, setReferences] = useState<ReferencingDoc[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(Boolean(currentAsset?._id));
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let isMounted = true;
-    if (!currentAsset?._id) return;
-
-    setLoading(true);
-    setError(null);
+    if (!currentAsset?._id) {
+      return;
+    }
 
     // Query for any document that references this asset id
     const assetId = currentAsset._id;
@@ -60,16 +62,14 @@ export function AssetUsageDetails(props: any) {
       .then((docs) => {
         if (isMounted) {
           setReferences(docs || []);
+          setError(null);
+          setLoading(false);
         }
       })
       .catch((err) => {
         if (isMounted) {
           console.error("[AssetUsageDetails] Error checking asset references:", err);
           setError("Could not load asset usage tracking.");
-        }
-      })
-      .finally(() => {
-        if (isMounted) {
           setLoading(false);
         }
       });
@@ -91,7 +91,7 @@ export function AssetUsageDetails(props: any) {
   return (
     <Stack gap={4}>
       {/* Sanity Media Default Details Form (Tags, Alt, Title) */}
-      {renderDefaultDetails(props)}
+      {typeof renderDefaultDetails === "function" ? renderDefaultDetails(props) : null}
 
       {/* Asset Usage & Safety Tracking Inspector */}
       <Card padding={3} radius={2} border tone="inherit">
@@ -158,7 +158,7 @@ export function AssetUsageDetails(props: any) {
                       tone="transparent"
                       style={{ cursor: "pointer" }}
                       onClick={() => {
-                        window.location.href = `/studio/structure/${doc._type};${cleanId}`;
+                        router.push(`/studio/intent/edit/id=${cleanId};type=${doc._type}/`);
                       }}
                     >
                       <Flex justify="space-between" align="center">

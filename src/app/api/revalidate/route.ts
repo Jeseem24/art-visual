@@ -121,6 +121,7 @@ export async function POST(req: NextRequest) {
 
     const docType = body._type;
     const target = TYPE_TARGET_MAP[docType];
+    const slug = typeof body.slug === "string" ? body.slug : body.slug?.current;
 
     const purgedTags: string[] = [];
     const purgedPaths: string[] = [];
@@ -137,6 +138,18 @@ export async function POST(req: NextRequest) {
         revalidatePath(path, type);
         purgedPaths.push(type ? `${path} (${type})` : path);
       }
+
+      // 3. Purge dynamic slug-specific paths and tags if present
+      if (slug) {
+        revalidateTag(slug, "max");
+        purgedTags.push(slug);
+
+        if (docType === "serviceItem") {
+          const servicePath = `/services/${slug}`;
+          revalidatePath(servicePath, "page");
+          purgedPaths.push(`${servicePath} (page)`);
+        }
+      }
     } else {
       // Fallback: Unknown document type purges global layout to ensure consistency
       revalidatePath("/", "layout");
@@ -151,10 +164,11 @@ export async function POST(req: NextRequest) {
       purgedPaths,
       now: Date.now(),
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : "Unknown error";
     console.error("[Revalidate API] Error processing revalidation webhook:", err);
     return NextResponse.json(
-      { message: "Internal server error.", error: err?.message },
+      { message: "Internal server error.", error: errorMessage },
       { status: 500 }
     );
   }

@@ -137,7 +137,14 @@ export async function restoreSnapshot(options: {
   const restoredKeys = new Set(Object.keys(restoredContent));
   const keysToUnset = currentCleanKeys.filter((k) => !restoredKeys.has(k));
 
-  // 5. Apply restore patch atomically to the draft
+  // 5. Ensure draft document exists before patching
+  await client.createIfNotExists({
+    _id: draftId,
+    _type: documentType,
+    ...(currentDoc ? extractCleanContent(currentDoc) : {}),
+  });
+
+  // 6. Apply restore patch atomically to the draft
   const patch = client.patch(draftId).set(restoredContent);
   if (keysToUnset.length > 0) {
     patch.unset(keysToUnset);

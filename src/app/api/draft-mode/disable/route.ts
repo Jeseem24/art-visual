@@ -15,12 +15,9 @@ export async function GET(req: NextRequest) {
   const redirectUrl = (rawRedirect.startsWith("/") && !rawRedirect.startsWith("//") && !rawRedirect.startsWith("/\\"))
     ? rawRedirect
     : "/";
-  const host = req.headers.get("x-forwarded-host") || req.headers.get("host") || "localhost:3000";
-  const proto = req.headers.get("x-forwarded-proto") || (host.startsWith("localhost") ? "http" : "https");
-  const cleanHost = host.replace("0.0.0.0", "localhost");
-  const target = `${proto}://${cleanHost}${redirectUrl}`;
+  const origin = req.nextUrl.origin.replace("0.0.0.0", "localhost");
 
-  const response = NextResponse.redirect(new URL(target));
+  const response = NextResponse.redirect(new URL(redirectUrl, origin));
   
   // Explicitly clear both draft cookies across entire domain
   response.cookies.set("__prerender_bypass", "", { path: "/", maxAge: 0 });

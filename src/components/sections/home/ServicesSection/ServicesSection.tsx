@@ -47,7 +47,6 @@ export const ServicesSection = memo(function ServicesSection({
               title={service.title}
               description={service.description}
               videoSrc={service.videoSrc}
-              posterSrc={service.posterSrc}
               href={service.href}
               ctaLabel={service.ctaLabel}
             />

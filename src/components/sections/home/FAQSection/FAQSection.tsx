@@ -21,7 +21,6 @@ export interface FAQSectionProps {
 export const FAQSection = memo(function FAQSection({
   data = FAQ_DEFAULTS,
   className = "",
-  allowMultiple = false,
 }: FAQSectionProps) {
   const content = { ...FAQ_DEFAULTS, ...data };
   const [openId, setOpenId] = useState<string | null>(null);

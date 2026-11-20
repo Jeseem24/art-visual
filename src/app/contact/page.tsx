@@ -14,12 +14,40 @@ export const metadata: Metadata = {
   title: "Contact Us",
   description:
     "Have a creative idea or a project in mind? Let's connect and bring your vision to life through powerful visual storytelling.",
+  openGraph: {
+    title: "Contact Us | Art Visual",
+    description:
+      "Have a creative idea or a project in mind? Let's connect and bring your vision to life through powerful visual storytelling.",
+    url: "/contact",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Contact Us | Art Visual",
+    description:
+      "Have a creative idea or a project in mind? Let's connect and bring your vision to life through powerful visual storytelling.",
+  },
 };
+
+interface ContactPageCmsData {
+  heroHeadlineLine1Prefix?: string;
+  heroHeadlineLine1Highlight?: string;
+  heroHeadlineLine2?: string;
+  heroSubtitle?: string;
+  inquiryBadge?: string;
+  inquiryHeadline?: string;
+  formTitle?: string;
+  submitButtonLabel?: string;
+  studioImageSrc?: string;
+  serviceOptions?: Array<{ value: string; label: string }>;
+  contactEmail?: string;
+  contactPhone?: string;
+  contactLocation?: string;
+}
 
 export const revalidate = 10;
 
 export default async function ContactPage() {
-  const contactData = await sanityFetch<any>({
+  const contactData = await sanityFetch<ContactPageCmsData | null>({
     query: CONTACT_PAGE_QUERY,
     fallback: null,
     tags: ["contactPage"],

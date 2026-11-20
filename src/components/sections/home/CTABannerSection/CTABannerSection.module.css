@@ -1,6 +1,6 @@
 :root {
   /* Banner Spacing Controls */
-  --cta-section-padding-top: px;
+  --cta-section-padding-top: 100px;
   --cta-section-padding-bottom: 210px;
   --cta-banner-padding-left: clamp(58px, 3.02vw, 58px);
   --cta-banner-padding-top: clamp(76px, 3.96vw, 76px);
@@ -26,7 +26,7 @@
   width: 100%;
   padding-top: clamp(48px, calc(var(--cta-section-padding-top, 100px) * 0.7), var(--cta-section-padding-top, 100px));
   padding-bottom: clamp(64px, calc(var(--cta-section-padding-bottom, 140px) * 0.7), var(--cta-section-padding-bottom, 140px));
-  padding-left: 16; 
+  padding-left: 16px; 
   background-color: var(--color-bg-page, #ffffff);
   overflow-x: clip;
 }
@@ -184,7 +184,7 @@
   margin-top: var(--cta-desc-margin-top, 45px);
   max-width: 880px;
   letter-spacing: -0.01em;
-  margin-bottom: 16;
+  margin-bottom: 16px;
 }
 
 .highlight {

@@ -18,6 +18,9 @@ export const AboutHeroSection = memo(function AboutHeroSection({
 }: AboutHeroSectionProps) {
   const headline = data?.headline ?? ABOUT_HERO_DEFAULTS.headline;
   const subtitle = data?.subtitle ?? ABOUT_HERO_DEFAULTS.subtitle;
+  const isDefaultHeadline =
+    headline.line1 === ABOUT_HERO_DEFAULTS.headline.line1 &&
+    headline.line2Prefix === ABOUT_HERO_DEFAULTS.headline.line2Prefix;
 
   return (
     <section className={`${styles.hero} ${className}`.trim()} aria-label="About Hero">
@@ -32,7 +35,7 @@ export const AboutHeroSection = memo(function AboutHeroSection({
                   {headline.line1}
                 </span>
                 <span className={styles.mobileLine}>
-                  We Turn Stories
+                  {isDefaultHeadline ? "We Turn Stories" : headline.line1}
                 </span>
               </>
             ),
@@ -43,7 +46,9 @@ export const AboutHeroSection = memo(function AboutHeroSection({
                   <span className={styles.highlight}>{headline.line2Highlight}</span>
                 </span>
                 <span className={styles.mobileOnly}>
-                  <span className={styles.mobileLine}>Into Visual</span>
+                  <span className={styles.mobileLine}>
+                    {isDefaultHeadline ? "Into Visual" : headline.line2Prefix}
+                  </span>
                   <span className={`${styles.mobileLine} ${styles.highlight}`}>
                     {headline.line2Highlight}
                   </span>

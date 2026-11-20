@@ -24,6 +24,10 @@ import {
   HERO_DEFAULTS,
 } from "@/components/sections/home/HeroSection/constants";
 import {
+  HERO_SHOWCASE_CARDS,
+  type ShowcaseCardItem,
+} from "@/components/sections/home/HeroShowcase/constants";
+import {
   ABOUT_SECTION_DEFAULTS,
 } from "@/components/sections/home/AboutSection/constants";
 import {
@@ -49,12 +53,75 @@ import {
 } from "@/components/sections/home/FAQSection/constants";
 import styles from "./HomePage.module.css";
 
+interface SanitySiteSettings {
+  [key: string]: unknown;
+  brandName?: string;
+  tagline?: string;
+  brandDescription?: string;
+  faviconUrl?: string;
+  logoUrl?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  location?: string;
+  whatsappNumber?: string;
+}
+
+interface HomePageCmsData {
+  [key: string]: unknown;
+  heroLocationPill?: string;
+  heroHeadlineLine1Text?: string;
+  heroHeadlineLine1Highlight?: string;
+  heroHeadlineLine2Text?: string;
+  heroSubtitle?: string;
+  heroCtaLabel?: string;
+  heroCtaHref?: string;
+  heroShowcaseCards?: Array<{ id?: string; title?: string; description?: string; image?: string; videoSrc?: string; _key?: string }>;
+  aboutBadge?: string;
+  aboutTitleLine1?: string;
+  aboutTitleLine2?: string;
+  aboutStoryHighlight?: string;
+  aboutStoryBody?: string;
+  aboutParagraph1?: string;
+  aboutParagraph2?: string;
+  aboutVideoSrc?: string;
+  aboutVideoAlt?: string;
+  aboutRibbonItems?: Array<string | { id?: string; title?: string; text?: string }>;
+  aboutCtaLabel?: string;
+  aboutCtaHref?: string;
+  whyChooseUsBadge?: string;
+  whyChooseUsHeadlineLine1?: string;
+  whyChooseUsHeadlineLine2?: string;
+  whyChooseUsCards?: Array<{ _key?: string; number?: string; title?: string; description?: string }>;
+  servicesBadge?: string;
+  servicesTitleLine1?: string;
+  servicesTitleLine2?: string;
+  worksBadge?: string;
+  worksHeadline?: string;
+  testimonialsBadge?: string;
+  testimonialsHeadlineLine1?: string;
+  testimonialsHeadlineLine2?: string;
+  faqBadge?: string;
+  faqHeadline?: string;
+}
+
+interface CtaBannerCmsData {
+  badgeText?: string;
+  headlineLine1?: string;
+  headlineLine2?: string;
+  descriptionHighlight?: string;
+  descriptionBody?: string;
+  buttonLabel?: string;
+  buttonHref?: string;
+  reelStrip1Urls?: string[];
+  reelStrip2Urls?: string[];
+}
+
 /**
  * Dynamic SEO metadata for the home page.
  * Synchronizes with Sanity Site Settings (Brand Name, Tagline, Bio Description).
  */
 export async function generateMetadata(): Promise<Metadata> {
-  const siteSettings = await sanityFetch<any>({
+  const siteSettings = await sanityFetch<SanitySiteSettings | null>({
     query: SITE_SETTINGS_QUERY,
     fallback: null,
     tags: ["siteSettings", "homePage"],
@@ -99,12 +166,12 @@ export default async function HomePage() {
     faqsData,
     ctaBannerDataRaw,
   ] = await Promise.all([
-    sanityFetch<any>({
+    sanityFetch<HomePageCmsData | null>({
       query: HOME_PAGE_QUERY,
       fallback: null,
       tags: ["homePage"],
     }),
-    sanityFetch<any[]>({
+    sanityFetch<ServiceItem[]>({
       query: SERVICES_QUERY,
       fallback: SERVICES_ITEMS,
       tags: ["serviceItem", "homePage"],
@@ -124,7 +191,7 @@ export default async function HomePage() {
       fallback: FAQ_DEFAULTS.items,
       tags: ["faqItem", "homePage"],
     }),
-    sanityFetch<any>({
+    sanityFetch<CtaBannerCmsData | null>({
       query: CTA_BANNER_QUERY,
       fallback: null,
       tags: ["ctaBanner", "homePage"],
@@ -183,6 +250,10 @@ export default async function HomePage() {
           items:
             homeData.aboutRibbonItems && homeData.aboutRibbonItems.length > 0
               ? homeData.aboutRibbonItems
+                  .map((item) =>
+                    typeof item === "string" ? item : item.text || item.title || ""
+                  )
+                  .filter(Boolean)
               : ABOUT_SECTION_DEFAULTS.ribbon.items,
         },
         cta: {
@@ -209,11 +280,11 @@ export default async function HomePage() {
         },
         items:
           homeData.whyChooseUsCards && homeData.whyChooseUsCards.length > 0
-            ? homeData.whyChooseUsCards.map((card: any, idx: number) => ({
+            ? homeData.whyChooseUsCards.map((card: { _key?: string; number?: string; title?: string; description?: string }, idx: number) => ({
                 id: card._key || `why-${idx}`,
                 number: card.number || `0${idx + 1}`,
-                title: card.title,
-                description: card.description,
+                title: card.title || "",
+                description: card.description || "",
               }))
             : WHY_CHOOSE_US_DEFAULTS.items,
       }
@@ -222,12 +293,16 @@ export default async function HomePage() {
   const formattedServices: ServiceItem[] = servicesData.map((item, index) => {
     const fallback = SERVICES_ITEMS[index] || SERVICES_ITEMS[0];
     return {
-      id: item.id || item._id || fallback.id,
+      id: item.id || (item as unknown as { _id?: string })._id || fallback.id,
       title: item.title || fallback.title,
       description: item.description || fallback.description,
       videoSrc: item.videoSrc || fallback.videoSrc,
       posterSrc: item.posterSrc || fallback.posterSrc,
-      href: item.href || (item.slug ? `/services/${item.slug}` : fallback.href),
+      href:
+        item.href ||
+        ((item as unknown as { slug?: string }).slug
+          ? `/services/${(item as unknown as { slug?: string }).slug}`
+          : fallback.href),
       ctaLabel: item.ctaLabel || fallback.ctaLabel || "View service",
     };
   });
@@ -239,9 +314,10 @@ export default async function HomePage() {
       title: item.title || fallback.title,
       slug: item.slug || fallback.slug,
       imageSrc: item.imageSrc || fallback.imageSrc,
+      videoSrc: item.videoSrc,
       alt: item.title || fallback.alt,
       category: item.category || fallback.category,
-      href: item.slug ? `/work/${item.slug}` : fallback.href,
+      href: item.slug ? `/work` : (item.href || fallback.href),
     };
   });
 
@@ -260,6 +336,22 @@ export default async function HomePage() {
     }
   );
 
+  const formattedShowcaseCards: readonly ShowcaseCardItem[] | undefined =
+    homeData?.heroShowcaseCards && homeData.heroShowcaseCards.length > 0
+      ? homeData.heroShowcaseCards.map((card, idx) => {
+          const fallback =
+            HERO_SHOWCASE_CARDS[idx] || HERO_SHOWCASE_CARDS[0];
+          return {
+            id: card.id || card._key || fallback.id,
+            title: card.title || fallback.title,
+            description: card.description || fallback.description,
+            image: card.image || fallback.image,
+            videoSrc: card.videoSrc || fallback.videoSrc,
+            rotationDeg: fallback.rotationDeg,
+          };
+        })
+      : undefined;
+
   return (
     <div className={styles.homePage}>
       {/* Hero Section */}
@@ -268,7 +360,7 @@ export default async function HomePage() {
         headline={heroHeadline}
         subtitle={heroSubtitle}
         cta={heroCta}
-        showcaseCards={homeData?.heroShowcaseCards}
+        showcaseCards={formattedShowcaseCards}
       />
 
       {/* Services Overview */}

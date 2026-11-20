@@ -10,8 +10,6 @@ export interface ServiceCardProps {
   description: string;
   /** Video source path */
   videoSrc?: string;
-  /** Poster image path for preview */
-  posterSrc?: string;
   /** Image source path fallback */
   imageSrc?: string;
   /** Image alt text */
@@ -56,7 +54,6 @@ export const ServiceCard = memo(function ServiceCard({
   title,
   description,
   videoSrc,
-  posterSrc,
   imageSrc,
   imageAlt = title,
   href = "/services",
@@ -85,6 +82,7 @@ export const ServiceCard = memo(function ServiceCard({
               playsInline
               preload="metadata"
               className={styles.mediaVideo}
+              aria-label={title}
             />
           ) : imageSrc ? (
             <Image

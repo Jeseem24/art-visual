@@ -21,22 +21,26 @@ export function VersionHistoryInspector(props: DocumentInspectorProps) {
   const [confirmSnapshot, setConfirmSnapshot] = useState<VersionSnapshotItem | null>(null);
   const [inspectedSnapshot, setInspectedSnapshot] = useState<VersionSnapshotItem | null>(null);
 
-  const loadData = useCallback(async () => {
-    try {
-      setError(null);
-      const data = await fetchSnapshots(client, cleanId);
-      setSnapshots(data);
-    } catch (err: any) {
-      console.error("[VersionHistoryInspector] Fetch error:", err);
-      setError(err?.message || "Failed to load version snapshots.");
-    } finally {
-      setLoading(false);
-    }
+  const loadData = useCallback(() => {
+    return fetchSnapshots(client, cleanId)
+      .then((data) => {
+        setSnapshots(data);
+        setError(null);
+        setLoading(false);
+      })
+      .catch((err: unknown) => {
+        console.error("[VersionHistoryInspector] Fetch error:", err);
+        const message = err instanceof Error ? err.message : "Failed to load version snapshots.";
+        setError(message);
+        setLoading(false);
+      });
   }, [client, cleanId]);
 
   useEffect(() => {
     let isCancelled = false;
-    loadData();
+    void loadData().then(() => {
+      if (isCancelled) return;
+    });
 
     // Listen to real-time additions of versionSnapshot documents for this document
     const subscription = client
@@ -47,7 +51,7 @@ export function VersionHistoryInspector(props: DocumentInspectorProps) {
       )
       .subscribe(() => {
         if (!isCancelled) {
-          loadData();
+          void loadData();
         }
       });
 
@@ -70,9 +74,10 @@ export function VersionHistoryInspector(props: DocumentInspectorProps) {
 
       setConfirmSnapshot(null);
       await loadData();
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("[VersionHistoryInspector] Restore error:", err);
-      setError(err?.message || "Failed to restore version snapshot.");
+      const message = err instanceof Error ? err.message : "Failed to restore version snapshot.";
+      setError(message);
     } finally {
       setRestoringId(null);
     }

@@ -18,6 +18,9 @@ export const WorkHeroSection = memo(function WorkHeroSection({
 }: WorkHeroSectionProps) {
   const headline = data?.headline ?? WORK_HERO_DEFAULTS.headline;
   const subtitle = data?.subtitle ?? WORK_HERO_DEFAULTS.subtitle;
+  const isDefaultHeadline =
+    headline.line1 === WORK_HERO_DEFAULTS.headline.line1 &&
+    headline.line2Highlight === WORK_HERO_DEFAULTS.headline.line2Highlight;
 
   return (
     <section
@@ -41,11 +44,23 @@ export const WorkHeroSection = memo(function WorkHeroSection({
                   </span>
                 </span>
                 <span className={styles.mobileHeadline}>
-                  <span className={styles.mobileLine}>Bringing Stories</span>
-                  <span className={styles.mobileLine}>to Life Through</span>
-                  <span className={styles.mobileLine}>
-                    <span className={styles.highlight}>Our Work.</span>
-                  </span>
+                  {isDefaultHeadline ? (
+                    <>
+                      <span className={styles.mobileLine}>Bringing Stories</span>
+                      <span className={styles.mobileLine}>to Life Through</span>
+                      <span className={styles.mobileLine}>
+                        <span className={styles.highlight}>Our Work.</span>
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <span className={styles.mobileLine}>{headline.line1}</span>
+                      <span className={styles.mobileLine}>
+                        {headline.line2Prefix}{" "}
+                        <span className={styles.highlight}>{headline.line2Highlight}</span>
+                      </span>
+                    </>
+                  )}
                 </span>
               </>
             ),

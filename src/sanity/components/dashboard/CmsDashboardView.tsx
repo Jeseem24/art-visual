@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import {
   Card,
   Stack,
@@ -44,6 +45,8 @@ interface DashboardMetrics {
     title?: string;
     name?: string;
     projectName?: string;
+    authorName?: string;
+    question?: string;
   }>;
   healthStats: {
     totalChecked: number;
@@ -78,73 +81,115 @@ const DASHBOARD_CONSOLIDATED_QUERY = `
   "snapshotCount": count(*[_type == "versionSnapshot"]),
   "recentDocs": *[_type in [
     "featuredWork", "serviceItem", "homePage", "aboutPage",
-    "servicesPage", "workPage", "contactPage", "siteSettings", "ctaBanner"
-  ]] | order(_updatedAt desc)[0...6] {
+    "servicesPage", "workPage", "contactPage", "siteSettings", "ctaBanner",
+    "navbarSettings", "testimonial", "faqItem"
+  ]] | order(_updatedAt desc)[0...16] {
     _id,
     _type,
     _updatedAt,
     title,
     name,
-    projectName
+    projectName,
+    authorName,
+    question
   },
   "brokenSlugs": count(*[_type in ["featuredWork", "serviceItem"] && (!defined(slug.current) || slug.current == "")])
 }
 `;
 
+interface ConsolidatedDashboardQueryResult {
+  pubProjects?: number;
+  draftProjects?: number;
+  pubServices?: number;
+  draftServices?: number;
+  mediaCount?: number;
+  snapshotCount?: number;
+  brokenSlugs?: number;
+  recentDocs?: Array<{
+    _id: string;
+    _type: string;
+    _updatedAt: string;
+    title?: string;
+    name?: string;
+    projectName?: string;
+    authorName?: string;
+    question?: string;
+  }>;
+}
+
 export function CmsDashboardView() {
+  const router = useRouter();
   const client = useClient({ apiVersion: "2026-03-01" });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
 
-  const fetchDashboardData = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
+  const fetchDashboardData = useCallback(() => {
+    return client
+      .fetch<ConsolidatedDashboardQueryResult>(DASHBOARD_CONSOLIDATED_QUERY)
+      .then((data) => {
+        const pubProjects = data?.pubProjects || 0;
+        const pubServices = data?.pubServices || 0;
+        const brokenSlugs = data?.brokenSlugs || 0;
 
-      const data = await client.fetch<any>(DASHBOARD_CONSOLIDATED_QUERY);
+        const healthStatus: "healthy" | "warnings" | "errors" =
+          brokenSlugs === 0 ? "healthy" : brokenSlugs > 3 ? "errors" : "warnings";
 
-      const pubProjects = data?.pubProjects || 0;
-      const pubServices = data?.pubServices || 0;
-      const brokenSlugs = data?.brokenSlugs || 0;
+        const rawDocs = data?.recentDocs || [];
+        const seenIds = new Set<string>();
+        const deduplicatedRecentDocs: DashboardMetrics["recentActivity"] = [];
+        for (const doc of rawDocs) {
+          const cleanId = doc._id.replace("drafts.", "");
+          if (!seenIds.has(cleanId)) {
+            seenIds.add(cleanId);
+            deduplicatedRecentDocs.push(doc);
+          }
+          if (deduplicatedRecentDocs.length >= 6) break;
+        }
 
-      const healthStatus: "healthy" | "warnings" | "errors" =
-        brokenSlugs === 0 ? "healthy" : brokenSlugs > 3 ? "errors" : "warnings";
-
-      setMetrics({
-        publishedProjects: pubProjects,
-        draftProjects: data?.draftProjects || 0,
-        publishedServices: pubServices,
-        draftServices: data?.draftServices || 0,
-        totalMediaAssets: data?.mediaCount || 0,
-        totalSnapshots: data?.snapshotCount || 0,
-        recentActivity: data?.recentDocs || [],
-        healthStats: {
-          totalChecked: pubProjects + pubServices + 8,
-          issuesFound: brokenSlugs,
-          status: healthStatus,
-        },
+        setMetrics({
+          publishedProjects: pubProjects,
+          draftProjects: data?.draftProjects || 0,
+          publishedServices: pubServices,
+          draftServices: data?.draftServices || 0,
+          totalMediaAssets: data?.mediaCount || 0,
+          totalSnapshots: data?.snapshotCount || 0,
+          recentActivity: deduplicatedRecentDocs,
+          healthStats: {
+            totalChecked: pubProjects + pubServices + 8,
+            issuesFound: brokenSlugs,
+            status: healthStatus,
+          },
+        });
+        setError(null);
+        setLoading(false);
+      })
+      .catch((err: unknown) => {
+        const message = err instanceof Error ? err.message : "Failed to load dashboard metrics.";
+        console.error("[CmsDashboard] Error fetching metrics:", err);
+        setError(message);
+        setLoading(false);
       });
-    } catch (err: any) {
-      console.error("[CmsDashboard] Error fetching metrics:", err);
-      setError(err?.message || "Failed to load dashboard metrics.");
-    } finally {
-      setLoading(false);
-    }
   }, [client]);
 
   useEffect(() => {
-    fetchDashboardData();
+    let isCancelled = false;
+    void fetchDashboardData().then(() => {
+      if (isCancelled) return;
+    });
+    return () => {
+      isCancelled = true;
+    };
   }, [fetchDashboardData]);
 
   // Universal Sanity Studio navigation using intent router
   const handleOpenDocument = (docType: string, docId: string) => {
     const cleanId = docId.replace("drafts.", "");
-    window.location.href = `/studio/intent/edit/id=${cleanId};type=${docType}/`;
+    router.push(`/studio/intent/edit/id=${cleanId};type=${docType}/`);
   };
 
   const handleNavigate = (path: string) => {
-    window.location.href = path;
+    router.push(path);
   };
 
   const handleOpenPreview = () => {
@@ -172,7 +217,10 @@ export function CmsDashboardView() {
               mode="ghost"
               fontSize={1}
               padding={3}
-              onClick={fetchDashboardData}
+              onClick={() => {
+                setLoading(true);
+                void fetchDashboardData();
+              }}
             />
           </Flex>
         </Flex>
@@ -185,7 +233,14 @@ export function CmsDashboardView() {
                 <Text weight="semibold" size={1}>Unable to Load Dashboard</Text>
                 <Text size={1} muted style={{ marginTop: 4 }}>{error}</Text>
               </Box>
-              <Button text="Retry" mode="ghost" onClick={fetchDashboardData} />
+              <Button
+                text="Retry"
+                mode="ghost"
+                onClick={() => {
+                  setLoading(true);
+                  void fetchDashboardData();
+                }}
+              />
             </Flex>
           </Card>
         )}
@@ -284,13 +339,40 @@ export function CmsDashboardView() {
                 <Stack gap={3}>
                   <Flex justify="space-between" align="center">
                     <Text size={1} weight="semibold">Content Health</Text>
-                    <ShieldCheck size={16} color="#22c55e" />
+                    <ShieldCheck
+                      size={16}
+                      color={
+                        metrics.healthStats.status === "healthy"
+                          ? "#22c55e"
+                          : metrics.healthStats.status === "warnings"
+                          ? "#eab308"
+                          : "#ef4444"
+                      }
+                    />
                   </Flex>
-                  <Heading size={4} style={{ color: "#22c55e" }}>
-                    Inspect
+                  <Heading
+                    size={4}
+                    style={{
+                      color:
+                        metrics.healthStats.status === "healthy"
+                          ? "#22c55e"
+                          : metrics.healthStats.status === "warnings"
+                          ? "#eab308"
+                          : "#ef4444",
+                    }}
+                  >
+                    {metrics.healthStats.status === "healthy"
+                      ? "Healthy"
+                      : metrics.healthStats.status === "warnings"
+                      ? "Attention"
+                      : "Action Req"}
                   </Heading>
                   <Flex align="center" justify="space-between">
-                    <Text size={0} muted>Run full quality scan</Text>
+                    <Text size={0} muted>
+                      {metrics.healthStats.issuesFound === 0
+                        ? "0 issues detected"
+                        : `${metrics.healthStats.issuesFound} issues detected`}
+                    </Text>
                     <ArrowRight size={14} style={{ opacity: 0.6 }} />
                   </Flex>
                 </Stack>
@@ -458,14 +540,14 @@ export function CmsDashboardView() {
                     <Card padding={3} radius={2} border tone="transparent">
                       <Text size={1} weight="semibold" style={{ color: "#60a5fa" }}>Featured Works Carousel</Text>
                       <Text size={1} muted style={{ marginTop: 6, lineHeight: 1.6 }}>
-                        Project cards are edited under <strong>Portfolio Projects</strong> in the left sidebar. Turn on <em>"Showcase in Home Page Carousel"</em> on any project to feature it.
+                        Project cards are edited under <strong>Portfolio Projects</strong> in the left sidebar. Turn on <em>&quot;Showcase in Home Page Carousel&quot;</em> on any project to feature it.
                       </Text>
                     </Card>
 
                     <Card padding={3} radius={2} border tone="transparent">
                       <Text size={1} weight="semibold" style={{ color: "#a78bfa" }}>Global CTA Banner</Text>
                       <Text size={1} muted style={{ marginTop: 6, lineHeight: 1.6 }}>
-                        The bottom banner (<em>"Have a Story to Tell? Let's Create It."</em>) is edited under <strong>Global CTA Banner</strong> so updates apply across all pages.
+                        The bottom banner (<em>&quot;Have a Story to Tell? Let&apos;s Create It.&quot;</em>) is edited under <strong>Global CTA Banner</strong> so updates apply across all pages.
                       </Text>
                     </Card>
 

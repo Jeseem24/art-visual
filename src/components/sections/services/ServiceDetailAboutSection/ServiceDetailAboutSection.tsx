@@ -35,8 +35,8 @@ export const ServiceDetailAboutSection = memo(function ServiceDetailAboutSection
     <>
       <span className={styles.desktopHeadline}>{fullText}</span>
       <span className={styles.mobileHeadline}>
-        <span className={styles.mobileLine}>{(headline as any).line1}</span>
-        <span className={styles.mobileLine}>{(headline as any).line2}</span>
+        <span className={styles.mobileLine}>{(headline as { line1?: string }).line1}</span>
+        <span className={styles.mobileLine}>{(headline as { line2?: string }).line2}</span>
       </span>
     </>
   ) : (

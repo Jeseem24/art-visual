@@ -4,7 +4,7 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import type { InputProps } from "sanity";
 import { useFormValue, useDocumentOperation } from "sanity";
 import { usePaneRouter } from "sanity/structure";
-import { Card, Flex, Button, Text } from "@sanity/ui";
+import { Card, Flex, Button } from "@sanity/ui";
 import { UndoIcon } from "@sanity/icons/Undo";
 import { SyncIcon } from "@sanity/icons/Sync";
 import { EyeOpenIcon } from "@sanity/icons/EyeOpen";
@@ -63,6 +63,26 @@ function RootUndoRedoToolbar(props: InputProps) {
     };
   }, [publishedId]);
 
+  const applyStatePatch = useCallback(
+    (state: Record<string, unknown>) => {
+      const currentClean = extractCleanContent(currentDocRef.current || {});
+      const targetClean = extractCleanContent(state);
+
+      const currentKeys = Object.keys(currentClean);
+      const targetKeys = new Set(Object.keys(targetClean));
+      const keysToUnset = currentKeys.filter((k) => !targetKeys.has(k));
+
+      const operations: Array<{ set: Record<string, unknown> } | { unset: string[] }> = [{ set: targetClean }];
+      if (keysToUnset.length > 0) {
+        operations.push({ unset: keysToUnset });
+      }
+
+      patch.execute(operations);
+      forceUpdate();
+    },
+    [patch, forceUpdate]
+  );
+
   // Global Keyboard Shortcuts (Ctrl+Z, Ctrl+Shift+Z, Ctrl+Y, Cmd+Z, Cmd+Shift+Z)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -82,7 +102,9 @@ function RootUndoRedoToolbar(props: InputProps) {
       const isMac =
         typeof navigator !== "undefined" &&
         (/Mac|iPod|iPhone|iPad/.test(
-          (navigator as any).userAgentData?.platform || navigator.platform || ""
+          (navigator as unknown as { userAgentData?: { platform?: string } }).userAgentData?.platform ||
+            navigator.platform ||
+            ""
         ));
       const modifier = isMac ? e.metaKey : e.ctrlKey;
 
@@ -118,24 +140,7 @@ function RootUndoRedoToolbar(props: InputProps) {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [publishedId, patch, forceUpdate]);
-
-  const applyStatePatch = (state: Record<string, unknown>) => {
-    const currentClean = extractCleanContent(currentDocRef.current || {});
-    const targetClean = extractCleanContent(state);
-
-    const currentKeys = Object.keys(currentClean);
-    const targetKeys = new Set(Object.keys(targetClean));
-    const keysToUnset = currentKeys.filter((k) => !targetKeys.has(k));
-
-    const operations: any[] = [{ set: targetClean }];
-    if (keysToUnset.length > 0) {
-      operations.push({ unset: keysToUnset });
-    }
-
-    patch.execute(operations);
-    forceUpdate();
-  };
+  }, [publishedId, applyStatePatch]);
 
   const handleUndo = () => {
     const prevState = sessionHistory.undo(publishedId);
@@ -152,7 +157,14 @@ function RootUndoRedoToolbar(props: InputProps) {
   };
 
   const handlePreview = () => {
-    const path = TYPE_PATH_MAP[docType || ""] || "/";
+    const slug = (currentDoc?.slug as { current?: string } | undefined)?.current;
+    let path = TYPE_PATH_MAP[docType || ""] || "/";
+    if (docType === "serviceItem" && slug) {
+      path = `/services/${slug}`;
+    } else if (docType === "featuredWork" && slug) {
+      path = `/work`;
+    }
+
     const previewUrl = `/api/draft-mode/enable?path=${encodeURIComponent(path)}&type=${encodeURIComponent(
       docType || ""
     )}`;

@@ -23,9 +23,10 @@ export function validateVideoFile(options?: VideoValidationOptions): CustomValid
   const maxSizeBytes = maxSizeMB * 1024 * 1024;
   const allowedMimeTypes = options?.allowedMimeTypes ?? ALLOWED_VIDEO_MIME_TYPES;
 
-  return async (value: any, context) => {
+  return async (value: unknown, context) => {
+    const fileValue = value as { asset?: { _ref?: string } } | undefined;
     // If no file reference is selected, pass validation (unless .required() is also chained)
-    if (!value?.asset?._ref) {
+    if (!fileValue?.asset?._ref) {
       return true;
     }
 
@@ -37,7 +38,7 @@ export function validateVideoFile(options?: VideoValidationOptions): CustomValid
         originalFilename?: string;
       }>(
         `*[_id == $id][0]{ size, mimeType, originalFilename }`,
-        { id: value.asset._ref }
+        { id: fileValue.asset._ref }
       );
 
       if (!asset) {

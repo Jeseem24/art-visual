@@ -26,11 +26,9 @@ export function VideoPreviewInput(props: FileInputProps) {
   useEffect(() => {
     let isMounted = true;
     if (!assetRef) {
-      setVideoData(null);
       return;
     }
 
-    setLoading(true);
     client
       .fetch<VideoAssetData>(
         `*[_id == $id][0] {
@@ -44,12 +42,11 @@ export function VideoPreviewInput(props: FileInputProps) {
       .then((res) => {
         if (isMounted) {
           setVideoData(res || null);
+          setLoading(false);
         }
       })
       .catch((err) => {
         console.warn("[VideoPreviewInput] Error resolving video asset details:", err);
-      })
-      .finally(() => {
         if (isMounted) {
           setLoading(false);
         }
@@ -59,6 +56,8 @@ export function VideoPreviewInput(props: FileInputProps) {
       isMounted = false;
     };
   }, [client, assetRef]);
+
+  const activeVideoData = assetRef ? videoData : null;
 
   const togglePlay = () => {
     if (!videoRef.current) return;
@@ -77,7 +76,7 @@ export function VideoPreviewInput(props: FileInputProps) {
     return `${(bytes / 1024).toFixed(0)} KB`;
   };
 
-  const isOverSize = (videoData?.size || 0) > MAX_VIDEO_BYTES;
+  const isOverSize = (activeVideoData?.size || 0) > MAX_VIDEO_BYTES;
 
   return (
     <Stack gap={3}>
@@ -96,11 +95,11 @@ export function VideoPreviewInput(props: FileInputProps) {
               )}
             </Flex>
 
-            {videoData?.url ? (
+            {activeVideoData?.url ? (
               <Box style={{ position: "relative", overflow: "hidden", borderRadius: 4, background: "#080808" }}>
                 <video
                   ref={videoRef}
-                  src={videoData.url}
+                  src={activeVideoData.url}
                   muted
                   loop
                   playsInline
@@ -140,15 +139,15 @@ export function VideoPreviewInput(props: FileInputProps) {
             ) : null}
 
             {/* Video File Metadata */}
-            {videoData && (
+            {activeVideoData && (
               <Flex justify="space-between" align="center" wrap="wrap" gap={2}>
                 <Flex align="center" gap={2}>
                   <HardDrive size={13} style={{ opacity: 0.6 }} />
-                  <Text size={0} muted>{videoData.originalFilename || "video.mp4"}</Text>
+                  <Text size={0} muted>{activeVideoData.originalFilename || "video.mp4"}</Text>
                   <Text size={0} muted>·</Text>
-                  <Text size={0} muted>{formatSize(videoData.size)}</Text>
+                  <Text size={0} muted>{formatSize(activeVideoData.size)}</Text>
                 </Flex>
-                <Badge tone="default" fontSize={0}>{videoData.mimeType || "video/mp4"}</Badge>
+                <Badge tone="default" fontSize={0}>{activeVideoData.mimeType || "video/mp4"}</Badge>
               </Flex>
             )}
 
