@@ -49,13 +49,14 @@ export async function sanityFetch<T>({
       process.env.SANITY_API_READ_TOKEN ||
       process.env.SANITY_API_TOKEN;
 
-    const activeClient = isDraftMode
-      ? client.withConfig({
-          token,
-          perspective: "drafts",
-          useCdn: false,
-        })
-      : client;
+    const activeClient =
+      isDraftMode && token
+        ? client.withConfig({
+            token,
+            perspective: "drafts",
+            useCdn: false,
+          })
+        : client;
 
     const fetchOptions: Record<string, unknown> = {
       next: {
