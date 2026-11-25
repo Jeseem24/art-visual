@@ -22,6 +22,8 @@ const cspStudio = `
   media-src 'self' blob: data: https://cdn.sanity.io https://*.sanity.io https://*.sanity-cdn.com;
   font-src 'self' data: https://*.sanity.io https://*.sanity-cdn.com;
   connect-src 'self' https://*.sanity.io wss://*.sanity.io https://*.sanity.api https://cdn.sanity.io https://sanity-cdn.com https://*.sanity-cdn.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com;
+  worker-src 'self' blob:;
+  frame-src 'self' https://*.sanity.io https://sanity.io https://*.sanity-cdn.com;
   frame-ancestors 'self' https://*.sanity.io https://sanity.io;
   form-action 'self';
   base-uri 'self';
@@ -56,13 +58,21 @@ const nextConfig: NextConfig = {
   },
   async headers() {
     return [
-      // 1. Studio routes: allow framing and status fetch from Sanity.io cloud manage dashboard
+      // 1. Studio routes: allow framing, CORS, and status fetch from Sanity.io cloud manage dashboard
       {
         source: "/studio/:path*",
         headers: [
           {
             key: "Access-Control-Allow-Origin",
             value: "https://sanity.io",
+          },
+          {
+            key: "Access-Control-Allow-Methods",
+            value: "GET, HEAD, OPTIONS",
+          },
+          {
+            key: "Access-Control-Allow-Headers",
+            value: "*",
           },
           {
             key: "Content-Security-Policy",
