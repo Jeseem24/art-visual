@@ -1,14 +1,28 @@
 import type { NextConfig } from "next";
 
-const cspHeader = `
+const cspPublic = `
   default-src 'self';
   script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdn.sanity.io https://*.sanity.io https://www.googletagmanager.com;
   style-src 'self' 'unsafe-inline';
   img-src 'self' blob: data: https://images.unsplash.com https://cdn.sanity.io https://*.sanity.io https://*.figma.com https://*.google-analytics.com https://www.googletagmanager.com;
   media-src 'self' blob: data: https://cdn.sanity.io https://*.sanity.io;
   font-src 'self' data:;
-  connect-src 'self' https://*.sanity.io https://*.sanity.api https://cdn.sanity.io https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com;
+  connect-src 'self' https://*.sanity.io https://*.sanity.api https://cdn.sanity.io https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com;
   frame-ancestors 'self';
+  form-action 'self';
+  base-uri 'self';
+  object-src 'none';
+`.replace(/\s{2,}/g, " ").trim();
+
+const cspStudio = `
+  default-src 'self';
+  script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdn.sanity.io https://*.sanity.io https://www.googletagmanager.com;
+  style-src 'self' 'unsafe-inline';
+  img-src 'self' blob: data: https://images.unsplash.com https://cdn.sanity.io https://*.sanity.io https://*.figma.com https://*.google-analytics.com https://www.googletagmanager.com;
+  media-src 'self' blob: data: https://cdn.sanity.io https://*.sanity.io;
+  font-src 'self' data:;
+  connect-src 'self' https://*.sanity.io https://*.sanity.api https://cdn.sanity.io https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com;
+  frame-ancestors 'self' https://*.sanity.io https://sanity.io;
   form-action 'self';
   base-uri 'self';
   object-src 'none';
@@ -42,12 +56,35 @@ const nextConfig: NextConfig = {
   },
   async headers() {
     return [
+      // 1. Studio routes: allow embedding within official Sanity.io cloud dashboard
       {
-        source: "/:path*",
+        source: "/studio/:path*",
         headers: [
           {
             key: "Content-Security-Policy",
-            value: cspHeader,
+            value: cspStudio,
+          },
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+          {
+            key: "Referrer-Policy",
+            value: "strict-origin-when-cross-origin",
+          },
+          {
+            key: "Strict-Transport-Security",
+            value: "max-age=31536000; includeSubDomains; preload",
+          },
+        ],
+      },
+      // 2. Public marketing routes: strict clickjacking protection with SAMEORIGIN
+      {
+        source: "/((?!studio).*)",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value: cspPublic,
           },
           {
             key: "X-Frame-Options",
