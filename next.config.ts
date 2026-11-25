@@ -56,10 +56,14 @@ const nextConfig: NextConfig = {
   },
   async headers() {
     return [
-      // 1. Studio routes: allow embedding within official Sanity.io cloud dashboard
+      // 1. Studio routes: allow framing and status fetch from Sanity.io cloud manage dashboard
       {
         source: "/studio/:path*",
         headers: [
+          {
+            key: "Access-Control-Allow-Origin",
+            value: "https://sanity.io",
+          },
           {
             key: "Content-Security-Policy",
             value: cspStudio,
