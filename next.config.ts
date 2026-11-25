@@ -16,12 +16,12 @@ const cspPublic = `
 
 const cspStudio = `
   default-src 'self';
-  script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdn.sanity.io https://*.sanity.io https://www.googletagmanager.com;
-  style-src 'self' 'unsafe-inline';
-  img-src 'self' blob: data: https://images.unsplash.com https://cdn.sanity.io https://*.sanity.io https://*.figma.com https://*.google-analytics.com https://www.googletagmanager.com;
-  media-src 'self' blob: data: https://cdn.sanity.io https://*.sanity.io;
-  font-src 'self' data:;
-  connect-src 'self' https://*.sanity.io https://*.sanity.api https://cdn.sanity.io https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com;
+  script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdn.sanity.io https://*.sanity.io https://sanity-cdn.com https://*.sanity-cdn.com https://www.googletagmanager.com;
+  style-src 'self' 'unsafe-inline' https://*.sanity.io https://*.sanity-cdn.com;
+  img-src 'self' blob: data: https://images.unsplash.com https://cdn.sanity.io https://*.sanity.io https://sanity-cdn.com https://*.sanity-cdn.com https://*.figma.com https://*.google-analytics.com https://www.googletagmanager.com;
+  media-src 'self' blob: data: https://cdn.sanity.io https://*.sanity.io https://*.sanity-cdn.com;
+  font-src 'self' data: https://*.sanity.io https://*.sanity-cdn.com;
+  connect-src 'self' https://*.sanity.io wss://*.sanity.io https://*.sanity.api https://cdn.sanity.io https://sanity-cdn.com https://*.sanity-cdn.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com;
   frame-ancestors 'self' https://*.sanity.io https://sanity.io;
   form-action 'self';
   base-uri 'self';
